@@ -1,0 +1,7 @@
+import type {CalendarEvent} from './types.ts';
+export const calendarCacheKey=(uid:string)=>`sanctra_calendar_${uid}_v1`;
+export function getCalendarEvents(uid:string):CalendarEvent[]{if(!uid)return [];try{const raw=JSON.parse(localStorage.getItem(calendarCacheKey(uid))||'[]');return Array.isArray(raw)?raw:[];}catch{return [];}}
+export function saveCalendarEvents(uid:string,events:CalendarEvent[]):void{if(!uid)throw Error('Sign in to save calendar events.');localStorage.setItem(calendarCacheKey(uid),JSON.stringify(events));}
+export function mergeCalendarEvents(local:CalendarEvent[],remote:CalendarEvent[]):CalendarEvent[]{const records=new Map(remote.map(e=>[e.id,e]));for(const e of local){const other=records.get(e.id);if(!other||other.revision<e.revision)records.set(e.id,e);else if(other.revision===e.revision&&calendarFingerprint(other)!==calendarFingerprint(e))throw Error('This event changed on another device. Reconnect and review it before editing.');}return [...records.values()];}
+
+export function calendarFingerprint(value:unknown):string{if(Array.isArray(value))return JSON.stringify(value.map(v=>JSON.parse(calendarFingerprint(v))));if(value&&typeof value==='object')return JSON.stringify(Object.fromEntries(Object.entries(value).filter(([,v])=>v!==undefined).sort(([a],[b])=>a.localeCompare(b)).map(([k,v])=>[k,JSON.parse(calendarFingerprint(v))])));return JSON.stringify(value??null);}

@@ -1,0 +1,6 @@
+/* Keep full-resolution pixels stationary. Scaling the wallpaper in a perpetual
+   drift animation softened detail on tablet and large displays. */
+.sanctra-app .wallpaper-layer,.sanctra-app .scenic-illustration {
+ animation:none!important;transform:none!important;filter:none!important;
+}
+.sanctra-app .vip-motion-wallpaper {animation:none;filter:none;}

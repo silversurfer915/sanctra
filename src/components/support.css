@@ -1,0 +1,69 @@
+.support-workspace {display:flex;flex-direction:column;gap:24px;min-width:0;}
+.support-workspace .workspace-heading {margin-bottom:0;}
+.support-workspace .support-topics {gap:12px;}
+.support-workspace .support-topics>button {border-radius:16px;transition:background .18s,border-color .18s;}
+.support-workspace .support-topics>button:hover {background:color-mix(in srgb,var(--sanctra-sage) 10%,var(--sanctra-surface));border-color:var(--sanctra-sage);}
+.support-workspace .support-topics>button>div {flex:1;min-width:0;}
+.support-workspace .support-topics h3 {font-size:16px;margin-bottom:5px;}
+.support-workspace .support-faq {margin-bottom:24px;}
+.support-faq h2 {font-size:20px;margin:0 0 6px;}
+.support-faq>p,.support-form-description {color:var(--sanctra-muted);line-height:1.6;}
+.support-faq details {border-top:1px solid color-mix(in srgb,var(--sanctra-paper) 12%,transparent);padding:14px 0;}
+.support-faq details:first-of-type {margin-top:16px;}
+.support-faq details:last-child {padding-bottom:0;}
+.support-faq summary {cursor:pointer;font-weight:500;line-height:1.5;}
+.support-faq details p {max-width:70ch;margin:10px 0 0;color:var(--sanctra-muted);line-height:1.7;}
+.support-workspace .ticket-compose {display:flex;flex-direction:column;gap:20px;}
+.support-workspace .support-faq-embedded {padding:0;background:none;border:0;box-shadow:none;margin:0;backdrop-filter:none;}
+.support-workspace .ticket-compose label {display:block;line-height:1.6;}
+.support-workspace .ticket-compose .inbox-input {display:block;width:100%;margin-top:8px;}
+.support-optional {color:var(--sanctra-muted);font-size:13px;}
+.support-status {white-space:nowrap;font-size:12px;padding:5px 10px;border-radius:8px;background:color-mix(in srgb,var(--sanctra-paper) 7%,transparent);color:var(--sanctra-paper);}
+.support-status.status-in_progress {background:color-mix(in srgb,var(--sanctra-sage) 15%,transparent);color:var(--sanctra-sage);}
+.support-status-control {display:flex;gap:8px;align-items:center;font-size:13px;}
+.support-status-control select {width:auto;}
+.support-workspace .ticket-list>button {flex-wrap:wrap;gap:12px;}
+.support-workspace .ticket-list>button>div {flex:1;min-width:160px;}
+.support-workspace .ticket-message p {white-space:pre-wrap;overflow-wrap:anywhere;}
+.support-workspace :is(button,input,textarea,select,summary):focus-visible {outline:2px solid var(--sanctra-sage);outline-offset:4px;}
+.support-workspace textarea {resize:vertical;min-height:100px;}
+@media(max-width:600px){.support-workspace .workspace-tabs{flex-wrap:wrap;}.support-workspace .ticket-conversation .workspace-heading>div{flex-wrap:wrap;}.support-status-control{width:100%;}.support-workspace .support-topics>button{padding:18px;}}
+.sanctra-app .support-workspace>header.workspace-heading h1 {font-family:var(--font-display);font-size:clamp(28px,3vw,38px);line-height:1.15;margin-bottom:12px;}
+.support-workspace .support-faq h2 {font-size:20px;}
+.support-workspace .ticket-compose>label,.support-workspace .ticket-compose>.support-form-description {max-width:75ch;}
+@media(prefers-reduced-motion:reduce){.support-workspace .support-topics>button{transition:none;}}
+
+.support-workspace .support-topics .support-premium-topic {grid-column:1/-1;border-color:color-mix(in srgb,var(--sanctra-sage) 35%,transparent);}
+/* Support keeps its own compact proportions within the app's shared glass world. */
+.sanctra-app .support-workspace {width:100%;max-width:960px;margin-inline:auto;gap:20px;}
+.sanctra-app .support-workspace>.workspace-heading {width:100%;margin:0 auto 4px;align-items:flex-start;}
+.sanctra-app .support-workspace>.workspace-heading h1 {font-size:clamp(26px,3vw,34px);margin:0 0 8px;}
+.sanctra-app .support-workspace>.workspace-heading p {font-size:14px;line-height:1.6;}
+.sanctra-app .support-workspace .ticket-compose {max-width:760px;width:100%;margin:0 auto;padding:24px;gap:16px;border-radius:18px;background:color-mix(in srgb,var(--sanctra-ink) 76%,transparent)!important;}
+.sanctra-app .support-workspace .ticket-compose>.workspace-heading {padding-bottom:16px;border-bottom:1px solid color-mix(in srgb,var(--sanctra-paper) 12%,transparent);gap:12px;}
+.support-category-label {display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--sanctra-sage);font-weight:600;}
+.sanctra-app .support-workspace .ticket-compose>label {max-width:none;width:100%;margin:0;display:grid;gap:6px;font-size:13px;line-height:1.5;}
+.sanctra-app .support-workspace .ticket-compose .inbox-input {margin:0;width:100%;min-height:42px;padding:10px 12px;font-size:14px;line-height:1.5;border-radius:10px;}
+.sanctra-app .support-workspace .ticket-compose textarea.inbox-input {min-height:96px;}
+.sanctra-app .support-workspace .ticket-compose>.support-form-description {margin:0;max-width:none;font-size:14px;line-height:1.6;}
+.sanctra-app .support-workspace .support-faq-embedded>h2,.sanctra-app .support-workspace .support-faq-embedded>p {display:none;}
+.sanctra-app .support-workspace .support-faq-embedded details {padding:10px 0;}
+.sanctra-app .support-workspace .support-faq-embedded details:first-of-type {margin-top:0;}
+.sanctra-app .support-workspace .support-faq summary {font-size:13px;}
+.sanctra-app .support-workspace .support-faq details p {font-size:13px;line-height:1.65;margin:8px 0 0;}
+.sanctra-app .support-workspace .ticket-compose .attachment-button {display:flex;justify-content:center;align-items:center;gap:10px;width:100%;margin:0;padding:14px;border:1px dashed color-mix(in srgb,var(--sanctra-paper) 24%,transparent)!important;border-radius:10px!important;font-size:13px;background:color-mix(in srgb,var(--sanctra-paper) 3%,transparent)!important;}
+.sanctra-app .support-workspace .ticket-compose>.workspace-footnote {margin:0;font-size:12px;line-height:1.65;}
+.sanctra-app .support-workspace .ticket-compose>button.workspace-primary {align-self:flex-end;width:auto;min-height:42px;padding:10px 18px;border-radius:10px!important;font-size:13px;}
+.sanctra-app .support-workspace .support-topics {grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.sanctra-app .support-workspace .support-topics>button {padding:18px;gap:14px;min-height:88px;border-radius:14px!important;background:color-mix(in srgb,var(--sanctra-ink) 68%,transparent)!important;}
+.sanctra-app .support-workspace .support-topics h3 {font-size:15px;line-height:1.4;}
+.sanctra-app .support-workspace .support-topics p {font-size:12px;line-height:1.55;}
+.sanctra-app .support-workspace>.support-faq {padding:20px;margin:0;border-radius:16px;background:color-mix(in srgb,var(--sanctra-ink) 72%,transparent)!important;}
+.sanctra-app .support-workspace>.support-faq h2 {font-size:18px;margin:0 0 4px;}
+.sanctra-app .support-workspace>.support-faq>p {font-size:13px;}
+.sanctra-app .support-workspace>.support-faq details {padding:10px 0;}
+@media(max-width:600px){.sanctra-app .support-workspace .ticket-compose{padding:18px;gap:14px;}.sanctra-app .support-workspace .support-topics{grid-template-columns:1fr;}.sanctra-app .support-workspace .ticket-compose>.workspace-heading{align-items:flex-start;}.support-category-label{font-size:12px;}.sanctra-app .support-workspace>.workspace-heading h1{font-size:27px;}}
+
+.sanctra-app .support-workspace.is-composing>.workspace-heading {max-width:760px;}
+.sanctra-app .support-workspace .ticket-compose>label {display:block;}
+.sanctra-app .support-workspace .ticket-compose>label>.inbox-input {display:block;margin-top:6px;}

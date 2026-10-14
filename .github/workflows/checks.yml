@@ -1,0 +1,25 @@
+name: Checks
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '12.8.1'
+      - run: pnpm install --frozen-lockfile
+      - run: npm ci --prefix integrations/hermes
+      - run: npm run build
+      - run: npm run check:seo
+      - run: node --test tests/agent-*.test.ts tests/personal-sessions.test.ts tests/mergeStudyRecords.test.ts tests/groupConversation.test.ts tests/jee-integration.test.ts
+      - run: npm --prefix integrations/hermes test
+      - run: node integrations/hermes/scripts/openapi.mjs --check

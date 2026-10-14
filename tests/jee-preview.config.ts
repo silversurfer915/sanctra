@@ -1,0 +1,6 @@
+import {defineConfig} from 'vite';import react from '@vitejs/plugin-react';import tailwindcss from '@tailwindcss/vite';
+export default defineConfig({plugins:[{name:'isolated-jee-preview',enforce:'pre',transform(_code,id){
+if(id.endsWith('/src/components/jeetrack/useJeeTrackStore.ts'))return `import {useState} from 'react';import {getDefaultJeeTrackState} from '../../utils/jeetrackData';import {validateJeeTrackState} from '../../utils/jeeTrackValidation';export function useJeeTrackStore(){const [state,setState]=useState(()=>{try{return validateJeeTrackState(JSON.parse(localStorage.getItem('sanctra-jee-preview')||''))}catch{return getDefaultJeeTrackState()}});return {state,update:value=>{setState(before=>{const next=validateJeeTrackState(typeof value==='function'?value(before):value);localStorage.setItem('sanctra-jee-preview',JSON.stringify(next));return next});return true},loading:false,error:null,retry:()=>{},syncStatus:'synced',legacyAvailable:false,importLegacy:()=>{}}}`;
+if(id.endsWith('/src/components/AiAllowance.tsx'))return `export function AiAllowance(){return <p>Preview only · no AI calls</p>}`;
+if(id.endsWith('/src/features/ai-planner/gateway.ts'))return `export function aiGatewayReady(){return false}export async function callAiGateway(){throw new Error('Preview does not call AI')}`;
+}},react(),tailwindcss()]});

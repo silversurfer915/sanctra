@@ -1,0 +1,591 @@
+rules_version = '2';
+// platform_users/{uid}: own identity and server timestamp heartbeat; admin directory only.
+// moderation/{uid}: admin-only reason, expiry milliseconds, permanent/active flags, actor and server timestamp.
+// moderation_audit/{id}: immutable admin audit including targetUid.
+// support_tickets/{id}: immutable owner/name/title/category/createdAt; status and server updatedAt.
+// support_tickets/{id}/messages/{id}: immutable authenticated sender/name/text (1..5000), server createdAt.
+// announcements: admin edit/archive preserves original author and timestamp.
+// users/{uid}: private sessions, subjects, tasks, calendar events and settings.
+// activeSessions/{uid}: single active timer session per account; owner-only read/write.
+// study_groups/{id}: room metadata. Owner UID/createdAt are immutable.
+// members/{uid}: own presence, study totals and optional invitation code.
+// messages/{id}: immutable authenticated chat/cheer. Sender UID is immutable.
+// study_integrity/{uid}: owner/admin-only clock, device lease and diagnostics.
+// study_rankings/{uid}: exact public projection of periods, totals and review status; never devices/timers/reasons.
+// room_invites/{code}: exact-code lookup, groupId and creator UID only.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null && request.auth.token.get('firebase',{}).get('sign_in_provider','')!='anonymous'; }
+    function admin() { return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)); }
+    function unrestricted() { return signedIn() && (!exists(/databases/$(database)/documents/moderation/$(request.auth.uid)) || !get(/databases/$(database)/documents/moderation/$(request.auth.uid)).data.active || (!get(/databases/$(database)/documents/moderation/$(request.auth.uid)).data.permanent && get(/databases/$(database)/documents/moderation/$(request.auth.uid)).data.expiresAt <= request.time.toMillis())); }
+    function authenticated() { return signedIn() && (admin() || unrestricted()); }
+    function plusMember(uid) {
+      let path = /databases/$(database)/documents/subscriptions/$(uid);
+      let data = exists(path) ? get(path).data : {};
+      return exists(/databases/$(database)/documents/admins/$(uid)) || data.get('isPlus',false) == true && data.get('status','none') in ['active','cancelled']
+        && data.get('currentPeriodEnd',0) > request.time.toMillis();
+    }
+    function currentChatDay() { return int(request.time.toMillis() / 86400000); }
+    function chatUsagePath(uid) { let day = string(currentChatDay()); return /databases/$(database)/documents/users/$(uid)/chat_days/$(day); }
+    function validChatIncrement(uid,data) {
+      let path = chatUsagePath(uid);
+      let previous = exists(path) ? get(path).data.count : 0;
+      return data.keys().hasOnly(['day','count','lastMessageId','lastGroupId'])
+        && data.day == currentChatDay()
+        && data.count is int && data.count == previous+1 && data.count <= (plusMember(uid) ? 500 : 250)
+        && text(data.lastMessageId,100) && text(data.lastGroupId,100);
+    }
+    function countedMessage(uid,groupId,messageId) {
+      let path = chatUsagePath(uid);
+      let previous = exists(path) ? get(path).data.count : 0;
+      let after = getAfter(path).data;
+      return after.count == previous+1 && after.lastMessageId == messageId && after.lastGroupId == groupId;
+    }
+
+    function owner(uid) { return authenticated() && request.auth.uid == uid; }
+    function text(value, max) { return value is string && value.size() <= max; }
+    function nonnegative(value, max) { return value is number && value >= 0 && value <= max; }
+    // JEE Track uses independent private records rather than overwriting a full account state.
+    function jeeDate(v) { return v is string && v.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$'); }
+    function jeeSubject(v) { return v in ['physics','chemistry','maths']; }
+    function jeeOptionalText(v, key, max) { return !(key in v) || text(v[key],max); }
+    function jeeMistake(m) {return m is map && m.keys().hasOnly(['subject','chapterId','mistakes','reason']) && jeeSubject(m.subject) && m.chapterId is int && m.chapterId>0 && m.mistakes is int && m.mistakes>0 && m.mistakes<=300 && jeeOptionalText(m,'reason',2000);}
+    function jeeMistakes(v) {return v is list && v.size()<=8
+      && (v.size()<1 || jeeMistake(v[0])) && (v.size()<2 || jeeMistake(v[1]))
+      && (v.size()<3 || jeeMistake(v[2])) && (v.size()<4 || jeeMistake(v[3]))
+      && (v.size()<5 || jeeMistake(v[4])) && (v.size()<6 || jeeMistake(v[5]))
+      && (v.size()<7 || jeeMistake(v[6])) && (v.size()<8 || jeeMistake(v[7]));}
+    function validJeeRecord(data) {
+      let v = data.value;
+      return data.keys().hasOnly(['kind','value']) && v is map && (
+        (data.kind == 'tests' && v.keys().hasOnly(['id','exam','session','paper','type','date','total','max','physics','chemistry','maths','notes','source','durationMinutes','attempted','unattempted','chapterMistakes'])
+          && text(v.id,160) && v.exam in ['mains','advanced'] && v.type in ['full','partial'] && jeeDate(v.date)
+          && nonnegative(v.max,2000) && v.max > 0 && v.total is number && v.total >= -v.max && v.total <= v.max
+          && v.physics is number && v.physics >= -v.max && v.physics <= v.max
+          && v.chemistry is number && v.chemistry >= -v.max && v.chemistry <= v.max
+          && v.maths is number && v.maths >= -v.max && v.maths <= v.max
+          && v.total == v.physics+v.chemistry+v.maths && (!('paper' in v) || v.paper in ['p1','p2','combined'])
+          && jeeOptionalText(v,'session',200) && jeeOptionalText(v,'notes',2000) && jeeOptionalText(v,'source',2000)
+          && (!('durationMinutes' in v) || (v.durationMinutes is number && v.durationMinutes>0 && v.durationMinutes<=600))
+          && (!('attempted' in v) || (v.attempted is int && nonnegative(v.attempted,300)))
+          && (!('unattempted' in v) || (v.unattempted is int && nonnegative(v.unattempted,300)))
+          && (!('chapterMistakes' in v) || jeeMistakes(v.chapterMistakes)))
+        || (data.kind == 'upcoming' && v.keys().hasOnly(['id','exam','session','type','date','venue','notes'])
+          && text(v.id,160) && v.exam in ['mains','advanced'] && v.type in ['full','partial'] && jeeDate(v.date)
+          && text(v.session,200) && jeeOptionalText(v,'venue',2000) && jeeOptionalText(v,'notes',2000))
+        || (data.kind == 'backlogs' && v.keys().hasOnly(['id','title','subject','priority','due','details','done','addedDate','doneDate'])
+          && text(v.id,160) && text(v.title,200) && v.title.size()>0 && jeeSubject(v.subject)
+          && v.priority in ['high','med','low'] && v.done is bool && jeeDate(v.addedDate)
+          && (!('due' in v) || jeeDate(v.due)) && (!('doneDate' in v) || jeeDate(v.doneDate)) && jeeOptionalText(v,'details',2000))
+        || (data.kind == 'practiceLogs' && v.keys().hasOnly(['id','subject','chapterId','chapterName','questions','date','loggedAt','notes'])
+          && text(v.id,160) && jeeSubject(v.subject) && v.chapterId is int && v.chapterId>0 && text(v.chapterName,200)
+          && v.questions is int && v.questions>0 && v.questions<=10000 && jeeDate(v.date) && nonnegative(v.loggedAt,1000000000000000) && jeeOptionalText(v,'notes',2000))
+        || (data.kind == 'hours' && v.keys().hasOnly(['id','date','subject','lecture','practice','revision','mockAnalysis','total','notes','chapterId','source','sourceSessionId','sessionId'])
+          && text(v.id,160) && jeeDate(v.date) && (jeeSubject(v.subject) || v.subject == 'all')
+          && nonnegative(v.lecture,24) && nonnegative(v.practice,24) && nonnegative(v.revision,24) && nonnegative(v.mockAnalysis,24) && nonnegative(v.total,24)
+          && v.total-v.lecture-v.practice-v.revision-v.mockAnalysis < 0.00001 && v.total-v.lecture-v.practice-v.revision-v.mockAnalysis > -0.00001
+          && (!('chapterId' in v) || (v.chapterId is int && v.chapterId>0)) && (!('source' in v) || v.source in ['timer','manual'])
+          && jeeOptionalText(v,'sourceSessionId',160) && jeeOptionalText(v,'sessionId',160) && jeeOptionalText(v,'notes',2000))
+        || (data.kind == 'chapter' && v.keys().hasOnly(['subject','id','name','theory','practice','class','unit','section','revisions','adv'])
+          && jeeSubject(v.subject) && v.id is int && v.id>0 && text(v.name,200) && text(v.unit,200) && v.class in ['11','12']
+          && v.theory is bool && v.practice is bool && (!('revisions' in v) || (v.revisions is int && nonnegative(v.revisions,10000)))
+          && (!('adv' in v) || v.adv is bool) && (!('section' in v) || v.section in ['physical','inorganic','organic']))
+        || (data.kind == 'preference' && v.keys().hasOnly(['key','value']) && (
+          (v.key == 'weeklyPracticeGoal' && v.value is int && nonnegative(v.value,10000))
+          || (v.key == 'targetYear' && v.value is string && v.value.matches('^20[0-9]{2}$'))
+          || (v.key == 'targetPercentile' && nonnegative(v.value,100))
+          || (v.key == 'examDates' && v.value is map && v.value.keys().hasOnly(['mainsJan','mainsApr','advanced'])
+            && (!('mainsJan' in v.value) || jeeDate(v.value.mainsJan)) && (!('mainsApr' in v.value) || jeeDate(v.value.mainsApr)) && (!('advanced' in v.value) || jeeDate(v.value.advanced)))
+          || (v.key == 'profile' && v.value is map && v.value.keys().hasOnly(['classLevel','studyMode','coaching','targetMainsMarks','targetAdvancedMarks'])
+            && v.value.classLevel in ['11','12','dropper'] && v.value.studyMode in ['self','coaching','both'] && text(v.value.coaching,200)
+            && (!('targetMainsMarks' in v.value) || nonnegative(v.value.targetMainsMarks,300)) && (!('targetAdvancedMarks' in v.value) || nonnegative(v.value.targetAdvancedMarks,2000)))
+        ))
+      );
+    }
+    function validUser(data) {
+      return data.keys().hasOnly(['sessions','subjects','tasks','calendarEvents','examGoal','examGoals','settings','lastSyncedAt','deletedTaskIds','deletedSessionIds'])
+        && (!('sessions' in data) || (data.sessions is list && data.sessions.size() <= 10000))
+        && (!('subjects' in data) || (data.subjects is list && data.subjects.size() <= 500))
+        && (!('tasks' in data) || (data.tasks is list && data.tasks.size() <= 10000))
+        && (!('calendarEvents' in data) || (data.calendarEvents is list && data.calendarEvents.size() <= 10000))
+        && (!('settings' in data) || data.settings is map)
+        && (!('lastSyncedAt' in data) || nonnegative(data.lastSyncedAt, 4102444800000));
+    }
+    function validRoom(data) {
+      return data.keys().hasAll(['id','name','description','category','activeCount','timerMode','badgeColor','isPublic','createdById','createdByName','createdAt','roomCode'])
+        && data.keys().hasOnly(['id','name','description','category','activeCount','targetExam','timerMode','badgeColor','isPublic','createdById','createdByName','createdAt','roomCode','topic','adminIds','deleted','customCode'])
+        && (!('customCode' in data) || data.customCode is bool)
+        && text(data.id,100) && text(data.name,60) && data.name.size() > 0
+        && text(data.description,1000) && text(data.category,100)
+        && text(data.timerMode,30) && text(data.badgeColor,200)
+        && data.isPublic is bool && text(data.createdById,128) && text(data.createdByName,200)
+        && nonnegative(data.activeCount,100000) && nonnegative(data.createdAt,4102444800000)
+        && (!('adminIds' in data) || (data.adminIds is list && data.adminIds.size() <= 20))
+        && (!('deleted' in data) || data.deleted is bool)
+        && text(data.roomCode,64) && (!('topic' in data) || text(data.topic,300));
+    }
+    function room(groupId) { return get(/databases/$(database)/documents/study_groups/$(groupId)).data; }
+    function roomOpen(groupId) { return exists(/databases/$(database)/documents/study_groups/$(groupId)) && !room(groupId).get('deleted',false); }
+    function memberOf(groupId) { return exists(/databases/$(database)/documents/study_groups/$(groupId)/members/$(request.auth.uid)) && get(/databases/$(database)/documents/study_groups/$(groupId)/members/$(request.auth.uid)).data.get('joined',true); }
+    function platformFlag(name) { return !exists(/databases/$(database)/documents/platform/controls) || get(/databases/$(database)/documents/platform/controls).data.get(name,true); }
+    function siteOpen() {
+      let path=/databases/$(database)/documents/platform/controls;
+      let data=exists(path)?get(path).data:{};
+      return !data.get('sitePaused',false) || (data.get('pauseStartsAt',0)>request.time.toMillis()) || (data.get('pauseEndsAt',0)>0 && data.pauseEndsAt<=request.time.toMillis());
+    }
+    function groupsEnabled() { return !exists(/databases/$(database)/documents/platform/controls) || get(/databases/$(database)/documents/platform/controls).data.get('groupsEnabled',true); }
+    function canAccess(groupId) { return authenticated() && groupsEnabled() && roomOpen(groupId) && memberOf(groupId); }
+    function groupAdmin(groupId) { return authenticated() && roomOpen(groupId) && (room(groupId).createdById==request.auth.uid || (memberOf(groupId) && request.auth.uid in room(groupId).get('adminIds',[]))); }
+    function canKick(groupId, uid) {
+      return groupAdmin(groupId) && uid != room(groupId).createdById
+        && (room(groupId).createdById == request.auth.uid || !(uid in room(groupId).get('adminIds',[])));
+    }
+    function validMember(data, uid) {
+      return data.keys().hasAll(['uid','displayName','avatarUrl','status','currentSubject','todaySeconds','streakDays','joinedAt','lastActiveAt','lastHeartbeat'])
+        && data.keys().hasOnly(['uid','displayName','avatarUrl','status','currentSubject','todaySeconds','streakDays','joinedAt','lastActiveAt','lastHeartbeat','studyDate','timerMode','isCurrentUser','inviteCode','joined','dailySeconds','liveSeconds','liveDate','focusStartedAt','statusMessage','publicStyle'])
+        && (!('publicStyle' in data) || validPublicStyle(data.publicStyle,uid))
+        && (!('joined' in data) || data.joined is bool)
+        && (!('dailySeconds' in data) || (data.dailySeconds is map && data.dailySeconds.size() <= 62))
+        && (!('liveSeconds' in data) || nonnegative(data.liveSeconds,86400))
+        && (!('liveDate' in data) || text(data.liveDate,10))
+        && (!('focusStartedAt' in data) || nonnegative(data.focusStartedAt,4102444800000))
+        && (!('statusMessage' in data) || text(data.statusMessage,160))
+        && data.uid == uid && text(data.displayName,200) && text(data.avatarUrl,2048)
+        && data.status in ['focusing','break','idle','offline','paused'] && text(data.currentSubject,150)
+        && nonnegative(data.todaySeconds,86400) && nonnegative(data.streakDays,100000)
+        && nonnegative(data.joinedAt,4102444800000) && nonnegative(data.lastActiveAt,4102444800000)
+        && nonnegative(data.lastHeartbeat,4102444800000)
+        && (!('studyDate' in data) || (text(data.studyDate,10) && data.studyDate.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')))
+        && (!('timerMode' in data) || text(data.timerMode,30))
+        && (!('inviteCode' in data) || text(data.inviteCode,64))
+        && (!('isCurrentUser' in data) || data.isCurrentUser is bool);
+    }
+    function validImage(data) {
+      return !('image' in data) || (data.image is map && data.image.keys().hasAll(['dataUrl','width','height']) && data.image.keys().hasOnly(['dataUrl','width','height'])
+        && data.image.dataUrl is string && data.image.dataUrl.size() <= 180000 && data.image.dataUrl.matches('data:image/(jpeg|gif);base64,[A-Za-z0-9+/]+={0,2}')
+        && data.image.width is int && data.image.height is int && data.image.width > 0 && data.image.height > 0 && data.image.width <= 1600 && data.image.height <= 1600);
+    }
+    function validMessage(data, groupId) {
+      return data.keys().hasAll(['groupId','senderUid','senderName','senderAvatar','text','timestamp','type'])
+        && data.keys().hasOnly(['groupId','senderUid','senderName','senderAvatar','text','timestamp','type','cheerEmoji','mentionUids','image']) && validImage(data)
+        && (!('mentionUids' in data) || (data.mentionUids is list && data.mentionUids.size() <= 20))
+        && data.groupId == groupId && data.senderUid == request.auth.uid
+        && text(data.senderName,200) && text(data.senderAvatar,2048)
+        && text(data.text,200) && data.text.size() > 0 && data.type in ['chat','cheer']
+        && data.timestamp is number && data.timestamp >= request.time.toMillis()-300000 && data.timestamp <= request.time.toMillis()+300000
+        && (!('cheerEmoji' in data) || text(data.cheerEmoji,16));
+    }
+    function managesAdmins(){return admin() && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.get('canManageAdmins',false);}
+    match /ai_access/{uid} {
+      allow read: if owner(uid) || admin();
+      allow create, update: if admin()
+        && request.resource.data.keys().hasOnly(['extraDaily','updatedAt','grantedBy','enabled','dailyLimit','requestsPerMinute'])
+        && request.resource.data.extraDaily is int && request.resource.data.extraDaily >= 0
+        && (!('enabled' in request.resource.data) || request.resource.data.enabled is bool)
+        && (request.resource.data.get('dailyLimit',null)==null || (request.resource.data.dailyLimit is int && nonnegative(request.resource.data.dailyLimit,1000000)))
+        && (request.resource.data.get('requestsPerMinute',null)==null || (request.resource.data.requestsPerMinute is int && request.resource.data.requestsPerMinute>=1 && request.resource.data.requestsPerMinute<=60))
+        && request.resource.data.updatedAt == request.time
+        && request.resource.data.grantedBy == request.auth.uid;
+      allow delete: if admin();
+    }
+    match /ai_config/{id} {
+      allow get: if authenticated();
+      allow create, update: if admin() && id=='global'
+        && request.resource.data.keys().hasOnly(['enabled','maintenanceMessage','model','chatEnabled','manualEnabled','validationEnabled','requestsPerMinute','inputPricePerMillion','outputPricePerMillion','updatedAt','updatedBy'])
+        && request.resource.data.enabled is bool && request.resource.data.chatEnabled is bool
+        && request.resource.data.manualEnabled is bool && request.resource.data.validationEnabled is bool
+        && text(request.resource.data.maintenanceMessage,300) && request.resource.data.maintenanceMessage.size()>0
+        && text(request.resource.data.model,100) && (request.resource.data.model=='' || request.resource.data.model.matches('gemini-[A-Za-z0-9._-]+'))
+        && request.resource.data.requestsPerMinute is int && request.resource.data.requestsPerMinute>=1 && request.resource.data.requestsPerMinute<=60
+        && request.resource.data.inputPricePerMillion is number && nonnegative(request.resource.data.inputPricePerMillion,1000)
+        && request.resource.data.outputPricePerMillion is number && nonnegative(request.resource.data.outputPricePerMillion,1000)
+        && request.resource.data.updatedAt==request.time && request.resource.data.updatedBy==request.auth.uid;
+    }
+    match /ai_usage_days/{day}/users/{uid} {allow read: if admin(); allow write: if false;}
+    match /ai_usage_events/{uid}/requests/{id} {allow read, write: if false;}
+    // Hermes credentials and operation evidence are exclusively owned by the audited Worker.
+    // Even administrators use the owner-only management API, never direct browser writes.
+    match /agent_grants/{id} { allow read, write: if false; }
+    match /agent_owner_slots/{uid} { allow read, write: if false; }
+    match /agent_rate_limits/{id} { allow read, write: if false; }
+    match /agent_operations/{grantId}/receipts/{operationId} { allow read, write: if false; }
+    match /agent_management/{uid}/receipts/{operationId} { allow read, write: if false; }
+    match /agent_audit/{id} { allow read, write: if false; }
+    function aiDailyLimit(uid) {
+      let access=exists(/databases/$(database)/documents/ai_access/$(uid))?get(/databases/$(database)/documents/ai_access/$(uid)).data:{};
+      return access.get('dailyLimit',null)!=null?access.dailyLimit:(plusMember(uid)?12:3)+access.get('extraDaily',0);
+    }
+    function aiAccountEnabled(uid) {
+      return (!exists(/databases/$(database)/documents/ai_config/global) || get(/databases/$(database)/documents/ai_config/global).data.enabled)
+        && (!exists(/databases/$(database)/documents/ai_access/$(uid)) || get(/databases/$(database)/documents/ai_access/$(uid)).data.get('enabled',true));
+    }
+    match /admins/{uid} {
+      allow get: if owner(uid) || admin();
+      allow list: if admin();
+      allow create: if managesAdmins() && request.auth.uid!=uid && request.resource.data.keys().hasOnly(['enabled','canManageAdmins','grantedBy','grantedAt']) && request.resource.data.enabled==true && request.resource.data.canManageAdmins==false && request.resource.data.grantedBy==request.auth.uid && request.resource.data.grantedAt==request.time;
+      allow delete: if managesAdmins() && uid!=request.auth.uid && !resource.data.get('canManageAdmins',false);
+    }
+    function validAnnouncement(data) {
+      return data.keys().hasAll(['title','text','authorUid','timestamp']) && data.keys().hasOnly(['title','text','authorUid','timestamp','deleted','category','pinned','coverUrl','popupMode','expiresAt','autoCloseSeconds','startsAt','status','audience','actionLabel','actionUrl'])
+        && text(data.title,100) && data.title.size()>0 && text(data.text,5000) && data.text.size()>0
+        && (!('category' in data) || text(data.category,60)) && (!('pinned' in data) || data.pinned is bool)
+        && (!('coverUrl' in data) || (text(data.coverUrl,2048) && (data.coverUrl=='' || data.coverUrl.matches('^https://.*') || data.coverUrl.matches('^/backgrounds/[a-zA-Z0-9._-]+$'))))
+        && data.get('popupMode','once') in ['once','refresh','daily','off'] && nonnegative(data.get('expiresAt',0),4102444800000) && nonnegative(data.get('autoCloseSeconds',0),3600)
+        && data.get('status','published') in ['draft','published'] && data.get('audience','all') in ['all','free','plus'] && nonnegative(data.get('startsAt',0),4102444800000)
+        && text(data.get('actionLabel',''),60) && text(data.get('actionUrl',''),2048) && (data.get('actionUrl','')=='' || data.actionUrl.matches('^https://[^ \n\r]+$'))
+        && text(data.authorUid,128) && nonnegative(data.timestamp,4102444800000) && (!('deleted' in data) || data.deleted is bool);
+    }
+    match /announcements/{id} {
+      allow read: if authenticated();
+      allow create: if admin() && validAnnouncement(request.resource.data) && request.resource.data.authorUid==request.auth.uid
+        && request.resource.data.timestamp >= request.time.toMillis()-300000 && request.resource.data.timestamp <= request.time.toMillis()+300000;
+      allow update: if admin() && validAnnouncement(request.resource.data) && request.resource.data.authorUid==resource.data.authorUid && request.resource.data.timestamp==resource.data.timestamp;
+    }
+    function validPresence(data,uid) {
+      return data.keys().hasAll(['uid','displayName','avatarUrl','isGuest','lastSeen']) && data.keys().hasOnly(['uid','displayName','avatarUrl','isGuest','lastSeen'])
+        && data.uid==uid && text(data.displayName,200) && validProfileMedia(data.avatarUrl) && data.isGuest is bool && data.lastSeen==request.time;
+    }
+    match /platform_users/{uid} {
+      allow read: if admin() || owner(uid);
+      allow create,update: if owner(uid) && validPresence(request.resource.data,uid);
+      allow delete: if resource.data.isGuest && ((signedIn() && request.auth.uid==uid) || (admin() && resource.data.lastSeen < request.time-duration.value(1,'h')));
+    }
+    function validRestriction(data) {
+      return data.keys().hasAll(['reason','expiresAt','permanent','active','actorUid','updatedAt']) && data.keys().hasOnly(['reason','expiresAt','permanent','active','actorUid','updatedAt','targetUid'])
+        && text(data.reason,1000) && data.reason.size()>0 && nonnegative(data.expiresAt,4102444800000)
+        && data.permanent is bool && data.active is bool && data.actorUid==request.auth.uid && data.updatedAt==request.time
+        && (data.permanent || !data.active || data.expiresAt > request.time.toMillis());
+    }
+    match /moderation/{uid} {
+      allow get: if signedIn() && (request.auth.uid==uid || admin());
+      allow list: if admin();
+      allow create,update: if admin() && uid!=request.auth.uid && !exists(/databases/$(database)/documents/admins/$(uid)) && validRestriction(request.resource.data) && !('targetUid' in request.resource.data);
+    }
+    match /moderation_audit/{id} {
+      allow read: if admin();
+      allow create: if admin() && validRestriction(request.resource.data) && text(request.resource.data.targetUid,128)
+        && getAfter(/databases/$(database)/documents/moderation/$(request.resource.data.targetUid)).data.updatedAt==request.time && getAfter(/databases/$(database)/documents/moderation/$(request.resource.data.targetUid)).data.reason==request.resource.data.reason && getAfter(/databases/$(database)/documents/moderation/$(request.resource.data.targetUid)).data.actorUid==request.auth.uid && getAfter(/databases/$(database)/documents/moderation/$(request.resource.data.targetUid)).data.expiresAt==request.resource.data.expiresAt && getAfter(/databases/$(database)/documents/moderation/$(request.resource.data.targetUid)).data.active==request.resource.data.active && getAfter(/databases/$(database)/documents/moderation/$(request.resource.data.targetUid)).data.permanent==request.resource.data.permanent;
+    }
+    function validTicket(data) {
+      return data.keys().hasAll(['ownerUid','ownerName','title','category','status','createdAt','updatedAt']) && data.keys().hasOnly(['ownerUid','ownerName','title','category','status','createdAt','updatedAt','isPriority'])
+        && text(data.ownerUid,128) && text(data.ownerName,200) && text(data.title,120) && data.title.size()>0 && data.category in ['issue','suggestion','question','account','report','partnership','premium','timer','appeal','other'] && data.status in ['open','in_progress','resolved'] && data.createdAt is timestamp && data.updatedAt==request.time
+        && (!('isPriority' in data) || data.isPriority is bool);
+    }
+    function ticketAccess(data) { return signedIn() && (data.ownerUid==request.auth.uid || admin()); }
+    match /support_tickets/{id} {
+      allow read: if ticketAccess(resource.data);
+      allow create: if authenticated() && siteOpen() && (!exists(/databases/$(database)/documents/platform/controls) || get(/databases/$(database)/documents/platform/controls).data.get('supportEnabled',true)) && validTicket(request.resource.data) && request.resource.data.ownerUid==request.auth.uid && request.resource.data.createdAt==request.time && request.resource.data.status=='open' && (!request.resource.data.get('isPriority',false) || plusMember(request.auth.uid));
+      allow update: if authenticated() && ticketAccess(resource.data) && validTicket(request.resource.data)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['updatedAt','status']) && (admin() || request.resource.data.status != 'in_progress' || request.resource.data.status == resource.data.status);
+      match /messages/{messageId} {
+        function parent() { return get(/databases/$(database)/documents/support_tickets/$(id)).data; }
+        function validReply(data) { return data.keys().hasAll(['senderUid','senderName','text','createdAt']) && data.keys().hasOnly(['senderUid','senderName','text','createdAt','image']) && validImage(data) && data.senderUid==request.auth.uid && text(data.senderName,200) && text(data.text,5000) && data.text.size()>0 && data.createdAt==request.time; }
+        allow read: if ticketAccess(parent());
+        allow create: if authenticated() && ticketAccess(getAfter(/databases/$(database)/documents/support_tickets/$(id)).data) && getAfter(/databases/$(database)/documents/support_tickets/$(id)).data.status in ['open','in_progress'] && validReply(request.resource.data);
+      }
+    }
+    function validControls(data) {
+      return data.keys().hasAll(['groupsEnabled','supportEnabled','rankingsEnabled','notice','actorUid','updatedAt'])
+        && data.keys().hasOnly(['groupsEnabled','supportEnabled','rankingsEnabled','notice','actorUid','updatedAt','maintenanceMode','syllabusEnabled','jeeTrackEnabled','noticeType','maintenanceMessage','maintenanceEta','sitePaused','pauseStartsAt','pauseEndsAt','chatEnabled','chatAttachmentsEnabled','groupCreationEnabled','announcementPopupsEnabled','noticeEndsAt'])
+        && data.groupsEnabled is bool && data.supportEnabled is bool && data.rankingsEnabled is bool
+        && data.get('sitePaused',false) is bool && data.get('chatEnabled',true) is bool && data.get('chatAttachmentsEnabled',true) is bool && data.get('groupCreationEnabled',true) is bool && data.get('announcementPopupsEnabled',true) is bool
+        && nonnegative(data.get('pauseStartsAt',0),4102444800000) && nonnegative(data.get('pauseEndsAt',0),4102444800000) && nonnegative(data.get('noticeEndsAt',0),4102444800000)
+        && data.get('maintenanceMode',false) is bool && data.get('syllabusEnabled',false) is bool && data.get('jeeTrackEnabled',false) is bool
+        && data.get('noticeType','info') in ['info','warning','maintenance']
+        && text(data.notice,300) && text(data.get('maintenanceMessage',''),2000) && text(data.get('maintenanceEta',''),150)
+        && data.actorUid==request.auth.uid && data.updatedAt==request.time;
+    }
+    match /platform/controls {
+      // Public, non-secret service flags are needed before sign-in to pause the landing too.
+      allow read: if true;
+      allow create,update: if admin() && validControls(request.resource.data);
+    }
+    match /platform_operations_audit/{id} {
+      allow read: if admin();
+      allow create: if admin() && request.resource.data.keys().hasOnly(['actorUid','createdAt','changed','sitePaused','notice'])
+        && request.resource.data.actorUid==request.auth.uid && request.resource.data.createdAt==request.time
+        && request.resource.data.changed is list && request.resource.data.changed.size()<=30
+        && request.resource.data.sitePaused is bool && text(request.resource.data.notice,300);
+    }
+    match /group_moderation_audit/{id} {
+      allow read: if admin();
+      allow create: if admin() && request.resource.data.keys().hasAll(['groupId','groupName','actorUid','reason','action','createdAt'])
+        && request.resource.data.keys().hasOnly(['groupId','groupName','actorUid','reason','action','createdAt'])
+        && text(request.resource.data.groupId,100) && text(request.resource.data.groupName,60)
+        && request.resource.data.actorUid==request.auth.uid && text(request.resource.data.reason,1000) && request.resource.data.reason.size()>0
+        && request.resource.data.action=='delete' && request.resource.data.createdAt==request.time
+        && !get(/databases/$(database)/documents/study_groups/$(request.resource.data.groupId)).data.get('deleted',false)
+        && getAfter(/databases/$(database)/documents/study_groups/$(request.resource.data.groupId)).data.deleted;
+    }
+    function validProfileMedia(url) {
+      return text(url,2048) && (url=='' || url.matches('^https://[a-zA-Z0-9.-]+(:[0-9]+)?(/[^ \n\r]*)?([?][^ \n\r]*)?$')
+        || (url.matches('^/(backgrounds|avatars)/[a-zA-Z0-9._/-]+([?][a-zA-Z0-9=&._-]+)?$') && !url.matches('.*[.][.].*') && !url.matches('.*//.*')));
+    }
+    function allowedRevocationAvatar(uid) {
+      let path=/databases/$(database)/documents/users/$(uid);
+      let settings=exists(path)?get(path).data.get('settings',{}):{};
+      return request.resource.data.avatarUrl==resource.data.avatarUrl || request.resource.data.avatarUrl==''
+        || request.resource.data.avatarUrl==settings.get('avatarUrl','') || request.resource.data.avatarUrl==settings.get('plusAnimatedAvatarUrl','');
+    }
+    function validPublicStyle(style,uid) {
+      let privileged=existsAfter(/databases/$(database)/documents/admins/$(uid));
+      return style.keys().hasOnly(['plusUntil','cover','scene','frame','aura','trial','admin'])
+        && style.admin is bool && (!style.admin || privileged) && style.trial is bool
+        && validProfileMedia(style.cover) && text(style.scene,40) && text(style.frame,40) && text(style.aura,40)
+        && style.plusUntil is number && (style.plusUntil==0 ? (!style.trial && style.cover=='' && style.scene=='none' && style.frame=='none' && style.aura=='none') :
+          (privileged || (plusMember(uid) && style.plusUntil==get(/databases/$(database)/documents/subscriptions/$(uid)).data.currentPeriodEnd && (!style.trial || get(/databases/$(database)/documents/subscriptions/$(uid)).data.get('isTrial',false)))));
+    }
+    function validGlobalProfile(data,uid) {
+      return data.keys().hasAll(['uid','displayName','avatarUrl','updatedAt','dayKey','weekKey','monthKey','daySeconds','weekSeconds','monthSeconds'])
+        && data.keys().hasOnly(['uid','displayName','avatarUrl','updatedAt','dayKey','weekKey','monthKey','daySeconds','weekSeconds','monthSeconds','publicStyle','streakDays','streakDate','streakUtcOffset'])
+        && (!('publicStyle' in data) || validPublicStyle(data.publicStyle,uid))
+        && (!data.keys().hasAny(['streakDays','streakDate','streakUtcOffset']) || (data.keys().hasAll(['streakDays','streakDate','streakUtcOffset']) && nonnegative(data.streakDays,100000) && data.streakDays is int && data.streakUtcOffset is int && data.streakUtcOffset>=-840 && data.streakUtcOffset<=840 && (data.streakDate=='' || data.streakDate.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$'))))
+        && data.uid==uid && text(data.displayName,200) && validProfileMedia(data.avatarUrl)
+        && data.updatedAt is number && data.updatedAt>=request.time.toMillis()-300000 && data.updatedAt<=request.time.toMillis()+300000
+        && data.dayKey.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$') && data.weekKey.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$') && data.monthKey.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+        && nonnegative(data.daySeconds,86400) && nonnegative(data.weekSeconds,604800) && nonnegative(data.monthSeconds,2678400);
+    }
+    match /global_profiles/{uid} {
+      allow read: if authenticated();
+      allow create,update: if owner(uid) && request.auth.token.get('firebase',{}).get('sign_in_provider','')!='anonymous'
+        && (!exists(/databases/$(database)/documents/platform/controls) || get(/databases/$(database)/documents/platform/controls).data.get('rankingsEnabled',true))
+        && validGlobalProfile(request.resource.data,uid);
+      // Admins cannot rewrite members' identity. Role grants preserve existing artwork.
+      allow update: if admin() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['publicStyle','avatarUrl','updatedAt'])
+        && validGlobalProfile(request.resource.data,uid)
+        && ((existsAfter(/databases/$(database)/documents/admins/$(uid)) != exists(/databases/$(database)/documents/admins/$(uid))
+          && (existsAfter(/databases/$(database)/documents/admins/$(uid)) ?
+            (request.resource.data.avatarUrl==resource.data.avatarUrl && request.resource.data.publicStyle.admin==true
+              && request.resource.data.publicStyle.diff(resource.data.publicStyle).affectedKeys().hasOnly(['admin','plusUntil'])) :
+            (request.resource.data.publicStyle.admin==false && allowedRevocationAvatar(uid)
+              && (request.resource.data.publicStyle.plusUntil==0 || request.resource.data.publicStyle.diff(resource.data.publicStyle).affectedKeys().hasOnly(['admin','plusUntil','trial'])))))
+          || (request.resource.data.publicStyle.plusUntil==0 && !existsAfter(/databases/$(database)/documents/admins/$(uid))
+            && exists(/databases/$(database)/documents/subscriptions/$(uid))
+            && get(/databases/$(database)/documents/subscriptions/$(uid)).data.get('isPlus',false)
+            && !getAfter(/databases/$(database)/documents/subscriptions/$(uid)).data.get('isPlus',false)
+            && allowedRevocationAvatar(uid)));
+      allow delete: if signedIn() && request.auth.uid==uid;
+    }
+    // Ranked time is one server-bounded clock per account, independent of editable sessions.
+    function validClock(data,uid) {
+      return data.keys().hasOnly(['uid','registered','dayStart','weekStart','monthStart','daySeconds','weekSeconds','monthSeconds','lastTick','deviceId','timerId','active','clientSeconds','credited','stretchStart','integrityStatus','reason'])
+        && (!('stretchStart' in data) || (data.stretchStart is int && data.stretchStart>=0 && data.stretchStart<=request.time.toMillis()+5000))
+        && data.uid==uid && data.registered==(request.auth.token.get('firebase',{}).get('sign_in_provider','')!='anonymous')
+        && data.lastTick==request.time && data.active is bool && text(data.deviceId,80) && data.deviceId.size()>0 && text(data.timerId,80) && data.timerId.size()>0
+        && data.clientSeconds is int && nonnegative(data.clientSeconds,2678400) && data.credited is int && nonnegative(data.credited,10800)
+        && data.dayStart is int && data.dayStart <= request.time.toMillis() && data.dayStart >= request.time.toMillis() - 86400000
+        && data.weekStart is int && data.weekStart <= data.dayStart && data.weekStart >= data.dayStart - 6*86400000
+        && data.monthStart is int && data.monthStart <= data.dayStart && data.monthStart >= data.dayStart - 31*86400000
+        && nonnegative(data.daySeconds,86400) && nonnegative(data.weekSeconds,604800) && nonnegative(data.monthSeconds,2678400)
+        && data.integrityStatus in ['clear','review','confirmed'] && data.reason in ['','timer_jump','clock_skew','impossible_elapsed'];
+    }
+    function boundedIncrement(oldStart,newStart,oldSeconds,newSeconds,delta,tick) {
+      let clipped=int((tick+delta*1000-(tick>newStart?tick:newStart)) / 1000);
+      let amount=clipped>0?clipped:0;
+      return newSeconds==(oldStart==newStart?oldSeconds+amount:amount);
+    }
+    function validClockAdvance(data,previous) {
+      let elapsed=int((request.time.toMillis() - previous.lastTick.toMillis()) / 1000);
+      let jumped=elapsed > 57600;
+      let start=previous.active?previous.get('stretchStart',previous.lastTick.toMillis()):request.time.toMillis();
+      let consumed=int((previous.lastTick.toMillis()-start) / 1000);
+      let remaining=consumed<10800?10800-consumed:0;
+      return previous.get('serverManaged',false)==false && (!previous.active || previous.deviceId==data.deviceId || elapsed>=90)
+        && data.stretchStart is int && (previous.active?data.stretchStart==start:(data.stretchStart>=previous.lastTick.toMillis() && data.stretchStart<=request.time.toMillis()+5000 && data.stretchStart>=request.time.toMillis()-5000))
+        && data.credited<=remaining && data.credited<=elapsed && (previous.active || data.credited==0)
+        && (!jumped || data.credited==0)
+        && data.integrityStatus==(previous.integrityStatus=='confirmed'?'confirmed':previous.integrityStatus=='review'||jumped?'review':'clear')
+        && (previous.reason!=''?data.reason==previous.reason:(jumped?data.reason in ['timer_jump','clock_skew','impossible_elapsed']:data.reason==''))
+        && boundedIncrement(previous.dayStart,data.dayStart,previous.daySeconds,data.daySeconds,data.credited,previous.lastTick.toMillis())
+        && boundedIncrement(previous.weekStart,data.weekStart,previous.weekSeconds,data.weekSeconds,data.credited,previous.lastTick.toMillis())
+        && boundedIncrement(previous.monthStart,data.monthStart,previous.monthSeconds,data.monthSeconds,data.credited,previous.lastTick.toMillis());
+    }
+    function publicClock(data) {
+      return {'uid':data.uid,'registered':data.registered,'dayStart':data.dayStart,'weekStart':data.weekStart,'monthStart':data.monthStart,
+        'daySeconds':data.daySeconds,'weekSeconds':data.weekSeconds,'monthSeconds':data.monthSeconds,'integrityStatus':data.integrityStatus};
+    }
+    function syncedPublicClock(data,uid) {
+      return !data.registered || (existsAfter(/databases/$(database)/documents/study_rankings/$(uid))
+        && getAfter(/databases/$(database)/documents/study_rankings/$(uid)).data==publicClock(data));
+    }
+    // Only the AI server writes verdicts and manual-credit receipts.
+    match /manual_validations/{uid}/sessions/{sessionId} {
+      allow read: if owner(uid) || admin();
+      allow write: if false;
+    }
+    match /manual_daily_credit/{uid}/days/{day} {
+      allow read, write: if false;
+    }
+    match /manual_credit_receipts/{uid}/entries/{fingerprint} {
+      allow read, write: if false;
+    }
+    match /study_rankings/{uid} {
+      allow read: if authenticated();
+      allow create,update: if (owner(uid)||admin()) && existsAfter(/databases/$(database)/documents/study_integrity/$(uid))
+        && request.resource.data.registered==true
+        && request.resource.data==publicClock(getAfter(/databases/$(database)/documents/study_integrity/$(uid)).data);
+    }
+    match /study_integrity/{uid} {
+      allow read: if owner(uid) || admin();
+      allow create: if owner(uid) && syncedPublicClock(request.resource.data,uid) && validClock(request.resource.data,uid) && request.resource.data.get('stretchStart',request.time.toMillis())>=request.time.toMillis()-5000 && request.resource.data.daySeconds==0 && request.resource.data.weekSeconds==0 && request.resource.data.monthSeconds==0 && request.resource.data.credited==0 && request.resource.data.integrityStatus=='clear' && request.resource.data.reason=='';
+      allow update: if owner(uid) && syncedPublicClock(request.resource.data,uid) && validClock(request.resource.data,uid) && validClockAdvance(request.resource.data,resource.data);
+      // Removing saved study may reduce a score, but cannot mint time or reset a timer/flag.
+      allow update: if owner(uid) && syncedPublicClock(request.resource.data,uid)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['daySeconds','weekSeconds','monthSeconds'])
+        && nonnegative(request.resource.data.daySeconds,resource.data.daySeconds)
+        && nonnegative(request.resource.data.weekSeconds,resource.data.weekSeconds)
+        && nonnegative(request.resource.data.monthSeconds,resource.data.monthSeconds);
+      match /deleted_sessions/{sessionId} {
+        allow read: if owner(uid);
+        allow create: if owner(uid) && request.resource.data.keys().hasOnly(['sessionId','deletedAt'])
+          && request.resource.data.sessionId==sessionId && request.resource.data.deletedAt==request.time;
+      }
+      allow update: if admin() && syncedPublicClock(request.resource.data,uid) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['integrityStatus','reason'])
+        && request.resource.data.integrityStatus in ['clear','review','confirmed'] && request.resource.data.reason in ['','timer_jump','clock_skew','impossible_elapsed']
+        && getAfter(/databases/$(database)/documents/study_integrity_reviews/$(uid)).data.actorUid==request.auth.uid && getAfter(/databases/$(database)/documents/study_integrity_reviews/$(uid)).data.updatedAt==request.time;
+      allow delete: if false;
+    }
+    match /study_integrity_reviews/{uid} {
+      allow read: if admin() || owner(uid);
+      allow create,update: if admin() && request.resource.data.keys().hasOnly(['actorUid','status','note','updatedAt']) && request.resource.data.actorUid==request.auth.uid
+        && request.resource.data.status in ['clear','review','confirmed'] && text(request.resource.data.note,1000) && request.resource.data.note.size()>0 && request.resource.data.updatedAt==request.time
+        && getAfter(/databases/$(database)/documents/study_integrity/$(uid)).data.integrityStatus==request.resource.data.status;
+    }
+
+    match /users/{uid} {
+      allow read: if owner(uid) || admin();
+      allow create: if owner(uid) && validUser(request.resource.data)
+        && !request.resource.data.keys().hasAny(['examGoal','examGoals','deletedTaskIds','deletedSessionIds']);
+      // Historical retired fields can remain, but clients cannot add or change them.
+      allow update: if owner(uid) && validUser(request.resource.data)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['sessions','subjects','tasks','calendarEvents','settings','lastSyncedAt']);
+      match /jeetrack/{recordId} {
+        allow read, delete: if owner(uid);
+        allow create, update: if owner(uid) && recordId.size() <= 220 && validJeeRecord(request.resource.data);
+      }
+      match /ai_days/{day} {
+        allow read: if owner(uid) || admin();
+        allow create, update: if owner(uid) && aiAccountEnabled(uid) && day == string(currentChatDay())
+          && request.resource.data.keys().hasOnly(['day','count','updatedAt'])
+          && request.resource.data.day == currentChatDay()
+          && request.resource.data.updatedAt == request.time
+          && request.resource.data.count is int
+          && request.resource.data.count == (resource == null ? 1 : resource.data.count+1)
+          && (admin() || request.resource.data.count <= aiDailyLimit(uid));
+        allow delete: if false;
+      }
+      match /chat_days/{day} {
+        allow read: if owner(uid) || admin();
+        allow create, update: if owner(uid) && day == string(currentChatDay())
+          && validChatIncrement(uid,request.resource.data)
+          && !exists(/databases/$(database)/documents/study_groups/$(request.resource.data.lastGroupId)/messages/$(request.resource.data.lastMessageId))
+          && getAfter(/databases/$(database)/documents/study_groups/$(request.resource.data.lastGroupId)/messages/$(request.resource.data.lastMessageId)).data.senderUid == uid;
+      }
+      match /community/preferences {
+        allow read: if owner(uid) || admin();
+        allow create, update: if owner(uid) && request.resource.data.keys().hasOnly(['joinedIds','primaryId','mutedIds','readIds'])
+          && request.resource.data.joinedIds is list && request.resource.data.joinedIds.size() <= 100
+          && request.resource.data.mutedIds is list && request.resource.data.mutedIds.size() <= 100
+          && request.resource.data.readIds is list && request.resource.data.readIds.size() <= 100
+          && (request.resource.data.primaryId == null || text(request.resource.data.primaryId,100));
+      }
+    }
+    function validActiveSession(data, uid) {
+      return data.keys().hasAll(['uid', 'deviceId', 'sessionId', 'status', 'mode', 'targetSeconds', 'breakSeconds', 'accumulatedSeconds', 'startTime', 'lastHeartbeat', 'updatedAt'])
+        && data.keys().hasOnly(['uid', 'deviceId', 'sessionId', 'status', 'mode', 'targetSeconds', 'breakSeconds', 'accumulatedSeconds', 'startTime', 'runningSince', 'lastHeartbeat', 'updatedAt', 'workspaceId', 'workspaceName', 'subjectId', 'subjectName', 'subjectColor', 'notes', 'date', 'strictMode', 'rankingCapped', 'jee'])
+        && (!('jee' in data) || (data.jee is map && data.jee.keys().hasOnly(['subject','chapterId','kind']) && jeeSubject(data.jee.subject) && data.jee.chapterId is int && data.jee.chapterId>0 && data.jee.kind in ['lecture','practice','revision','mockAnalysis']))
+        && data.uid == uid
+        && text(data.deviceId, 128) && data.deviceId.size() > 0
+        && text(data.sessionId, 128) && data.sessionId.size() > 0
+        && (!('strictMode' in data) || data.strictMode is bool)
+        && (!('rankingCapped' in data) || data.rankingCapped is bool)
+        && data.status in ['running', 'paused', 'break-running', 'break-paused']
+        && text(data.mode, 30)
+        && nonnegative(data.targetSeconds, 86400)
+        && nonnegative(data.breakSeconds, 86400)
+        && nonnegative(data.accumulatedSeconds, 86400)
+        && nonnegative(data.startTime, 4102444800000)
+        && nonnegative(data.lastHeartbeat, 4102444800000)
+        && nonnegative(data.updatedAt, 4102444800000)
+        && (!('runningSince' in data) || data.runningSince == null || nonnegative(data.runningSince, 4102444800000))
+        && (!('workspaceId' in data) || text(data.workspaceId, 100))
+        && (!('workspaceName' in data) || text(data.workspaceName, 100))
+        && (!('subjectId' in data) || text(data.subjectId, 100))
+        && (!('subjectName' in data) || text(data.subjectName, 100))
+        && (!('subjectColor' in data) || text(data.subjectColor, 50))
+        && (!('notes' in data) || text(data.notes, 2000))
+        && (!('date' in data) || (text(data.date, 10) && data.date.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')));
+    }
+    match /activeSessions/{uid} {
+      allow read: if owner(uid);
+      allow create: if owner(uid) && request.resource.data.uid == uid && validActiveSession(request.resource.data, uid);
+      allow update: if owner(uid) && request.resource.data.uid == uid && validActiveSession(request.resource.data, uid);
+      allow delete: if owner(uid);
+    }
+    match /membership_audit/{id} {
+      allow read, create: if admin();
+      allow update, delete: if false;
+    }
+    match /subscriptions/{uid} {
+      // Subscriptions are managed manually by owner/admin. Normal users can only read their own record.
+      allow read: if signedIn() && (owner(uid) || admin());
+      allow create, update, delete: if admin();
+      match /invoices/{invoiceId} {
+        allow read: if signedIn() && (owner(uid) || admin());
+        allow create, update, delete: if admin();
+      }
+    }
+    match /payment_webhooks/{eventId} {
+      // Webhook deduplication logs are internal server-only.
+      allow read, write: if false;
+    }
+    match /study_groups/{groupId} {
+      // A private invitation URL is a capability: exact ID lookup is allowed;
+      // private rooms cannot be enumerated. New IDs use crypto.randomUUID().
+      allow get: if authenticated();
+      allow list: if authenticated() && (admin() || resource.data.isPublic || resource.data.createdById == request.auth.uid);
+      allow create: if authenticated() && siteOpen() && platformFlag('groupCreationEnabled') && (!exists(/databases/$(database)/documents/platform/controls) || get(/databases/$(database)/documents/platform/controls).data.get('groupsEnabled',true)) && request.resource.data.createdById == request.auth.uid
+        && request.resource.data.id == groupId && validRoom(request.resource.data) && !request.resource.data.keys().hasAny(['targetExam']) && !request.resource.data.get('deleted',false) && request.resource.data.get('adminIds',[]).size()==0
+        && ((request.resource.data.roomCode.matches('^SANCT-[A-F0-9]{8}$') && !request.resource.data.get('customCode',false)) || plusMember(request.auth.uid));
+      allow update: if authenticated() && !resource.data.get('deleted',false) && validRoom(request.resource.data)
+        && request.resource.data.get('targetExam',null) == resource.data.get('targetExam',null)
+        && request.resource.data.createdById == resource.data.createdById
+        && request.resource.data.id == resource.data.id && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.roomCode == resource.data.roomCode && request.resource.data.get('customCode',false) == resource.data.get('customCode',false)
+        && ((admin() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['deleted'])) || owner(resource.data.createdById)
+          || (groupAdmin(groupId) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name','description','topic']))
+          || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['adminIds']) && request.resource.data.adminIds == resource.data.get('adminIds',[]).removeAll([request.auth.uid])));
+      match /members/{uid} {
+        allow get: if admin() || owner(uid) || (authenticated() && roomOpen(groupId) && (room(groupId).isPublic || canAccess(groupId)));
+        allow list: if admin() || (authenticated() && roomOpen(groupId) && (room(groupId).isPublic || canAccess(groupId)));
+        allow create: if owner(uid) && groupsEnabled() && validMember(request.resource.data, uid)
+          && !getAfter(/databases/$(database)/documents/study_groups/$(groupId)).data.get('deleted',false)
+          && (getAfter(/databases/$(database)/documents/study_groups/$(groupId)).data.isPublic || getAfter(/databases/$(database)/documents/study_groups/$(groupId)).data.createdById == uid
+            || ('inviteCode' in request.resource.data && request.resource.data.inviteCode == room(groupId).roomCode));
+        allow update: if (owner(uid) && roomOpen(groupId) && validMember(request.resource.data, uid)
+          && (resource.data.get('joined', true) || request.resource.data.get('joined', true) == false || (groupsEnabled() && (room(groupId).isPublic || room(groupId).createdById == uid || request.resource.data.get('inviteCode','') == room(groupId).roomCode))))
+          || (canKick(groupId, uid) && validMember(request.resource.data, uid)
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['joined', 'status', 'lastHeartbeat'])
+            && request.resource.data.joined == false && request.resource.data.status == 'offline');
+        allow delete: if canKick(groupId, uid);
+      }
+      match /messages/{messageId} {
+        allow read: if admin() || canAccess(groupId);
+        allow create: if canAccess(groupId) && siteOpen() && platformFlag('chatEnabled') && (platformFlag('chatAttachmentsEnabled') || !('image' in request.resource.data)) && validMessage(request.resource.data, groupId)
+          && countedMessage(request.auth.uid,groupId,messageId);
+        allow delete: if admin() || (canAccess(groupId) && (resource.data.senderUid==request.auth.uid || groupAdmin(groupId)));
+      }
+    }
+    match /room_invites/{code} {
+      function validInvite(data) {
+        return data.keys().hasAll(['groupId','createdById']) && data.keys().hasOnly(['groupId','createdById'])
+          && text(data.groupId,100) && data.createdById == request.auth.uid
+          && getAfter(/databases/$(database)/documents/study_groups/$(data.groupId)).data.createdById == request.auth.uid
+          && getAfter(/databases/$(database)/documents/study_groups/$(data.groupId)).data.roomCode == code;
+      }
+      allow get: if authenticated();
+      allow create: if authenticated() && validInvite(request.resource.data);
+      allow update: if false;
+    }
+  }
+}

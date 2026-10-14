@@ -1,0 +1,27 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {selectAppCheckProvider} from '../src/utils/appCheckConfig.ts';
+import {buildPlannerContext} from '../src/features/ai-planner/context.ts';
+import {validatePlannerResponse} from '../src/features/ai-planner/validation.ts';
+import {applyPlannerBatch,undoPlannerBatch} from '../src/features/ai-planner/apply.ts';
+import {createPlannerRequestGate} from '../src/features/ai-planner/requestGate.ts';
+import type {PlannerInput,TaskDraft} from '../src/features/ai-planner/types.ts';
+const input:PlannerInput={userId:'u',workspaceId:'w',legacySpaceId:'w',instructions:'Tomorrow study maths',now:new Date(2026,9,4,23,30),includeTasks:true,allowDeletes:false,tasks:[{id:'old',workspaceId:'w',text:'Chemistry',dueDate:'2026-10-05',startTime:'09:00',endTime:'10:00',category:'today',completed:false,createdAt:1}],subjects:[]};
+const draft:TaskDraft={text:'Maths',dueDate:'2026-10-05',startTime:'10:00',endTime:'11:00',subjectId:null};
+const envelope=(d=draft)=>({version:1,summary:'Your plan',question:null,operations:[{kind:'create',taskId:null,draft:d}]});
+const parse=(raw:unknown)=>validatePlannerResponse(raw,buildPlannerContext(input),{batchId:'b',proposalIds:['p']});
+test('production cannot use a debug provider',()=>assert.equal(selectAppCheckProvider({production:true,siteKey:'',debugToken:'debug'}),'unavailable'));
+test('context uses local dates and excludes completed/foreign records',()=>{const c=buildPlannerContext({...input,tasks:[...input.tasks,{...input.tasks[0],id:'foreign',workspaceId:'x'},{...input.tasks[0],id:'done',completed:true}]});assert.equal(c.today,'2026-10-04');assert.equal(c.horizonEnd,'2026-11-03');assert.deepEqual(c.tasks.map(t=>t.id),['old']);assert.deepEqual(buildPlannerContext({...input,includeTasks:false}).tasks,[]);});
+test('invalid calendar dates, slots and unknown fields fail',()=>{assert.equal(parse(envelope({...draft,dueDate:'2026-02-30'})).ok,false);assert.equal(parse(envelope({...draft,endTime:'09:00'})).ok,false);assert.equal(parse({...envelope(),evil:true}).ok,false);assert.equal(parse('{"version":').ok,false);});
+test('touching slots apply once and undo preserves later edits',()=>{const v=parse(envelope());assert.ok(v.ok);const a=applyPlannerBatch(input.tasks,v.batch,['p'],{identity:input,today:'2026-10-04',now:1,alreadyAppliedIds:[]});assert.ok(a.ok);assert.equal(a.tasks.length,2);assert.equal(input.tasks.length,1);assert.equal(applyPlannerBatch(a.tasks,v.batch,['p'],{identity:input,today:'2026-10-04',now:1,alreadyAppliedIds:['p']}).ok,false);assert.equal(undoPlannerBatch(a.tasks,a.receipt,input).tasks.length,1);const changed=a.tasks.map(t=>t.id==='task-ai-p'?{...t,text:'Later edit'}:t);assert.equal(undoPlannerBatch(changed,a.receipt,input).tasks.length,2);});
+test('overlap, foreign owner, stale updates and unapproved deletion block saving',()=>{const c=buildPlannerContext(input);const overlap=parse(envelope({...draft,startTime:'09:30'}));assert.ok(overlap.ok);assert.equal(applyPlannerBatch(input.tasks,overlap.batch,['p'],{identity:input,today:c.today,now:1,alreadyAppliedIds:[]}).ok,false);assert.equal(validatePlannerResponse({version:1,summary:'',question:null,operations:[{kind:'delete',taskId:'old',draft:null}]},c,{batchId:'b',proposalIds:['p']}).ok,false);const v=validatePlannerResponse({version:1,summary:'',question:null,operations:[{kind:'update',taskId:'old',draft}]},c,{batchId:'b',proposalIds:['p']});assert.ok(v.ok);assert.equal(applyPlannerBatch([{...input.tasks[0],text:'Changed'}],v.batch,['p'],{identity:input,today:c.today,now:1,alreadyAppliedIds:[]}).ok,false);assert.equal(applyPlannerBatch(input.tasks,v.batch,['p'],{identity:{...input,userId:'other'},today:c.today,now:1,alreadyAppliedIds:[]}).ok,false);});
+test('clarification has no mutations and timed-out requests cannot publish',()=>{assert.equal(parse({version:1,summary:'',question:'Which Friday?',operations:[]}).ok,true);const g=createPlannerRequestGate();const a=g.begin(input);g.begin(input);assert.equal(g.isCurrent(a,input),false);g.invalidate();assert.equal(g.isCurrent(a,input),false);});
+test('planning options include only chosen workspace tasks and require task access for removals',()=>{
+ const off=buildPlannerContext({...input,includeTasks:false,allowDeletes:true});
+ assert.deepEqual(off.tasks,[]);assert.equal(off.allowDeletes,false);
+ const on=buildPlannerContext({...input,includeTasks:true,allowDeletes:true});
+ assert.deepEqual(on.tasks.map(t=>t.id),['old']);assert.equal(on.allowDeletes,true);
+ const deletion={version:1,summary:'',question:null,operations:[{kind:'delete',taskId:'old',draft:null}]};
+ assert.equal(validatePlannerResponse(deletion,off,{batchId:'b',proposalIds:['p']}).ok,false);
+ assert.equal(validatePlannerResponse(deletion,on,{batchId:'b',proposalIds:['p']}).ok,true);
+});

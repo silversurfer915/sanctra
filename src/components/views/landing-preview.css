@@ -1,0 +1,571 @@
+/* Preview framing only. Product controls and content use production styles. */
+.sanctra-app.landing-product-preview,
+.landing-product-preview {
+  position: relative;
+  min-width: 0;
+  width: 100%;
+  color: var(--sanctra-paper, #f3f1e7);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%), rgba(20, 22, 28, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 24px;
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.65), inset 0 1px 1.5px rgba(255, 255, 255, 0.22);
+  overflow: clip;
+  text-align: left;
+  font-family: var(--font-body, 'Inter Variable', Inter, system-ui, sans-serif);
+}
+
+.landing-preview-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--sanctra-paper, #f3f1e7);
+  font-size: 14px;
+}
+
+.landing-preview-toolbar > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 600;
+  font-family: var(--font-display, 'Manrope Variable', Manrope, Inter, sans-serif);
+}
+
+.landing-preview-toolbar small,
+.landing-preview-state {
+  color: var(--sanctra-sage, #b8d4ea);
+  font-size: 12px;
+}
+
+.landing-preview-state {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.landing-preview-state:before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sanctra-sage, #b8d4ea);
+}
+
+.landing-focus-body {
+  padding: 8px 16px 18px;
+}
+
+.landing-product-preview .timer-dial {
+  margin: 16px 0 0;
+}
+
+.landing-product-preview .timer-ring {
+  width: min(78vw, 330px);
+  height: auto;
+  aspect-ratio: 1;
+}
+
+.landing-product-preview .timer-actions {
+  gap: 8px;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.landing-product-preview .timer-actions > button {
+  font-size: 12px;
+  padding: 11px 14px;
+  min-height: 44px;
+}
+
+.landing-preview-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 14px 22px;
+  color: #94a3b8;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.landing-preview-footer button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  background: transparent;
+  color: var(--sanctra-paper, #f3f1e7);
+  cursor: pointer;
+  min-height: 36px;
+}
+
+.landing-preview-subject {
+  display: flex;
+  justify-content: center;
+  margin-top: 18px;
+}
+
+.landing-focus-preview:fullscreen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 0;
+  background: #14171f;
+}
+
+.landing-focus-preview:fullscreen .timer-ring {
+  width: min(65dvh, 520px);
+}
+
+.sanctra-landing.landing-studio .landing-hero {
+  background: transparent;
+}
+
+.sanctra-landing.landing-studio .landing-section {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.015) 100%), rgba(16, 18, 25, 0.78);
+  border-radius: 28px;
+  padding: 48px;
+  margin-block: 40px;
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 24px 64px -16px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+.sanctra-landing.landing-studio .landing-section p {
+  color: #cbd5e1;
+}
+
+.sanctra-landing.landing-studio .landing-footer {
+  border-radius: 24px;
+}
+
+.sanctra-landing.landing-studio header.landing-header {
+  border-radius: 20px;
+}
+
+.sanctra-landing.landing-studio .hero-cta {
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+@media (max-width: 1100px) {
+  .sanctra-landing.landing-studio .landing-hero {
+    background: transparent;
+  }
+  .hero-product-window {
+    max-width: 720px;
+    width: 100%;
+    margin: auto;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .landing-product-preview,
+  .sanctra-landing.landing-studio .landing-section {
+    background: #171922;
+    backdrop-filter: none;
+  }
+}
+
+.landing-preview-dialog {
+  position: relative;
+  z-index: 100;
+}
+
+.landing-preview-dialog .fixed {
+  z-index: 100;
+}
+
+.sanctra-landing.landing-studio .together-section {
+  display: block;
+}
+
+.sanctra-landing.landing-studio .landing-section .landing-text-button {
+  color: #b8dcf5;
+}
+
+.sanctra-landing.landing-studio .ai-section-grid,
+.sanctra-landing.landing-studio .together-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 48px;
+  align-items: center;
+}
+
+.sanctra-landing.landing-studio .together-copy {
+  display: block;
+}
+
+.sanctra-landing.landing-studio .ai-features-bullet-list {
+  margin: 0;
+}
+
+.sanctra-landing.landing-studio .together-points-list {
+  margin: 0;
+}
+
+.landing-header-actions {
+  flex-shrink: 0;
+}
+
+.landing-signin {
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .sanctra-landing.landing-studio .ai-section-grid,
+  .sanctra-landing.landing-studio .together-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 700px) {
+  .sanctra-landing.landing-studio .landing-section {
+    padding: 24px 18px;
+    border-radius: 20px;
+    margin-block: 24px;
+  }
+  .landing-preview-toolbar,
+  .landing-preview-footer {
+    padding: 14px 16px;
+  }
+  .landing-preview-toolbar small {
+    font-size: 11px;
+  }
+  .sanctra-landing.landing-studio .hero-copy h1 {
+    font-size: clamp(40px, 9vw, 60px);
+  }
+  .landing-product-preview .timer-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+  .landing-product-preview .timer-actions > button {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .sanctra-landing.landing-studio .landing-header {
+    min-height: 56px;
+    padding: 12px 14px;
+    border-radius: 18px;
+    gap: 12px;
+  }
+  .sanctra-landing.landing-studio .landing-header .landing-header-actions > .landing-button {
+    display: none;
+  }
+}
+
+.sanctra-landing.landing-studio .landing-ai-copy > .landing-button {
+  width: auto;
+  display: inline-flex;
+  align-self: flex-start;
+}
+
+.sanctra-landing.landing-studio .landing-section .ai-bullet-item p,
+.sanctra-landing.landing-studio .landing-section .section-heading p,
+.sanctra-landing.landing-studio .landing-plus-summary p {
+  color: #d7e5ef;
+}
+
+.sanctra-landing.landing-studio a:focus-visible,
+.landing-product-preview button:focus-visible {
+  outline: 2px solid #b8dcf5;
+  outline-offset: 4px;
+}
+
+.sanctra-landing.landing-studio .hero-cta {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.sanctra-landing.landing-studio .hero-footnote {
+  margin-top: 0;
+}
+
+.sanctra-landing.landing-studio .hero-copy h1 {
+  font-size: clamp(48px, 5.8vw, 84px);
+}
+
+.sanctra-landing.landing-studio .hero-copy p {
+  color: #0b273a;
+}
+
+.sanctra-landing.landing-studio .hero-inner {
+  padding-block: 40px 48px;
+}
+
+@media (min-width: 1000px) {
+  .sanctra-landing.landing-studio .hero-inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 36px;
+  }
+  .sanctra-landing.landing-studio .hero-copy {
+    align-items: flex-start;
+    text-align: left;
+  }
+  .landing-product-preview .timer-ring {
+    width: 360px;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 1100px) {
+  .sanctra-landing.landing-studio .landing-header nav {
+    display: none;
+  }
+}
+
+@media (max-width: 999px) {
+  .sanctra-landing.landing-studio .hero-inner {
+    gap: 24px;
+    padding-block: 28px 40px;
+  }
+  .sanctra-landing.landing-studio .hero-copy h1 {
+    font-size: clamp(40px, 6vw, 56px);
+    margin-bottom: 16px;
+  }
+  .sanctra-landing.landing-studio .hero-copy p {
+    margin-bottom: 20px;
+  }
+  .sanctra-landing.landing-studio .hero-copy {
+    padding: 0 8px;
+  }
+}
+
+.sanctra-landing.landing-studio .observatory-scrim {
+  background: linear-gradient(90deg, #eaf7ff66, transparent 68%), linear-gradient(180deg, transparent 60%, #12344c30);
+}
+
+@media (max-width: 999px) {
+  .sanctra-landing.landing-studio .observatory-scrim {
+    background: linear-gradient(180deg, #eaf7ff66, transparent 75%);
+  }
+}
+
+.landing-product-preview {
+  overflow: visible;
+}
+
+.landing-preview-subject .sanctra-select-options {
+  top: auto;
+  bottom: calc(100% + 8px);
+}
+
+.sanctra-landing.landing-studio .hero-copy p {
+  font-size: 18px;
+  line-height: 1.65;
+  max-width: 520px;
+}
+
+.sanctra-landing.landing-studio .landing-header nav a,
+.sanctra-landing.landing-studio .landing-signin {
+  font-size: 14px;
+}
+
+.landing-product-preview .timer-actions > button {
+  font-size: 14px;
+}
+
+@media (min-width: 1200px) {
+  .landing-product-preview .timer-ring {
+    width: 380px;
+  }
+  .landing-preview-toolbar {
+    font-size: 16px;
+  }
+  .landing-preview-footer {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 600px) {
+  .sanctra-landing.landing-studio .hero-copy p {
+    font-size: 16px;
+  }
+  .landing-product-preview .timer-actions > button {
+    font-size: 13px;
+  }
+}
+
+.landing-dial-subject {
+  position: relative;
+  z-index: 30;
+  width: max-content;
+  max-width: 190px;
+  margin: 8px auto 0;
+}
+
+.landing-dial-subject > .sanctra-select > button {
+  padding: 6px 12px;
+  font-size: 13px;
+  min-height: 32px;
+}
+
+.landing-dial-subject .sanctra-select-options {
+  top: calc(100% + 8px);
+  bottom: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 190px;
+}
+
+.landing-product-preview .timer-ring {
+  z-index: 2;
+}
+
+.landing-product-preview .timer-actions {
+  position: relative;
+  z-index: 1;
+}
+
+/* Authentic in-app card & button styling for previews */
+.sanctra-app .landing-product-preview .analytics-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015)), rgba(23, 24, 29, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 20px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 10px 28px -8px rgba(0, 0, 0, 0.4);
+}
+
+.sanctra-app .landing-product-preview .analytics-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--sanctra-paper, #f3f1e7);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.sanctra-app .landing-product-preview .analytics-button:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.sanctra-app .landing-product-preview .workspace-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--sanctra-sage, #b8d4ea);
+  color: var(--sanctra-ink, #17181d);
+  border: 0;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.sanctra-app .landing-product-preview .workspace-primary:hover {
+  background: #cde4f7;
+  transform: translateY(-1px);
+}
+
+/* Overview grid inside planner preview */
+.sanctra-app .landing-product-preview .task-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.sanctra-app .landing-product-preview .task-overview-grid > .workspace-panel {
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 72px;
+}
+
+.sanctra-app .landing-product-preview .task-overview-grid > .workspace-panel small {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.8;
+}
+
+.sanctra-app .landing-product-preview .task-overview-grid > .workspace-panel strong {
+  font-size: 22px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.1;
+  margin-top: 4px;
+}
+
+.sanctra-app .landing-product-preview .task-overview-grid > .workspace-panel span {
+  font-size: 10px;
+  opacity: 0.75;
+  margin-top: 2px;
+}
+
+/* Soundscapes card inside atmosphere preview */
+.sanctra-app .landing-product-preview .audio-sound-card {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) 24px;
+  column-gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.035);
+  text-align: left;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.sanctra-app .landing-product-preview .audio-sound-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.sanctra-app .landing-product-preview .audio-sound-card[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--sanctra-sage, #b8d4ea) 14%, rgba(20, 22, 28, 0.9));
+  border-color: color-mix(in srgb, var(--sanctra-sage, #b8d4ea) 50%, rgba(255, 255, 255, 0.2));
+  box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.4);
+}
+
+.sanctra-app .landing-product-preview .audio-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--sanctra-sage, #b8d4ea);
+}
+
+.sanctra-app .landing-product-preview .audio-sound-card[aria-pressed='true'] .audio-icon {
+  background: color-mix(in srgb, var(--sanctra-sage, #b8d4ea) 25%, transparent);
+  color: #ffffff;
+}
+
+.landing-planner-preview,
+.landing-analytics-preview,
+.landing-jee-preview,
+.landing-ai-preview,
+.landing-circles-preview,
+.landing-atmosphere-preview {
+  margin-top: 0;
+  box-shadow: 0 20px 48px -10px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}

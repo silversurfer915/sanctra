@@ -1,0 +1,182 @@
+[
+  {
+    "category": "Bug report",
+    "answers": 1,
+    "faqBorder": "0px",
+    "leftInset": 21,
+    "openAnswers": 1,
+    "rightInset": 21,
+    "scrollWidth": 390,
+    "width": 390
+  },
+  {
+    "category": "Feature request",
+    "answers": 1,
+    "faqBorder": "0px",
+    "leftInset": 21,
+    "openAnswers": 1,
+    "rightInset": 21,
+    "scrollWidth": 390,
+    "width": 390
+  },
+  {
+    "category": "Account & sign-in help",
+    "answers": 2,
+    "faqBorder": "0px",
+    "leftInset": 21,
+    "openAnswers": 2,
+    "rightInset": 21,
+    "scrollWidth": 390,
+    "width": 390
+  },
+  {
+    "category": "Timer / session issue",
+    "answers": 2,
+    "faqBorder": "0px",
+    "leftInset": 21,
+    "openAnswers": 2,
+    "rightInset": 21,
+    "scrollWidth": 390,
+    "width": 390
+  },
+  {
+    "category": "Anti-cheat appeal",
+    "answers": 1,
+    "faqBorder": "0px",
+    "leftInset": 21,
+    "openAnswers": 1,
+    "rightInset": 21,
+    "scrollWidth": 390,
+    "width": 390
+  },
+  {
+    "category": "Other",
+    "answers": 1,
+    "faqBorder": "0px",
+    "leftInset": 21,
+    "openAnswers": 1,
+    "rightInset": 21,
+    "scrollWidth": 390,
+    "width": 390
+  },
+  {
+    "category": "Bug report",
+    "answers": 1,
+    "faqBorder": "0px",
+    "leftInset": 29,
+    "openAnswers": 1,
+    "rightInset": 29,
+    "scrollWidth": 1018,
+    "width": 1024
+  },
+  {
+    "category": "Feature request",
+    "answers": 1,
+    "faqBorder": "0px",
+    "leftInset": 29,
+    "openAnswers": 1,
+    "rightInset": 29,
+    "scrollWidth": 1018,
+    "width": 1024
+  },
+  {
+    "category": "Account & sign-in help",
+    "answers": 2,
+    "faqBorder": "0px",
+    "leftInset": 29,
+    "openAnswers": 2,
+    "rightInset": 29,
+    "scrollWidth": 1018,
+    "width": 1024
+  },
+  {
+    "category": "Timer / session issue",
+    "answers": 2,
+    "faqBorder": "0px",
+    "leftInset": 29,
+    "openAnswers": 2,
+    "rightInset": 29,
+    "scrollWidth": 1018,
+    "width": 1024
+  },
+  {
+    "category": "Anti-cheat appeal",
+    "answers": 1,
+    "faqBorder": "0px",
+    "leftInset": 29,
+    "openAnswers": 1,
+    "rightInset": 29,
+    "scrollWidth": 1018,
+    "width": 1024
+  },
+  {
+    "category": "Other",
+    "answers": 1,
+    "faqBorder": "0px",
+    "leftInset": 29,
+    "openAnswers": 1,
+    "rightInset": 29,
+    "scrollWidth": 1018,
+    "width": 1024
+  },
+  {
+    "category": "Bug report",
+    "answers": 1,
+    "faqBorder": "0px",
+    "leftInset": 29,
+    "openAnswers": 1,
+    "rightInset": 29,
+    "scrollWidth": 1274,
+    "width": 1280
+  },
+  {
+    "category": "Feature request",
+    "answers": 1,
+    "faqBorder": "0px",
+    "leftInset": 29,
+    "openAnswers": 1,
+    "rightInset": 29,
+    "scrollWidth": 1274,
+    "width": 1280
+  },
+  {
+    "category": "Account & sign-in help",
+    "answers": 2,
+    "faqBorder": "0px",
+    "leftInset": 29,
+    "openAnswers": 2,
+    "rightInset": 29,
+    "scrollWidth": 1274,
+    "width": 1280
+  },
+  {
+    "category": "Timer / session issue",
+    "answers": 2,
+    "faqBorder": "0px",
+    "leftInset": 29,
+    "openAnswers": 2,
+    "rightInset": 29,
+    "scrollWidth": 1274,
+    "width": 1280
+  },
+  {
+    "category": "Anti-cheat appeal",
+    "answers": 1,
+    "faqBorder": "0px",
+    "leftInset": 29,
+    "openAnswers": 1,
+    "rightInset": 29,
+    "scrollWidth": 1274,
+    "width": 1280
+  },
+  {
+    "category": "Other",
+    "answers": 1,
+    "faqBorder": "0px",
+    "leftInset": 29,
+    "openAnswers": 1,
+    "rightInset": 29,
+    "scrollWidth": 1274,
+    "width": 1280
+  }
+]

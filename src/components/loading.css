@@ -1,0 +1,11 @@
+.sanctra-loading .loading-scene {position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.sanctra-loading .loading-veil {position:absolute;inset:0;background:linear-gradient(180deg,#133a501a,#12334d24 50%,#102d4966);}
+.loading-arrival {position:relative;display:flex;align-items:center;flex-direction:column;padding:42px 52px;border-radius:28px;background:#12334de3;border:1px solid #d6efff50;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);color:#f7fcff;box-shadow:0 24px 70px #10394c30;}
+.loading-arrival .sanctra-wordmark {font-size:44px;letter-spacing:-.03em;}
+.loading-arrival .sanctra-brand-period {color:#f4cdad;}
+.loading-arrival-rule {width:104px;height:3px;overflow:hidden;border-radius:8px;background:#bfeaff24;margin:26px 0 20px;}
+.loading-arrival-rule i {display:block;width:40%;height:100%;border-radius:inherit;background:#c5eafa;animation:desk-arrival 1.8s ease-in-out infinite alternate;}
+.loading-arrival-status {font-size:13px;letter-spacing:.02em;color:#e1f3ff;}
+@keyframes desk-arrival {from {transform:translateX(-100%);}to {transform:translateX(250%);}}
+@media(max-width:600px){.loading-arrival{padding:34px 36px;}.loading-arrival .sanctra-wordmark{font-size:36px;}}
+@media(prefers-reduced-motion:reduce){.loading-arrival-rule i{animation:none;width:100%;}}

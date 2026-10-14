@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="100%" height="100%">
+  <defs>
+    <radialGradient id="solar-bg" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#2d1502"/>
+      <stop offset="60%" stop-color="#190901"/>
+      <stop offset="100%" stop-color="#080300"/>
+    </radialGradient>
+    <linearGradient id="phoenix-gold" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#ea580c"/>
+      <stop offset="45%" stop-color="#b89b6b"/>
+      <stop offset="85%" stop-color="#c6ad79"/>
+      <stop offset="100%" stop-color="#fef08a"/>
+    </linearGradient>
+    <radialGradient id="sun-corona" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#b89b6b" stop-opacity="0.8"/>
+      <stop offset="70%" stop-color="#ef4444" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#ea580c" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="phoenix-glow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="1.2" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <style>
+    @keyframes phoenix-wing-left {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(-5deg); }
+    }
+    @keyframes phoenix-wing-right {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(5deg); }
+    }
+    @keyframes ember-rise-1 {
+      0% { transform: translate(0, 0) scale(1); opacity: 0.9; }
+      100% { transform: translate(-8px, -35px) scale(0.3); opacity: 0; }
+    }
+    @keyframes ember-rise-2 {
+      0% { transform: translate(0, 0) scale(1); opacity: 0.9; }
+      100% { transform: translate(10px, -40px) scale(0.3); opacity: 0; }
+    }
+    @keyframes corona-pulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.025); opacity: 0.85; }
+    }
+    .wing-l { transform-origin: 80px 90px; animation: phoenix-wing-left 7.5600000000000005s ease-in-out infinite; }
+    .wing-r { transform-origin: 80px 90px; animation: phoenix-wing-right 7.5600000000000005s ease-in-out infinite; }
+    .ember-1 { animation: ember-rise-1 6s linear infinite; }
+    .ember-2 { animation: ember-rise-2 6s linear infinite 0.7s; }
+    .ember-3 { animation: ember-rise-1 6s linear infinite 1.4s; }
+    .corona { transform-origin: 80px 75px; animation: corona-pulse 6.3s ease-in-out infinite; }
+    @media (prefers-reduced-motion: reduce) {
+      .wing-l, .wing-r, .ember-1, .ember-2, .ember-3, .corona {
+        animation: none !important;
+      }
+    }
+  </style>
+
+  <!-- Deep Warm Hearth Void -->
+  <circle cx="80" cy="80" r="76" fill="url(#solar-bg)"/>
+
+  <!-- Pulsing Solar Corona Glow -->
+  <circle cx="80" cy="75" r="48" fill="url(#sun-corona)" class="corona"/>
+
+  <!-- Rising Embers & Sparks -->
+  <g class="ember-1" transform="translate(68, 120)">
+    <circle cx="0" cy="0" r="2" fill="#c6ad79" filter="url(#phoenix-glow)"/>
+  </g>
+  <g class="ember-2" transform="translate(94, 115)">
+    <circle cx="0" cy="0" r="2.2" fill="#f97316" filter="url(#phoenix-glow)"/>
+  </g>
+  <g class="ember-3" transform="translate(80, 130)">
+    <circle cx="0" cy="0" r="1.8" fill="#fef08a" filter="url(#phoenix-glow)"/>
+  </g>
+  <g class="ember-1" transform="translate(45, 95)">
+    <circle cx="0" cy="0" r="1.5" fill="#b89b6b"/>
+  </g>
+  <g class="ember-2" transform="translate(115, 95)">
+    <circle cx="0" cy="0" r="1.5" fill="#b89b6b"/>
+  </g>
+
+  <!-- Left Sweeping Wing -->
+  <g class="wing-l">
+    <!-- Primary Outer Feather Arc -->
+    <path d="M 80 85 C 50 65 24 35 22 25 C 22 45 42 75 80 92 Z" fill="url(#phoenix-gold)"/>
+    <!-- Secondary Mid Feather -->
+    <path d="M 80 88 C 55 75 32 55 30 45 C 34 65 52 85 80 95 Z" fill="#b89b6b"/>
+    <!-- Tertiary Inner Feather -->
+    <path d="M 80 92 C 60 82 42 70 40 60 C 45 75 60 90 80 98 Z" fill="#d97706"/>
+  </g>
+
+  <!-- Right Sweeping Wing -->
+  <g class="wing-r">
+    <!-- Primary Outer Feather Arc -->
+    <path d="M 80 85 C 110 65 136 35 138 25 C 138 45 118 75 80 92 Z" fill="url(#phoenix-gold)"/>
+    <!-- Secondary Mid Feather -->
+    <path d="M 80 88 C 105 75 128 55 130 45 C 126 65 108 85 80 95 Z" fill="#b89b6b"/>
+    <!-- Tertiary Inner Feather -->
+    <path d="M 80 92 C 100 82 118 70 120 60 C 115 75 100 90 80 98 Z" fill="#d97706"/>
+  </g>
+
+  <!-- Flowing Phoenix Tail Plumes -->
+  <path d="M 80 115 C 68 135 60 148 55 160 C 65 152 75 140 80 125 Z" fill="url(#phoenix-gold)"/>
+  <path d="M 80 115 C 92 135 100 148 105 160 C 95 152 85 140 80 125 Z" fill="url(#phoenix-gold)"/>
+  <path d="M 80 115 C 78 135 78 152 80 160 C 82 152 82 135 80 115 Z" fill="#fef08a"/>
+
+  <!-- Phoenix Body & Torso -->
+  <path d="M 72 75 C 70 95 72 115 80 122 C 88 115 90 95 88 75 Z" fill="url(#phoenix-gold)"/>
+  <path d="M 75 82 C 74 95 76 108 80 114 C 84 108 86 95 85 82 Z" fill="#fef08a"/>
+
+  <!-- Phoenix Head & Neck -->
+  <path d="M 74 62 C 73 50 78 40 80 36 C 82 40 87 50 86 62 Z" fill="url(#phoenix-gold)"/>
+  <circle cx="80" cy="52" r="9" fill="url(#phoenix-gold)"/>
+
+  <!-- Ornate Crown Crest Feathers -->
+  <path d="M 80 44 C 75 32 68 20 62 14 C 68 24 75 34 78 42 Z" fill="#fef08a"/>
+  <path d="M 80 44 C 85 32 92 20 98 14 C 92 24 85 34 82 42 Z" fill="#fef08a"/>
+  <path d="M 80 44 C 79 30 79 18 80 10 C 81 18 81 30 80 44 Z" fill="#ffffff" filter="url(#phoenix-glow)"/>
+  <circle cx="80" cy="10" r="2.5" fill="#fef08a"/>
+
+  <!-- Noble Golden Beak -->
+  <polygon points="76,54 84,54 80,62" fill="#7c2d12"/>
+
+  <!-- Fiery Eyes -->
+  <circle cx="75" cy="50" r="1.8" fill="#7c2d12"/>
+  <circle cx="75.5" cy="49.5" r="0.7" fill="#ffffff"/>
+  <circle cx="85" cy="50" r="1.8" fill="#7c2d12"/>
+  <circle cx="84.5" cy="49.5" r="0.7" fill="#ffffff"/>
+
+  <!-- Solar Core Heart Gem -->
+  <polygon points="80,82 86,90 80,98 74,90" fill="#dc2626"/>
+  <polygon points="80,85 84,90 80,95 76,90" fill="#fef08a"/>
+
+  <!-- Border Ring -->
+  <circle cx="80" cy="80" r="76" fill="none" stroke="#b89b6b" stroke-opacity="0.4" stroke-width="2"/>
+</svg>

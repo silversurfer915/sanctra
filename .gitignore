@@ -1,0 +1,44 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+.env
+.env.*
+!.env.example
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.firebase/
+
+# Local verification artifacts
+artifacts/
+
+worker/.dev.vars
+
+# Private development state and captures
+.codex/
+.superpowers/
+.impeccable/review/
+outputs/
+*.pem
+*.key
+*service-account*.json
+*secret*.json
+.wrangler/

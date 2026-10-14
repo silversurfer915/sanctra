@@ -1,0 +1,2 @@
+import {defineConfig} from 'vite';import react from '@vitejs/plugin-react';import tailwindcss from '@tailwindcss/vite';import {readFileSync} from 'node:fs';
+export default defineConfig({plugins:[{name:'support-preview-only',enforce:'pre',transform(_code,id){if(id.endsWith('/src/utils/adminService.ts'))return readFileSync(new URL('./support-preview-service.ts',import.meta.url),'utf8');}},react(),tailwindcss()]});

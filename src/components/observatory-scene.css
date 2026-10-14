@@ -1,0 +1,57 @@
+.observatory-scene {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #101e2e;
+  isolation: isolate;
+  z-index: -1;
+}
+
+.observatory-poster,
+.observatory-video {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.observatory-poster {
+  z-index: 1;
+  transition: opacity 0.6s ease;
+}
+
+.observatory-poster.is-hidden {
+  opacity: 0;
+}
+
+.observatory-video {
+  z-index: 2;
+}
+
+.observatory-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: linear-gradient(180deg,#10394c12,transparent 50%,#12344c30);
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .observatory-video {
+    display: none;
+  }
+  .observatory-poster {
+    opacity: 1 !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .observatory-poster,
+  .observatory-video {
+    object-position: 60% center;
+  }
+}

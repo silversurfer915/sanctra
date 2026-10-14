@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="100%" height="100%">
+  <defs>
+    <radialGradient id="space-bg" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#1e1645"/>
+      <stop offset="60%" stop-color="#0a0a1a"/>
+      <stop offset="100%" stop-color="#030208"/>
+    </radialGradient>
+    <radialGradient id="portal-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#a3aaca" stop-opacity="0.6"/>
+      <stop offset="70%" stop-color="#b4a3c9" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#a3aaca" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="helmet-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="50%" stop-color="#e2e8f0"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+    <linearGradient id="visor-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#83aab8"/>
+      <stop offset="45%" stop-color="#3b82f6"/>
+      <stop offset="85%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#d946ef"/>
+    </linearGradient>
+    <linearGradient id="visor-shimmer" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glow-astro" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.2" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <style>
+    @keyframes astro-float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-5px) rotate(1.5deg); }
+    }
+    @keyframes visor-sweep {
+      0% { transform: translateX(-70px) skewX(-20deg); opacity: 0; }
+      20% { opacity: 0.8; }
+      50% { transform: translateX(80px) skewX(-20deg); opacity: 0; }
+      100% { transform: translateX(80px) skewX(-20deg); opacity: 0; }
+    }
+    @keyframes star-twinkle {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.3); }
+    }
+    @keyframes orbit-drift {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes ring-pulse {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(1.015); }
+    }
+    .astro-body { transform-origin: 80px 85px; animation: astro-float 8.1s ease-in-out infinite; }
+    .visor-shine { animation: visor-sweep 6.84s ease-in-out infinite; }
+    .star-1 { animation: star-twinkle 6s ease-in-out infinite; }
+    .star-2 { animation: star-twinkle 6s ease-in-out infinite 0.7s; }
+    .star-3 { animation: star-twinkle 6s ease-in-out infinite 1.4s; }
+    .orbit-group { transform-origin: 80px 80px; animation: orbit-drift 32.4s linear infinite; }
+    .portal-ring { transform-origin: 80px 80px; animation: ring-pulse 7.2s ease-in-out infinite; }
+    @media (prefers-reduced-motion: reduce) {
+      .astro-body, .visor-shine, .star-1, .star-2, .star-3, .orbit-group, .portal-ring {
+        animation: none !important;
+      }
+    }
+  </style>
+
+  <!-- Background Canvas -->
+  <circle cx="80" cy="80" r="76" fill="url(#space-bg)"/>
+
+  <!-- Celestial Portal Rings -->
+  <circle cx="80" cy="80" r="64" fill="none" stroke="url(#portal-glow)" stroke-width="12" class="portal-ring"/>
+  <ellipse cx="80" cy="80" rx="72" ry="24" fill="none" stroke="#a78bfa" stroke-opacity="0.3" stroke-width="1.5" transform="rotate(-25 80 80)"/>
+
+  <!-- Background Twinkling Stars -->
+  <g>
+    <circle cx="32" cy="38" r="1.5" fill="#f8fafc" class="star-1"/>
+    <polygon points="32,34 33,37 36,38 33,39 32,42 31,39 28,38 31,37" fill="#b4a3c9" class="star-1"/>
+    <circle cx="128" cy="42" r="1.2" fill="#67e8f9" class="star-2"/>
+    <polygon points="128,39 129,41 131,42 129,43 128,45 127,43 125,42 127,41" fill="#67e8f9" class="star-2"/>
+    <circle cx="40" cy="125" r="1.4" fill="#fef08a" class="star-3"/>
+    <circle cx="122" cy="118" r="1.5" fill="#d4afc6" class="star-1"/>
+    <circle cx="78" cy="22" r="1" fill="#ffffff" class="star-2"/>
+  </g>
+
+  <!-- Orbiting Particle Group -->
+  <g class="orbit-group">
+    <circle cx="80" cy="16" r="2.5" fill="#9fb9cc" filter="url(#glow-astro)"/>
+    <circle cx="144" cy="80" r="2" fill="#bd8e9d" filter="url(#glow-astro)"/>
+    <circle cx="18" cy="90" r="1.8" fill="#c6ad79" filter="url(#glow-astro)"/>
+  </g>
+
+  <!-- Floating Astronaut -->
+  <g class="astro-body">
+    <!-- Suit Shoulders & Backpack -->
+    <rect x="52" y="112" width="56" height="38" rx="16" fill="url(#helmet-grad)"/>
+    <rect x="58" y="116" width="44" height="24" rx="8" fill="#334155"/>
+    <circle cx="68" cy="128" r="3" fill="#9fb9cc"/>
+    <circle cx="92" cy="128" r="3" fill="#9abca9"/>
+    <!-- Collar Ring -->
+    <rect x="60" y="106" width="40" height="10" rx="5" fill="#475569"/>
+    <rect x="62" y="108" width="36" height="6" rx="3" fill="#94a3b8"/>
+
+    <!-- Helmet Outer Shell -->
+    <circle cx="80" cy="74" r="38" fill="url(#helmet-grad)"/>
+    <!-- Helmet Side Tech Modules -->
+    <rect x="37" y="66" width="8" height="16" rx="3" fill="#475569"/>
+    <rect x="115" y="66" width="8" height="16" rx="3" fill="#475569"/>
+    <circle cx="41" cy="74" r="2" fill="#83aab8"/>
+    <circle cx="119" cy="74" r="2" fill="#83aab8"/>
+
+    <!-- Visor Bezel Frame -->
+    <rect x="47" y="50" width="66" height="48" rx="22" fill="#1e293b"/>
+    <!-- Visor Cosmic Glass -->
+    <g>
+      <clipPath id="visor-clip">
+        <rect x="49" y="52" width="62" height="44" rx="20"/>
+      </clipPath>
+      <rect x="49" y="52" width="62" height="44" rx="20" fill="url(#visor-grad)"/>
+
+      <!-- Inside Visor: Reflected Galaxy / Stars -->
+      <g clip-path="url(#visor-clip)">
+        <ellipse cx="64" cy="62" rx="14" ry="4" fill="#ffffff" fill-opacity="0.4" transform="rotate(-15 64 62)"/>
+        <circle cx="92" cy="80" r="1.5" fill="#ffffff"/>
+        <circle cx="86" cy="68" r="1" fill="#ffffff"/>
+        <circle cx="60" cy="82" r="1.2" fill="#fef08a"/>
+        <!-- Animated Light Sweep Across Visor -->
+        <rect x="30" y="40" width="28" height="70" fill="url(#visor-shimmer)" class="visor-shine"/>
+      </g>
+    </g>
+
+    <!-- Helmet Crest Antenna -->
+    <rect x="78" y="32" width="4" height="6" rx="2" fill="#64748b"/>
+    <circle cx="80" cy="30" r="3" fill="#9fb9cc" filter="url(#glow-astro)"/>
+  </g>
+
+  <!-- Outer Border Ring -->
+  <circle cx="80" cy="80" r="76" fill="none" stroke="#6366f1" stroke-opacity="0.35" stroke-width="2"/>
+</svg>

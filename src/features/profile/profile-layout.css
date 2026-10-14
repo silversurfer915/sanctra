@@ -1,0 +1,116 @@
+/* Profile-only layout corrections. Structural columns share their parent glass. */
+.sanctra-app .profile-page :is(.profile-identity>div:last-child,.studio-goal>div,.profile-account-info,.vip-membership-top>div:last-child){min-width:0;}
+.sanctra-app .profile-page :is(.profile-identity p,.profile-intent-tag,.preview-bio,.studio-goal strong,.studio-goal p,.profile-group-info strong){overflow-wrap:anywhere;white-space:normal;}
+.sanctra-app .profile-page .vip-membership-top>div:last-child>div{flex-wrap:wrap;row-gap:8px;}
+.sanctra-app .profile-page .study-details>header{align-items:flex-start;}
+.sanctra-app .profile-page .study-details>header>div{min-width:0;}
+.sanctra-app .profile-page .study-details>header>button{flex-shrink:0;white-space:nowrap;}
+.sanctra-app .profile-page :is(.studio-section,.studio-preview){background:transparent!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;}
+.sanctra-app .profile-page .studio-nav button{min-width:0;}
+.sanctra-app .profile-page .studio-nav svg{flex-shrink:0;}
+.sanctra-app .profile-page .studio-goal>div{flex:1;}
+.sanctra-app .profile-page .studio-section>.studio-description:last-child{margin-bottom:0;}
+@media(max-width:900px){
+ .sanctra-app .profile-page .studio-preview{grid-row:auto;}
+ .sanctra-app .profile-page .studio-layout{gap:24px;}
+}
+@media(max-width:640px){
+ .sanctra-app .profile-page .study-details>header{flex-wrap:wrap;gap:14px;}
+ .sanctra-app .profile-page .study-details>header>div{flex:1 1 190px;}
+ .sanctra-app .profile-page .profile-stats{grid-template-columns:repeat(2,minmax(0,1fr));}
+ .sanctra-app .profile-page .profile-stats>div{min-width:0;}
+ .sanctra-app .profile-page .profile-stats strong{overflow-wrap:anywhere;}
+ .sanctra-app .profile-page .preview-identity{min-height:0;padding:24px 18px;gap:16px;}
+ .sanctra-app .profile-page .studio-savebar .workspace-actions{flex-wrap:wrap;gap:10px;}
+ .sanctra-app .profile-page .studio-savebar button{min-height:44px;}
+}
+
+/* Profile editor: portrait choices lead; preview remains a quiet companion. */
+.sanctra-app .profile-page {max-width:1160px;display:flex;flex-direction:column;gap:24px;}
+.sanctra-app .profile-page>.identity-collections .identity-collection-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;}
+.sanctra-app .profile-page>.identity-collections>header{gap:24px;}
+@media(max-width:640px){.sanctra-app .profile-page{gap:20px;}.sanctra-app .profile-page>.identity-collections .identity-collection-grid{grid-template-columns:1fr;}}
+.sanctra-app .profile-page .profile-studio {padding:28px;}
+.sanctra-app .profile-page .studio-layout {grid-template-columns:minmax(0,1.25fr) minmax(280px,.9fr);gap:32px;}
+.sanctra-app .profile-page .studio-section>label {margin-block:16px;}
+.sanctra-app .profile-page .studio-section>.portrait-picker {margin-top:32px;}
+.sanctra-app .profile-page .portrait-picker header {display:flex;flex-direction:column;gap:4px;margin-bottom:16px;}
+.sanctra-app .profile-page .portrait-picker header h3 {margin:0;}
+.sanctra-app .profile-page .portrait-picker :is(p,small) {font-size:13px;line-height:1.65;color:var(--sanctra-muted);}
+.sanctra-app .profile-page :is(.portrait-static-grid,.portrait-motion-grid,.portrait-legacy-grid) {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+.sanctra-app .profile-page :is(.portrait-static-grid,.portrait-motion-grid,.portrait-legacy-grid) button {position:relative;display:flex;flex-direction:column;gap:8px;min-width:0;text-align:left;background:transparent;border:0;padding:4px;color:var(--sanctra-paper);cursor:pointer;border-radius:12px;transition:transform .2s cubic-bezier(.22,1,.36,1);}
+.sanctra-app .profile-page :is(.portrait-static-grid,.portrait-motion-grid,.portrait-legacy-grid) button:hover {transform:translateY(-2px);}
+.sanctra-app .profile-page :is(.portrait-static-grid,.portrait-motion-grid,.portrait-legacy-grid) button:focus-visible {outline:2px solid var(--sanctra-sage);outline-offset:3px;}
+.sanctra-app .profile-page :is(.portrait-static-grid,.portrait-motion-grid,.portrait-legacy-grid) button[aria-pressed=true] {background:color-mix(in srgb,var(--sanctra-sage) 10%,transparent);outline:1px solid var(--sanctra-sage);}
+.sanctra-app .profile-page :is(.portrait-static-grid,.portrait-motion-grid,.portrait-legacy-grid) :is(img,video) {width:100%;aspect-ratio:1.3;object-fit:cover;border-radius:10px;}
+.sanctra-app .profile-page :is(.portrait-static-grid,.portrait-motion-grid,.portrait-legacy-grid) :is(span,strong) {font-size:11px;font-weight:500;line-height:1.4;}
+.sanctra-app .profile-page .portrait-utilities {display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+.sanctra-app .profile-page .portrait-selected {position:absolute;top:10px;right:10px;color:var(--sanctra-ink);background:var(--sanctra-sage);border-radius:50%;padding:3px;box-sizing:content-box;}
+.sanctra-app .profile-page .portrait-picker .portrait-motion-heading {flex-direction:row;align-items:start;justify-content:space-between;gap:12px;margin-top:28px;padding-top:24px;border-top:1px solid var(--sanctra-glass-border);}
+.sanctra-app .profile-page .portrait-motion-heading .plus-badge {flex-shrink:0;margin-top:4px;}
+.sanctra-app .profile-page .portrait-motion-grid {grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;}
+.sanctra-app .profile-page .portrait-motion-grid button>div {position:relative;width:100%;}
+.sanctra-app .profile-page .portrait-motion-grid img {aspect-ratio:1;display:block;}
+.sanctra-app .profile-page .portrait-play {position:absolute;bottom:5px;left:5px;display:flex;align-items:center;justify-content:center;width:20px;height:20px;color:var(--sanctra-paper);background:color-mix(in srgb,var(--sanctra-ink) 85%,transparent);border-radius:50%;}
+.sanctra-app .profile-page .portrait-motion-grid .portrait-selected {top:5px;right:5px;}
+.sanctra-app .profile-page .portrait-custom-link summary {display:flex;align-items:center;gap:8px;}
+.sanctra-app .profile-page .portrait-custom-link .portrait-disclosure-chevron {transition:transform .2s;}
+.sanctra-app .profile-page .portrait-custom-link[open] .portrait-disclosure-chevron {transform:rotate(90deg);}
+.sanctra-app .profile-page .portrait-custom-link>p {margin:12px 0 0;}
+.sanctra-app .profile-page .portrait-link-row {display:flex;align-items:end;gap:8px;margin-bottom:12px;}
+.sanctra-app .profile-page .portrait-link-row>label {flex:1;min-width:0;}
+.sanctra-app .profile-page .portrait-link-row>button {flex-shrink:0;min-height:44px;}
+.sanctra-app .profile-page .portrait-picker .portrait-error {color:var(--sanctra-paper);}
+.sanctra-app .profile-page .portrait-legacy-grid {margin-top:16px;}
+.sanctra-app .profile-page .signature-ring-note {display:flex;align-items:start;gap:16px;margin-block:24px;padding-block:20px;border-block:1px solid var(--sanctra-glass-border);}
+.sanctra-app .profile-page .signature-ring-note>svg {color:var(--sanctra-sage);flex-shrink:0;margin-top:4px;}
+.sanctra-app .profile-page .signature-ring-note p {font-size:13px;color:var(--sanctra-muted);line-height:1.65;}
+.sanctra-app .profile-page .study-detail {padding:16px 0;border:0;border-radius:0;background:transparent;border-bottom:1px solid var(--sanctra-glass-border);align-items:start;}
+.sanctra-app .profile-page .study-detail>svg {margin-top:3px;}
+.sanctra-app .profile-page .study-details-grid {column-gap:32px;row-gap:8px;}
+.sanctra-app .profile-page .study-detail :is(input,select) {min-height:44px;padding:10px 12px;border-radius:10px;color:var(--sanctra-paper);}
+.sanctra-app .profile-page .study-detail option,.sanctra-app .profile-page .study-detail optgroup {background:var(--sanctra-ink);color:var(--sanctra-paper);}
+.sanctra-app .profile-page .study-custom-value {display:block;margin-top:12px;color:var(--sanctra-muted);}
+.sanctra-app .profile-page .study-details-actions {display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:24px;}
+.sanctra-app .profile-page .study-details-actions>span {font-size:12px;color:var(--sanctra-muted);}
+@media(max-width:1000px){.sanctra-app .profile-page .studio-layout {grid-template-columns:1fr;}.sanctra-app .profile-page .studio-preview {position:static;grid-row:auto;}.sanctra-app .profile-page .studio-controls {max-width:none;}}
+@media(max-width:640px){
+ .sanctra-app .profile-page .profile-studio {padding:18px;}
+ .sanctra-app .profile-page .portrait-static-grid {gap:8px;}
+ .sanctra-app .profile-page .portrait-motion-grid {grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+ .sanctra-app .profile-page .portrait-link-row {flex-direction:column;align-items:stretch;}
+ .sanctra-app .profile-page .portrait-link-row>button {align-self:flex-start;}
+ .sanctra-app .profile-page .study-details-actions {flex-direction:column;align-items:start;}
+ .sanctra-app .profile-page .studio-savebar {flex-wrap:wrap;}
+ .sanctra-app .profile-page .studio-savebar .workspace-actions {width:100%;justify-content:flex-end;}
+}
+@media(prefers-reduced-motion:reduce){.sanctra-app .profile-page .portrait-picker button{transition:none;transform:none!important;}}
+.sanctra-app .profile-page .studio-nav {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));}
+.sanctra-app .profile-page #studio-portrait>.portrait-picker {margin-top:0;}
+@media(max-width:640px){.sanctra-app .profile-page .studio-nav{grid-template-columns:repeat(2,minmax(0,1fr));}.sanctra-app .profile-page .studio-nav button{min-height:44px;}}
+
+@media(min-width:1024px){
+ .sanctra-app .profile-page{gap:18px;}
+ .sanctra-app .profile-page>.identity-collections .identity-collection-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+}
+
+@media(min-width:641px) and (max-width:1194px){
+ .sanctra-app .profile-page>.identity-collections .identity-collection-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+}
+@media(max-width:767px){
+ .sanctra-app .profile-page{gap:18px;}
+ .sanctra-app .profile-planning-grid{display:grid;gap:18px;}
+ .sanctra-app .studio-savebar{flex-wrap:wrap;gap:12px;padding-bottom:max(16px,env(safe-area-inset-bottom));}
+ .sanctra-app .studio-savebar>div{min-width:0;}
+ .sanctra-app .profile-studio :is(input,textarea,select){font-size:16px!important;}
+}
+@media(max-width:767px){
+ .sanctra-app .profile-page .profile-hero{padding:18px!important;}
+ .sanctra-app .profile-page .profile-identity{flex-wrap:nowrap;gap:14px;margin-bottom:18px;}
+ .sanctra-app .profile-page .profile-identity .profile-avatar{width:56px;height:56px;flex-shrink:0;}
+ .sanctra-app .profile-page .profile-identity h2{font-size:24px;}
+ .sanctra-app .profile-page .profile-identity p{font-size:14px;}
+ .sanctra-app .profile-page .profile-stats{gap:10px;}
+ .sanctra-app .profile-page .profile-stats>div{padding:12px;gap:6px;}
+ .sanctra-app .profile-page .profile-stats strong{font-size:22px;}
+}

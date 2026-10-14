@@ -1,0 +1,49 @@
+name: Deploy Sanctra
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_worker:
+        description: Deploy the API Worker too (requires CLOUDFLARE_API_TOKEN secret)
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: sanctra-production
+  cancel-in-progress: false
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '12.8.1'
+      - run: pnpm install --frozen-lockfile
+      - run: npm ci --prefix integrations/hermes
+      - run: npm run build
+        env:
+          VITE_FIREBASE_API_KEY: ${{ vars.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ vars.VITE_FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_PROJECT_ID: studyapp-4137d
+          VITE_FIREBASE_STORAGE_BUCKET: ${{ vars.VITE_FIREBASE_STORAGE_BUCKET }}
+          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ vars.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+          VITE_FIREBASE_APP_ID: ${{ vars.VITE_FIREBASE_APP_ID }}
+          VITE_AI_GATEWAY_URL: https://api.sanctrastudy.live
+      - run: npm run check:seo
+      - run: node --test tests/agent-*.test.ts tests/personal-sessions.test.ts tests/mergeStudyRecords.test.ts
+      - run: npm --prefix integrations/hermes test
+      - run: node integrations/hermes/scripts/openapi.mjs --check
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.FIREBASE_HOSTING_SERVICE_ACCOUNT }}
+      - run: npx --yes firebase-tools deploy --only hosting --project studyapp-4137d --non-interactive
+      - if: inputs.deploy_worker
+        run: npx --yes wrangler deploy --config worker/wrangler.jsonc
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

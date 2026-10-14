@@ -1,0 +1,63 @@
+/* Compact listening library, using Sanctra's existing surface tokens. */
+.sanctra-app.focus-audio-layer{background:color-mix(in srgb,var(--sanctra-ink) 38%,transparent)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;}
+.sanctra-app.focus-audio-layer .focus-audio-panel{
+ background:linear-gradient(145deg,color-mix(in srgb,var(--sanctra-paper) 5%,transparent),transparent 60%),color-mix(in srgb,var(--sanctra-ink) 76%,transparent)!important;
+ -webkit-backdrop-filter:blur(var(--sanctra-panel-blur,12px)) saturate(115%);
+ backdrop-filter:blur(var(--sanctra-panel-blur,12px)) saturate(115%);
+ border:1px solid color-mix(in srgb,var(--sanctra-paper) 18%,transparent)!important;
+ box-shadow:inset 0 1px 0 color-mix(in srgb,var(--sanctra-paper) 8%,transparent),0 20px 56px -16px #0007!important;
+}
+.sanctra-app.focus-audio-layer .focus-audio-panel{width:min(760px,calc(100vw - 32px));padding:24px;gap:20px;border-radius:20px;}
+.sanctra-app.focus-audio-layer .focus-audio-panel>header{display:flex;align-items:start;justify-content:space-between;gap:20px;}
+.sanctra-app.focus-audio-layer .focus-audio-panel h2{font-size:28px;line-height:1.2;margin:0;}
+.sanctra-app.focus-audio-layer .audio-card-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 20px;}
+.sanctra-app.focus-audio-layer .audio-sound-card{display:grid;grid-template-columns:40px minmax(0,1fr) 24px;grid-template-rows:auto auto;column-gap:12px;row-gap:4px;min-height:88px!important;padding:16px 8px!important;text-align:left;align-items:center;border-radius:0!important;border:0!important;border-bottom:1px solid var(--sanctra-glass-border)!important;background:transparent!important;}
+.sanctra-app.focus-audio-layer .audio-icon{grid-row:1 / 3;width:40px;height:40px;border-radius:12px;}
+.sanctra-app.focus-audio-layer .audio-sound-card strong{grid-column:2;font-size:14px;}
+.sanctra-app.focus-audio-layer .audio-sound-card small{grid-column:2;font-size:12px;line-height:1.4;}
+.sanctra-app.focus-audio-layer .audio-card-action{grid-column:3;grid-row:1 / 3;margin:0;display:grid;place-items:center;}
+.sanctra-app.focus-audio-layer .audio-sound-card[aria-pressed=true]{background:color-mix(in srgb,var(--sanctra-sage) 10%,transparent)!important;}
+.sanctra-app.focus-audio-layer .audio-sound-card:hover{background:color-mix(in srgb,var(--sanctra-paper) 5%,transparent)!important;}
+.sanctra-app.focus-audio-layer .audio-sound-card[aria-pressed=true]:hover{background:color-mix(in srgb,var(--sanctra-sage) 14%,transparent)!important;}
+.sanctra-app.focus-audio-layer .audio-tabs{gap:4px;padding:4px;border-radius:12px;background:color-mix(in srgb,var(--sanctra-ink) 35%,transparent);}
+.sanctra-app.focus-audio-layer .audio-tabs button{border:0;border-radius:8px;min-height:44px;padding:10px 12px;font-size:13px;}
+.sanctra-app.focus-audio-layer .audio-footer{padding-top:18px;}
+.sanctra-app.focus-audio-layer .audio-options .checkbox-label{font-size:13px;color:var(--sanctra-paper);}
+.sanctra-app.focus-audio-layer .soundscape-volume input{accent-color:var(--sanctra-sage);}
+.sanctra-app.focus-audio-layer .audio-panel-content{scrollbar-width:thin;scrollbar-color:var(--sanctra-glass-border) transparent;}
+.sanctra-app.focus-audio-layer .audio-search-form label,.sanctra-app.focus-audio-layer .soundscape-save-form label{font-size:14px;}
+.sanctra-app.focus-audio-layer button:focus-visible{outline:2px solid var(--sanctra-sage);outline-offset:3px;}
+@media(max-width:600px){
+ .sanctra-app.focus-audio-layer .focus-audio-panel{padding:20px;max-height:calc(100dvh - 32px);gap:16px;}
+ .sanctra-app.focus-audio-layer .audio-card-grid{grid-template-columns:1fr;}
+ .sanctra-app.focus-audio-layer .audio-tabs button{padding:10px 6px;font-size:12px!important;}
+ .sanctra-app.focus-audio-layer .audio-tabs svg{display:none;}
+ .sanctra-app.focus-audio-layer .audio-options{gap:12px;}
+ .sanctra-app.focus-audio-layer .audio-search-results img{width:60px;height:48px;}
+}
+@media(prefers-reduced-transparency:reduce){
+ .sanctra-app.focus-audio-layer .focus-audio-panel{background:var(--sanctra-ink)!important;-webkit-backdrop-filter:none;backdrop-filter:none;}
+}
+
+@media(min-width:1024px){
+ .sanctra-app.focus-audio-layer .audio-sound-card{min-height:76px!important;padding:12px 8px!important;}
+ .sanctra-app.focus-audio-layer .audio-panel-content{min-height:0;overflow-y:auto;padding-right:6px;}
+ .sanctra-app.focus-audio-layer .audio-footer{background:transparent;padding-top:14px;}
+ .sanctra-app.focus-audio-layer .audio-sound-card[aria-pressed=true] .audio-icon{background:color-mix(in srgb,var(--sanctra-sage) 20%,transparent);color:var(--sanctra-sage);}
+ .sanctra-app.focus-audio-layer .audio-options input{accent-color:var(--sanctra-sage);}
+}
+
+@media(max-width:1194px){
+ .sanctra-app.focus-audio-layer .focus-audio-panel{max-height:calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom));}
+ .sanctra-app.focus-audio-layer .audio-panel-content{min-height:0;overflow-y:auto;overscroll-behavior:contain;}
+ .sanctra-app.focus-audio-layer .focus-audio-panel>header button{min-width:44px;min-height:44px;}
+ .sanctra-app.focus-audio-layer input:not([type=checkbox]){font-size:16px;}
+ .sanctra-app.focus-audio-layer .audio-options label{min-height:44px;display:flex;align-items:center;}
+ .sanctra-app.focus-audio-layer .soundscape-volume input{min-height:36px;}
+}
+@media(max-width:600px){
+ .sanctra-app.focus-audio-layer .focus-audio-panel{width:calc(100vw - 16px);padding:16px;gap:12px;}
+ .sanctra-app.focus-audio-layer .audio-sound-card{min-height:76px!important;padding:12px 4px!important;}
+ .sanctra-app.focus-audio-layer .audio-footer{padding-top:12px;}
+ .sanctra-app.focus-audio-layer .audio-options{margin-top:6px;gap:4px 12px;}
+}

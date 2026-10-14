@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="100%" height="100%">
+  <defs>
+    <radialGradient id="ocean-void" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="60%" stop-color="#050a16"/>
+      <stop offset="100%" stop-color="#01040a"/>
+    </radialGradient>
+    <linearGradient id="whale-body-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9fb9cc"/>
+      <stop offset="45%" stop-color="#0284c7"/>
+      <stop offset="85%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="belly-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#e0f2fe"/>
+      <stop offset="100%" stop-color="#7dd3fc"/>
+    </linearGradient>
+    <filter id="whale-glow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="1.2" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <style>
+    @keyframes whale-swim {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-6px) rotate(-2deg); }
+    }
+    @keyframes fin-wave {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(12deg); }
+    }
+    @keyframes stardust-drift {
+      0% { transform: translateX(0) translateY(0); opacity: 0.8; }
+      100% { transform: translateX(-35px) translateY(12px); opacity: 0; }
+    }
+    @keyframes constellation-twinkle {
+      0%, 100% { opacity: 0.4; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.3); }
+    }
+    .whale-group { transform-origin: 80px 85px; animation: whale-swim 9.9s ease-in-out infinite; }
+    .whale-fin { transform-origin: 65px 95px; animation: fin-wave 6.84s ease-in-out infinite; }
+    .dust-1 { animation: stardust-drift 6s linear infinite; }
+    .dust-2 { animation: stardust-drift 6.12s linear infinite 0.9s; }
+    .dust-3 { animation: stardust-drift 6s linear infinite 1.7s; }
+    .const-node-1 { transform-origin: 52px 64px; animation: constellation-twinkle 6s ease-in-out infinite; }
+    .const-node-2 { transform-origin: 75px 56px; animation: constellation-twinkle 6s ease-in-out infinite 0.6s; }
+    .const-node-3 { transform-origin: 98px 62px; animation: constellation-twinkle 6s ease-in-out infinite 1.2s; }
+    @media (prefers-reduced-motion: reduce) {
+      .whale-group, .whale-fin, .dust-1, .dust-2, .dust-3, .const-node-1, .const-node-2, .const-node-3 {
+        animation: none !important;
+      }
+    }
+  </style>
+
+  <!-- Deep Ocean Void -->
+  <circle cx="80" cy="80" r="76" fill="url(#ocean-void)"/>
+
+  <!-- Background Nebula Ring Clouds -->
+  <ellipse cx="80" cy="80" rx="65" ry="40" fill="none" stroke="#0ea5e9" stroke-opacity="0.15" stroke-width="8" transform="rotate(-15 80 80)"/>
+  <ellipse cx="80" cy="80" rx="55" ry="30" fill="none" stroke="#6366f1" stroke-opacity="0.15" stroke-width="6" transform="rotate(25 80 80)"/>
+
+  <!-- Floating Deep Stardust Sprites -->
+  <circle cx="28" cy="40" r="1" fill="#bae6fd"/>
+  <circle cx="138" cy="35" r="1.5" fill="#fbcfe8"/>
+  <circle cx="130" cy="120" r="1.2" fill="#fed7aa"/>
+  <circle cx="24" cy="115" r="1.5" fill="#e0f2fe"/>
+
+  <!-- Trailing Stardust Particles behind Whale Tail -->
+  <g class="dust-1" transform="translate(135, 75)">
+    <circle cx="0" cy="0" r="2.2" fill="#9fb9cc" filter="url(#whale-glow)"/>
+  </g>
+  <g class="dust-2" transform="translate(142, 65)">
+    <circle cx="0" cy="0" r="1.8" fill="#9a87b4" filter="url(#whale-glow)"/>
+  </g>
+  <g class="dust-3" transform="translate(130, 88)">
+    <circle cx="0" cy="0" r="2" fill="#67e8f9" filter="url(#whale-glow)"/>
+  </g>
+
+  <!-- Swimming Cosmic Whale -->
+  <g class="whale-group">
+    <!-- Whale Body -->
+    <path d="M 22 84 C 20 62 48 48 85 52 C 115 56 138 72 145 68 C 148 66 150 58 152 54 C 153 68 148 80 142 84 C 136 88 148 98 152 104 C 148 98 144 94 138 90 C 118 108 75 116 42 108 C 28 102 22 94 22 84 Z" fill="url(#whale-body-grad)"/>
+
+    <!-- Luminous Grooved Whale Belly -->
+    <path d="M 32 90 C 45 106 75 114 110 102 C 85 108 55 106 38 96 Z" fill="url(#belly-grad)" fill-opacity="0.75"/>
+    <path d="M 40 94 Q 70 108 100 100" fill="none" stroke="#9fb9cc" stroke-width="1.2" stroke-opacity="0.6"/>
+    <path d="M 48 98 Q 72 110 94 104" fill="none" stroke="#9fb9cc" stroke-width="1.2" stroke-opacity="0.6"/>
+
+    <!-- Pectoral Fin (Waving in Current) -->
+    <path d="M 64 92 C 58 108 45 124 35 128 C 42 118 56 102 68 94 Z" fill="#9fb9cc" class="whale-fin"/>
+
+    <!-- Whale Eye -->
+    <circle cx="36" cy="80" r="3" fill="#0f172a"/>
+    <circle cx="36.8" cy="79.2" r="1.2" fill="#ffffff"/>
+    <circle cx="36" cy="80" r="4.5" fill="none" stroke="#9fb9cc" stroke-width="0.8"/>
+
+    <!-- Constellation Map on Whale's Back -->
+    <!-- Constellation Lines -->
+    <polyline points="40,68 52,64 75,56 98,62 120,68" fill="none" stroke="#67e8f9" stroke-width="1.5" stroke-opacity="0.75" stroke-dasharray="2 3"/>
+    <line x1="52" y1="64" x2="68" y2="74" stroke="#a78bfa" stroke-width="1.2" stroke-opacity="0.6"/>
+    <line x1="75" y1="56" x2="88" y2="72" stroke="#a78bfa" stroke-width="1.2" stroke-opacity="0.6"/>
+    <line x1="98" y1="62" x2="88" y2="72" stroke="#a78bfa" stroke-width="1.2" stroke-opacity="0.6"/>
+
+    <!-- Star Nodes (Twinkling) -->
+    <circle cx="40" cy="68" r="2.2" fill="#ffffff" filter="url(#whale-glow)"/>
+    <g class="const-node-1"><circle cx="52" cy="64" r="3" fill="#ffffff" filter="url(#whale-glow)"/><polygon points="52,60 53,63 56,64 53,65 52,68 51,65 48,64 51,63" fill="#9fb9cc"/></g>
+    <g class="const-node-2"><circle cx="75" cy="56" r="3.2" fill="#ffffff" filter="url(#whale-glow)"/><polygon points="75,52 76,55 79,56 76,57 75,60 74,57 71,56 74,55" fill="#d4afc6"/></g>
+    <g class="const-node-3"><circle cx="98" cy="62" r="2.8" fill="#ffffff" filter="url(#whale-glow)"/><polygon points="98,58 99,61 102,62 99,63 98,66 97,63 94,62 97,61" fill="#dfcda7"/></g>
+    <circle cx="120" cy="68" r="2.2" fill="#ffffff" filter="url(#whale-glow)"/>
+    <circle cx="68" cy="74" r="2" fill="#b4a3c9"/>
+    <circle cx="88" cy="72" r="2" fill="#b4a3c9"/>
+
+    <!-- Starlight Spout Geyser (Tiny sparkling fountain) -->
+    <path d="M 44 58 Q 42 42 46 36 Q 48 42 46 58" fill="none" stroke="#e0f2fe" stroke-width="1.5" stroke-opacity="0.8"/>
+    <circle cx="46" cy="34" r="2" fill="#ffffff" filter="url(#whale-glow)"/>
+    <circle cx="43" cy="38" r="1.2" fill="#7dd3fc"/>
+    <circle cx="49" cy="40" r="1" fill="#7dd3fc"/>
+  </g>
+
+  <!-- Border Ring -->
+  <circle cx="80" cy="80" r="76" fill="none" stroke="#9fb9cc" stroke-opacity="0.4" stroke-width="2"/>
+</svg>

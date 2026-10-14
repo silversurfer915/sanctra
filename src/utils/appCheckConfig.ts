@@ -1,0 +1,1 @@
+export function selectAppCheckProvider(config:{production:boolean;siteKey:string;debugToken?:string}):'enterprise'|'debug'|'unavailable'{if(config.production)return config.siteKey?'enterprise':'unavailable';return config.debugToken?'debug':config.siteKey?'enterprise':'unavailable';}

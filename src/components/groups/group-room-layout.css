@@ -1,0 +1,65 @@
+/* The group room owns its layout; conversation and rankings scroll independently. */
+.sanctra-app .live-groups.group-room{width:100%;max-width:none;gap:16px;}
+.sanctra-app .live-groups.group-room .group-room-heading{padding:14px 18px!important;gap:10px 14px;}
+.sanctra-app .live-groups.group-room .group-room-heading>div:first-child{flex:1 1 300px;}
+.sanctra-app .live-groups.group-room .group-room-heading h1{font-size:22px;line-height:1.3;}
+.sanctra-app .live-groups.group-room .group-room-heading p{font-size:14px;line-height:1.6;}
+.sanctra-app .live-groups.group-room .group-room-heading>.analytics-button{min-height:44px;white-space:nowrap;}
+.sanctra-app .live-groups.group-room .group-room-workspace .group-member-row{padding:10px 14px;gap:12px;min-height:76px;}
+.sanctra-app .live-groups.group-room .group-room-workspace .group-member-row strong{font-size:16px;line-height:1.35;font-weight:650;}
+.sanctra-app .live-groups.group-room .group-room-workspace .group-avatar{width:44px;height:44px;}
+.sanctra-app .live-groups.group-room .group-room-workspace .group-rank{font-size:23px!important;min-width:34px;}
+.sanctra-app .live-groups.group-room .group-room-workspace .group-duration{font-size:22px!important;font-weight:750;}
+.sanctra-app .live-groups.group-room .group-status{font-size:14px;line-height:1.5;display:inline;}
+.sanctra-app .live-groups.group-room .group-streak{display:inline-flex;margin-left:10px;font-size:12px;}
+.sanctra-app .live-groups.group-room .conversation-message .group-avatar-wrap.size-sm{width:36px;height:36px;flex:0 0 36px;}
+.sanctra-app .live-groups.group-room .conversation-message .group-avatar-wrap.size-sm>.group-avatar{width:100%;height:100%;}
+.sanctra-app .live-groups.group-room .conversation-message span.group-avatar{display:grid;place-items:center;background:var(--sanctra-sage);color:var(--sanctra-ink);font-weight:600;}
+.sanctra-app .live-groups.group-room .group-room-workspace .conversation-bubble p{font-size:16px;line-height:1.5;}
+.sanctra-app .live-groups.group-room .conversation-bubble header strong{font-size:16px;}
+.sanctra-app .live-groups.group-room .conversation-bubble time{font-size:12px;}
+.sanctra-app .live-groups.group-room .conversation-composer .conversation-input-area textarea{font-size:16px;}
+.sanctra-app .live-groups.group-room .group-conversation,.sanctra-app .live-groups.group-room .group-companion-panel>section{background:#142d41f2!important;}
+.sanctra-app .live-groups.group-room .group-companion-toolbar{display:flex;align-items:center;gap:10px;min-width:0;}
+.sanctra-app .live-groups.group-room .group-companion-toolbar .group-room-tabs{flex:1;min-width:0;width:auto;margin:0;background:#142d41f2;}
+.sanctra-app .live-groups.group-room .group-companion-toolbar .group-room-tabs button{font-size:16px;font-weight:650;min-height:48px;}
+.sanctra-app .live-groups.group-room .group-ranking-periods{display:flex;gap:6px;flex-shrink:0;}
+.sanctra-app .live-groups.group-room .group-ranking-periods button{font-size:14px;min-height:44px;padding:9px 12px;}
+.sanctra-app .live-groups.group-room .group-room-workspace .conversation-search{min-height:44px;}
+.sanctra-app .live-groups.group-room .group-conversation{padding:16px;gap:10px;}
+.sanctra-app .live-groups.group-room .conversation-feed{height:auto;flex:1 1 0;min-height:0;overflow-y:auto;}
+.sanctra-app .live-groups.group-room .group-conversation>:is(header,label,form,.workspace-footnote){flex-shrink:0;}
+.sanctra-app .live-groups.group-room .conversation-composer:not(:has(.conversation-reply)) .conversation-input-area,.sanctra-app .live-groups.group-room .conversation-composer:not(:has(.conversation-reply)) .conversation-composer-actions>button{grid-row:1;}
+.sanctra-app .live-groups.group-room .conversation-composer:not(:has(.conversation-reply)) .conversation-composer-actions>small{grid-row:2;}
+.sanctra-app .live-groups.group-room .group-room-tabs{min-height:48px;}
+@media(min-width:1100px){
+ .sanctra-app .live-groups.group-room{display:grid;grid-template-columns:minmax(360px,1.08fr) minmax(0,1fr);grid-template-rows:auto auto 54px minmax(0,1fr);gap:14px 20px;height:calc(100dvh - 130px);min-height:560px;}
+ .sanctra-app .live-groups.group-room>div:first-child{grid-column:1/-1;grid-row:1;}
+ .sanctra-app .live-groups.group-room>.group-room-heading{grid-column:1;grid-row:2;display:flex;align-items:center;}
+ .sanctra-app .live-groups.group-room>.group-room-heading>div:first-child{flex-basis:0;}
+ .sanctra-app .live-groups.group-room .group-room-workspace.is-split,.sanctra-app .live-groups.group-room .group-room-workspace.is-split .group-workspace{display:contents;}
+ .sanctra-app .live-groups.group-room .group-room-workspace.is-split .group-companion-toolbar{grid-column:1;grid-row:3;width:100%;margin:0;}
+ .sanctra-app .live-groups.group-room .group-room-workspace.is-split .group-companion-panel{grid-column:1;grid-row:4;min-height:0;}
+ .sanctra-app .live-groups.group-room .group-room-workspace.is-split #group-chat-panel{grid-column:2;grid-row:2/5;min-height:0;}
+ .sanctra-app .live-groups.group-room .group-room-workspace.is-split .group-conversation{margin:0;height:100%;min-height:0;}
+ .sanctra-app .live-groups.group-room .group-companion-panel>section{padding:12px;height:100%;min-height:0;}
+ .sanctra-app .live-groups.group-room .group-companion-panel>section>div:first-child h2{font-size:20px;}
+ .sanctra-app .live-groups.group-room .group-companion-panel>section>div:first-child .analytics-button{min-height:40px;font-size:13px;}
+ .sanctra-app .live-groups.group-room>p[role=alert]{grid-column:1/-1;}
+}
+@media(max-width:1099px){
+ .sanctra-app .live-groups.group-room .group-companion-toolbar{flex-wrap:wrap;}
+ .sanctra-app .live-groups.group-room .group-companion-toolbar .group-room-tabs{flex-basis:0;}
+ .sanctra-app .live-groups.group-room .group-room-workspace .group-conversation{height:clamp(520px,calc(100dvh - 180px),840px);}
+ .sanctra-app .live-groups.group-room .group-room-workspace .group-participant-list{max-height:65dvh;overflow-y:auto;}
+}
+@media(max-width:600px){
+ .sanctra-app .live-groups.group-room .group-room-heading{padding:18px!important;}
+ .sanctra-app .live-groups.group-room .group-room-heading h1{font-size:24px;}
+ .sanctra-app .live-groups.group-room .group-conversation{padding:16px;}
+ .sanctra-app .live-groups.group-room .group-room-workspace .group-member-row{padding:14px 10px;gap:8px;}
+ .sanctra-app .live-groups.group-room .group-room-workspace .group-member-row strong{font-size:16px;}
+ .sanctra-app .live-groups.group-room .group-room-workspace .group-avatar{width:44px;height:44px;}
+}
+
+@media(min-width:1100px){.sanctra-app .live-groups.group-room>.group-room-heading>button{width:40px;min-height:40px;padding:10px;font-size:0;gap:0;flex-shrink:0;}.sanctra-app .live-groups.group-room>.group-room-heading>button svg{width:18px;height:18px;}.sanctra-app .live-groups.group-room>.group-room-heading p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}}

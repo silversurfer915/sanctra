@@ -1,0 +1,154 @@
+/* Settings navigation and control rhythm; behavior remains in SettingsModal. */
+.sanctra-app .settings-overlay .settings-modal{display:grid;grid-template-columns:180px minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);max-width:940px;height:min(800px,90dvh);border-radius:20px;}
+.sanctra-app .settings-overlay .settings-heading{grid-column:1 / -1;padding:16px 24px;gap:16px;}
+.sanctra-app .settings-overlay #settings-title{font-family:var(--font-display);font-size:22px;font-weight:600;}
+.sanctra-app .settings-overlay .settings-heading p{font-size:13px;line-height:1.5;color:var(--sanctra-muted);max-width:55ch;margin-top:6px;}
+.sanctra-app .settings-overlay .settings-tab-strip{display:flex;flex-direction:column;align-items:stretch;gap:8px;padding:24px 12px;border-bottom:0;border-right:1px solid var(--sanctra-glass-border);}
+.sanctra-app .settings-overlay .settings-tab-strip button{min-height:44px;padding:12px;text-align:left;justify-content:start;border:0;box-shadow:none;border-radius:10px;font-size:13px;color:var(--sanctra-muted);background:transparent;}
+.sanctra-app .settings-overlay .settings-tab-strip button[aria-pressed=true]{color:var(--sanctra-paper);background:color-mix(in srgb,var(--sanctra-sage) 14%,transparent);}
+.sanctra-app .settings-overlay .settings-content{min-height:0;padding:24px;scrollbar-gutter:stable;}
+.sanctra-app .settings-overlay .settings-content .glass-card{border:0!important;border-bottom:1px solid var(--sanctra-glass-border)!important;border-radius:0;background:transparent!important;box-shadow:none!important;padding:20px 0;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
+.sanctra-app .settings-overlay .settings-content :is(span,label)[class*="text-xs"]{font-size:14px;line-height:1.5;color:var(--sanctra-paper);}
+.sanctra-app .settings-overlay .settings-content :is(span,p)[class*="text-[10px]"]{font-size:13px;line-height:1.5;color:var(--sanctra-muted);max-width:48ch;}
+.sanctra-app .settings-overlay .glass-blur-control{gap:16px;}
+.sanctra-app .settings-overlay .glass-blur-control h3{font-size:16px;font-family:inherit;}
+.sanctra-app .settings-overlay .glass-blur-control p{font-size:13px;line-height:1.6;}
+.sanctra-app .settings-overlay .background-gallery{gap:12px;}
+.sanctra-app .settings-overlay .plus-background-choice{border-radius:12px;}
+.sanctra-app .settings-overlay button:focus-visible,.sanctra-app .settings-overlay input:focus-visible{outline:2px solid var(--sanctra-sage);outline-offset:3px;}
+.sanctra-app .settings-overlay button[role=switch]{min-width:48px;min-height:44px;color:var(--sanctra-paper);}
+.sanctra-app .settings-overlay button[role=switch][aria-checked=true]{background:color-mix(in srgb,var(--sanctra-sage) 18%,transparent);color:var(--sanctra-sage);}
+@media(max-width:680px){
+ .sanctra-app .settings-overlay .settings-modal{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr);height:92dvh;max-height:92dvh;}
+ .sanctra-app .settings-overlay .settings-heading{padding:20px;}
+ .sanctra-app .settings-overlay .settings-heading p{max-width:28ch;}
+ .sanctra-app .settings-overlay .settings-tab-strip{flex-direction:row;padding:8px 12px;gap:4px;border-right:0;border-bottom:1px solid var(--sanctra-glass-border);}
+ .sanctra-app .settings-overlay .settings-tab-strip button{flex:1;justify-content:center;padding:10px 6px;font-size:12px;}
+ .sanctra-app .settings-overlay .settings-tab-strip svg{display:none;}
+ .sanctra-app .settings-overlay .settings-content{padding:16px 20px;}
+ .sanctra-app .settings-overlay .settings-content .glass-card{flex-wrap:wrap;gap:16px;}
+ .sanctra-app .settings-overlay .settings-content input[type=number]{min-height:44px;}
+}
+.sanctra-app .custom-image-settings{display:grid;gap:16px;padding-block:20px;border-bottom:1px solid var(--sanctra-glass-border);}
+.sanctra-app .custom-image-settings h3{font-size:16px;font-weight:600;color:var(--sanctra-paper);}
+.sanctra-app .custom-image-settings p{font-size:14px;line-height:1.6;color:var(--sanctra-muted);margin-top:6px;}
+.sanctra-app .custom-image-preview{width:100%;max-height:200px;object-fit:cover;border-radius:12px;}
+.sanctra-app .custom-image-upload{position:relative;cursor:pointer;overflow:hidden;}
+.sanctra-app .custom-image-upload input{position:absolute;inset:0;opacity:0;width:100%;cursor:pointer;}
+.sanctra-app .custom-image-upload:focus-within{outline:2px solid var(--sanctra-sage);outline-offset:3px;}
+.sanctra-app .custom-image-upload.is-busy{opacity:.6;cursor:wait;}
+.sanctra-app .custom-image-settings .custom-wallpaper-details{padding:0;border:0;background:transparent;}
+.sanctra-app .custom-image-settings .custom-wallpaper-details label{display:grid;gap:8px;margin-block:16px;}
+.sanctra-app .custom-image-settings .workspace-actions{flex-wrap:wrap;}
+.sanctra-app .custom-image-settings .custom-background-error{color:var(--sanctra-paper);}
+.sanctra-app .custom-image-upload{min-height:44px;}
+
+/* A single background library, with enough room to browse without burying controls. */
+.sanctra-app .settings-overlay .settings-modal {max-width:1040px;grid-template-columns:168px minmax(0,1fr);}
+.background-browser {min-width:0;}
+.background-current {display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.background-current>img {width:64px;aspect-ratio:16/10;object-fit:cover;border-radius:12px;flex-shrink:0;}
+.background-current h3 {font-size:16px;font-weight:600;line-height:1.35;margin:0 0 6px;}
+.background-current p {font-size:14px;color:var(--sanctra-paper);margin:0 0 4px;}
+.background-palette {display:flex;align-items:center;gap:7px;font-size:12px;line-height:1.5;color:var(--sanctra-muted);}
+.background-palette i {width:9px;height:9px;flex-shrink:0;border-radius:50%;}
+.background-search {display:flex;align-items:center;gap:10px;border:1px solid var(--sanctra-glass-border);border-radius:12px;padding:0 14px;color:var(--sanctra-muted);}
+.background-search input {width:100%;min-width:0;padding:12px 0;color:var(--sanctra-paper);background:transparent;border:0;outline-offset:3px;}
+.background-search input::placeholder {color:var(--sanctra-muted);}
+.background-filters {display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;}
+.background-filters button {padding:9px 13px;min-height:40px;border-radius:999px;border:1px solid var(--sanctra-glass-border);font-size:12px;color:var(--sanctra-muted);background:transparent;}
+.background-filters button[aria-pressed=true] {background:var(--sanctra-sage);color:var(--sanctra-ink);border-color:transparent;}
+.background-result-count {font-size:12px;line-height:1.6;color:var(--sanctra-muted);margin:0 0 10px;}
+.background-choice-grid {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+.sanctra-app .background-tile {display:flex;flex-direction:column;padding:0;min-width:0;overflow:hidden;text-align:left;border:1px solid var(--sanctra-glass-border);border-radius:12px;background:color-mix(in srgb,var(--sanctra-ink) 35%,transparent);color:var(--sanctra-paper);transition:border-color 180ms ease;}
+.sanctra-app .background-tile[aria-pressed=true] {border-color:var(--sanctra-sage);outline:1px solid var(--sanctra-sage);outline-offset:1px;}
+.background-tile-image {position:relative;display:block;width:100%;aspect-ratio:16/9;overflow:hidden;}
+.background-tile-image img {display:block;width:100%;height:100%;object-fit:cover;}
+.background-tile-state {position:absolute;right:8px;top:8px;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--sanctra-ink);color:var(--sanctra-sage);}
+.background-tile-copy {display:grid;gap:3px;padding:10px;}
+.background-tile-copy strong {font-size:13px;font-weight:600;line-height:1.4;overflow-wrap:anywhere;}
+.background-tile-copy>span {font-size:11px;color:var(--sanctra-muted);}
+.background-empty {padding-block:24px;color:var(--sanctra-muted);}
+.background-upgrade {display:flex;flex-wrap:wrap;align-items:center;gap:12px;border:1px solid var(--sanctra-glass-border);border-radius:12px;padding:16px;}
+.background-upgrade p {flex:1 1 200px;font-size:14px;line-height:1.6;}
+@media(max-width:850px){.background-choice-grid {grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:680px){
+ .sanctra-app .settings-overlay .settings-modal {grid-template-columns:minmax(0,1fr);}
+ .background-current {gap:12px;align-items:start;}
+ .background-current>img {width:90px;}
+ .background-current h3 {font-size:17px;}
+ .background-palette {font-size:11px;}
+ .background-choice-grid {gap:10px;}
+ .background-tile-copy {padding:10px;}
+ .background-filters button {padding-inline:11px;}
+}
+.appearance-navigation {display:flex;gap:20px;flex-wrap:wrap;border-bottom:1px solid var(--sanctra-glass-border);padding-bottom:4px;}
+.appearance-navigation button {min-height:44px;padding:8px 0;font-size:13px;color:var(--sanctra-muted);border:0;border-bottom:2px solid transparent;background:transparent;}
+.appearance-navigation button[aria-pressed=true] {color:var(--sanctra-sage);border-bottom-color:var(--sanctra-sage);}
+@media(max-width:680px){.appearance-navigation {gap:16px;}}
+
+@media(min-width:1024px){
+ .sanctra-app .settings-overlay .settings-content {padding:16px 24px;}
+ .sanctra-app .settings-overlay .settings-content>div.space-y-6 {display:grid;gap:14px;}
+ .sanctra-app .settings-overlay .settings-content>div.space-y-6>* {margin-block:0;}
+}
+.background-preview {display:grid;grid-template-columns:180px minmax(0,1fr);gap:16px;align-items:center;padding:12px;background:#ffffff07;border-radius:12px;margin-bottom:16px;}
+.background-preview>img {width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px;}
+.background-preview strong {font-size:14px;color:var(--sanctra-paper);}
+.background-preview p {font-size:12px;color:var(--sanctra-muted);margin:6px 0 12px;}
+.background-preview-actions {display:flex;gap:8px;flex-wrap:wrap;}
+.background-preview-actions button {min-height:40px;padding:8px 12px;font-size:12px;}
+.settings-danger-title {font-size:13px;color:var(--sanctra-muted);margin-top:32px;}
+@media(max-width:680px){.background-preview{grid-template-columns:minmax(0,1fr);}.background-preview>img{max-height:160px;}}
+
+@media(max-width:1194px){
+ .sanctra-app .settings-overlay .settings-heading>button{min-width:44px;min-height:44px;}
+ .sanctra-app .settings-overlay :is(input,textarea,select){font-size:16px;}
+ .sanctra-app .settings-overlay .background-filters button,.background-preview-actions button{min-height:44px;}
+ .sanctra-app .settings-overlay .background-choice-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media(max-width:680px){
+ .sanctra-app .settings-overlay{padding:8px;}
+ .sanctra-app .settings-overlay .settings-modal{height:calc(100dvh - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom));max-height:none;}
+ .sanctra-app .settings-overlay .settings-heading{padding:16px;}
+ .sanctra-app .settings-overlay .settings-content{padding:16px;overscroll-behavior:contain;padding-bottom:max(20px,env(safe-area-inset-bottom));}
+ .sanctra-app .settings-overlay .settings-tab-strip button{white-space:normal;}
+ .sanctra-app .settings-overlay .appearance-navigation{gap:12px;}
+ .sanctra-app .settings-overlay .background-filters{flex-wrap:nowrap;overflow-x:auto;padding:2px 0 6px;}
+ .sanctra-app .settings-overlay .background-filters button{flex-shrink:0;}
+}
+/* Settings has its own cool glass material, independent of warm wallpaper colours. */
+.sanctra-app .settings-overlay .settings-modal{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr);max-width:1080px;height:min(840px,92dvh);background:linear-gradient(135deg,rgba(50,58,79,.94),rgba(27,33,49,.96))!important;backdrop-filter:blur(24px)!important;-webkit-backdrop-filter:blur(24px)!important;color:#f5f3fa;--sanctra-paper:#f5f3fa;--sanctra-muted:#c5cbd9;--sanctra-sage:#d8c9f4;--sanctra-ink:#202739;--sanctra-glass-border:#d7deef30;}
+.sanctra-app .settings-overlay .settings-heading{padding:16px 22px;}
+.sanctra-app .settings-overlay .settings-heading p{margin-top:2px;}
+.sanctra-app .settings-overlay .settings-heading>button{min-width:44px;min-height:44px;}
+.sanctra-app .settings-overlay .settings-tab-strip{flex-direction:row;padding:10px 22px;gap:8px;border-right:0;border-bottom:1px solid #d7deef25;background:#10182820;}
+.sanctra-app .settings-overlay .settings-tab-strip button{padding:10px 16px;font-size:13px;min-height:44px;color:#d0d6e4;}
+.sanctra-app .settings-overlay .settings-tab-strip button svg{width:18px;height:18px;}
+.sanctra-app .settings-overlay .settings-tab-strip button:nth-child(1) svg{color:#dfd0fa;}
+.sanctra-app .settings-overlay .settings-tab-strip button:nth-child(2) svg{color:#c0e4d8;}
+.sanctra-app .settings-overlay .settings-tab-strip button:nth-child(3) svg{color:#f0d3be;}
+.sanctra-app .settings-overlay .settings-tab-strip button[aria-pressed=true]{background:#d8c9f42b!important;color:#f5efff!important;}
+.sanctra-app .settings-overlay .settings-content{padding:18px 22px;}
+.sanctra-app .settings-overlay .appearance-navigation{gap:6px;border:0;padding:0;margin-bottom:0;}
+.sanctra-app .settings-overlay .appearance-navigation button{padding:8px 14px;border:0;border-radius:10px;min-height:40px;background:#111a2929;color:#c5cbd9;}
+.sanctra-app .settings-overlay .appearance-navigation button[aria-pressed=true]{background:#c1dbed26;color:#dfedf7;}
+.sanctra-app .settings-overlay .background-current{margin-bottom:12px;}
+.sanctra-app .settings-overlay .background-current h3{font-size:13px;color:#c5cbd9;font-weight:400;margin-bottom:2px;}
+.sanctra-app .settings-overlay .background-current p{font-size:15px;font-weight:600;}
+.sanctra-app .settings-overlay .background-search{background:#17203270;border-color:#d7deef25;min-height:44px;}
+.sanctra-app .settings-overlay .background-search input{background:transparent!important;padding:10px 0!important;border-radius:0;box-shadow:none;font-size:14px;}
+.sanctra-app .settings-overlay .background-filters button{min-height:36px;padding:6px 12px;border-color:transparent;background:#c8d3ed0c;}
+.sanctra-app .settings-overlay .background-filters button[aria-pressed=true]{background:#d8c9f4;color:#282133;}
+.sanctra-app .settings-overlay .background-tile{background:#1d273b80;border-color:#d7deef25;}
+.sanctra-app .settings-overlay .background-tile[aria-pressed=true]{border-color:#d8c9f4;outline-color:#d8c9f4;}
+.sanctra-app .settings-overlay .background-tile-copy{padding:9px 10px;}
+.sanctra-app .settings-overlay .background-tile-copy strong{font-size:12px;}
+.sanctra-app .settings-overlay :is(button,input,select,textarea):focus-visible{outline:2px solid #d8c9f4;outline-offset:2px;}
+@media(max-width:680px){
+ .sanctra-app .settings-overlay .settings-heading,.sanctra-app .settings-overlay .settings-content{padding:14px;}
+ .sanctra-app .settings-overlay .settings-tab-strip{padding:8px;gap:4px;}
+ .sanctra-app .settings-overlay .settings-tab-strip button{padding:8px 6px;font-size:12px;}
+ .sanctra-app .settings-overlay .background-filters button{min-height:44px;}
+ .sanctra-app .settings-overlay .background-search input{font-size:16px;}
+}

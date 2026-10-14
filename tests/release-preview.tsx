@@ -1,0 +1,2 @@
+import React from 'react';import {createRoot} from 'react-dom/client';import '../src/index.css';import '../src/styles-sanctra.css';import {LoadingScreen} from '../src/components/LoadingScreen.tsx';import {LandingView} from '../src/components/views/LandingView.tsx';
+const loading=new URLSearchParams(location.search).has('loading');createRoot(document.getElementById('root')!).render(loading?<LoadingScreen wallpaperId="wp-art-forest"/>:<LandingView onOpenAuth={()=>alert('Sign-in action')} onStartStudying={()=>alert('Open desk')} onOpenGroups={()=>alert('Open groups')}/>);

@@ -1,0 +1,37 @@
+{
+  "name": "@sanctra/hermes-mcp",
+  "version": "1.1.0",
+  "private": false,
+  "type": "module",
+  "bin": {
+    "sanctra-hermes-mcp": "dist/index.js"
+  },
+  "exports": {
+    ".": "./dist/server.js",
+    "./http-client": "./dist/http-client.js",
+    "./tools": "./dist/tools.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "skill",
+    "examples"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "npm run build && node --test tests/*.test.mjs",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "2.3.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/client": "2.3.1",
+    "@types/node": "24.10.1",
+    "typescript": "7.0.2"
+  }
+}

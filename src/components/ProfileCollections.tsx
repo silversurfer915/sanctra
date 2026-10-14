@@ -1,0 +1,6 @@
+import {Crown,Check} from 'lucide-react';
+import {PROFILE_COLLECTIONS} from '../utils/profileCollections.ts';
+import {VipMedia} from './VipMedia.tsx';
+export function ProfileCollections({cover,isPlus,onChoose,onUpgrade}:{cover:string;isPlus:boolean;onChoose:(id:string)=>void;onUpgrade:()=>void}) {
+ return <section className="identity-collections"><header><div><h3>Find your signature.</h3><p>Four coordinated portraits and banners. The Sanctra Plus+ ring stays the same in every edition.</p></div><span className="plus-badge"><Crown size={13}/>Plus+</span></header><div className="identity-collection-grid">{PROFILE_COLLECTIONS.map(c=><button type="button" key={c.id} aria-label={`Equip ${c.name} collection`} aria-pressed={cover===c.cover} onClick={()=>isPlus?onChoose(c.id):onUpgrade()}><div className="collection-art"><VipMedia url={c.cover} decorative/><div className={`collection-medallion ${isPlus?'sanctra-plus-ring':''}`}><VipMedia url={c.avatar} name={c.name}/></div>{cover===c.cover&&<span className="collection-equipped"><Check size={14}/>Selected</span>}</div><div className="collection-caption"><strong>{c.name}</strong><span>{c.note}</span></div></button>)}</div>{!isPlus&&<button type="button" className="analytics-button" onClick={onUpgrade}><Crown size={16}/>Explore Plus+ customization</button>}</section>;
+}

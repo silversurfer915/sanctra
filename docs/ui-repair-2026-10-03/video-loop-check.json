@@ -1,0 +1,38 @@
+[
+  {
+    "file": "lake-still.mp4",
+    "frames": 454,
+    "seamDifference": 4.023,
+    "typicalAdjacentDifference": 3.701
+  },
+  {
+    "file": "rain-still.mp4",
+    "frames": 456,
+    "seamDifference": 0.824,
+    "typicalAdjacentDifference": 0.321
+  },
+  {
+    "file": "waterfall-still.mp4",
+    "frames": 456,
+    "seamDifference": 3.893,
+    "typicalAdjacentDifference": 3.949
+  },
+  {
+    "file": "fire-still.mp4",
+    "frames": 189,
+    "seamDifference": 16.385,
+    "typicalAdjacentDifference": 15.183
+  },
+  {
+    "file": "river-still.mp4",
+    "frames": 455,
+    "seamDifference": 1.004,
+    "typicalAdjacentDifference": 0.905
+  },
+  {
+    "file": "stream-still.mp4",
+    "frames": 456,
+    "seamDifference": 3.979,
+    "typicalAdjacentDifference": 3.296
+  }
+]

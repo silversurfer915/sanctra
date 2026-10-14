@@ -1,0 +1,7 @@
+/* A single identity mark for every entitled member; saved legacy frame IDs stay intact. */
+@property --sanctra-ring-angle {syntax:'<angle>';initial-value:0deg;inherits:false;}
+.sanctra-app .sanctra-plus-ring {position:relative;isolation:isolate;overflow:visible!important;border:1px solid color-mix(in srgb,var(--sanctra-sage) 55%,transparent)!important;outline:none!important;box-shadow:none!important;animation:none!important;}
+.sanctra-app .sanctra-plus-ring::after {content:'';position:absolute;inset:-4px;padding:2px;border-radius:inherit;pointer-events:none;background:conic-gradient(from var(--sanctra-ring-angle),color-mix(in srgb,var(--sanctra-sage) 22%,transparent),var(--sanctra-sage) 18%,var(--sanctra-paper,#f3f1e7) 23%,color-mix(in srgb,var(--sanctra-sage) 25%,transparent) 32%,color-mix(in srgb,var(--sanctra-sage) 22%,transparent) 72%,var(--sanctra-sage) 88%,color-mix(in srgb,var(--sanctra-sage) 22%,transparent));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude;animation:sanctra-ring-orbit 18s linear infinite;z-index:2;}
+.sanctra-app .sanctra-plus-ring :is(img,video) {border-radius:inherit;object-fit:cover;}
+@keyframes sanctra-ring-orbit {to{--sanctra-ring-angle:360deg;}}
+@media(prefers-reduced-motion:reduce){.sanctra-app .sanctra-plus-ring::after{animation:none!important;}}

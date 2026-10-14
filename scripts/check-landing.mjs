@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';import{readFile}from'node:fs/promises';
+const html=await readFile('dist/index.html','utf8');
+assert.equal((html.match(/<h1\b/g)||[]).length,1,'exactly one crawlable main heading');
+const headingLevels=[...html.matchAll(/<h([1-6])\b/g)].map(m=>+m[1]);for(let i=1;i<headingLevels.length;i++)assert.ok(headingLevels[i]<=headingLevels[i-1]+1,'no skipped heading levels');
+assert.equal((html.match(/rel="canonical"/g)||[]).length,1);assert.match(html,/rel="canonical" href="https:\/\/sanctrastudy.live\/"/);
+const text=html.replace(/<script[\s\S]*?<\/script>/g,' ').replace(/<style[\s\S]*?<\/style>/g,' ').replace(/<[^>]+>/g,' ');const words=text.split(/\s+/).filter(Boolean).length;assert.ok(words>500,'substantial public copy without JavaScript');
+assert.match(html,/<link rel="stylesheet" href="\/assets\/LandingView-.*?\.css"/,'prerender styles available without JavaScript');
+const schema=JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);assert.equal(schema.url,'https://sanctrastudy.live/');assert.equal(schema['@type'],'WebApplication');assert.equal(schema.offers,undefined,'no unverified pricing metadata');assert.ok(!/AI Tutor|voice calls|revision checklists/.test(html));
+assert.match(await readFile('dist/robots.txt','utf8'),/^User-agent: \*\nAllow: \/\n\nSitemap: https:\/\/sanctrastudy.live\/sitemap.xml\n$/);
+assert.match(await readFile('dist/sitemap.xml','utf8'),/<loc>https:\/\/sanctrastudy.live\/<\/loc>/);
+console.log(`PASS: ${words} crawlable words, heading hierarchy, canonical, metadata schema, robots, sitemap and static styling.`);

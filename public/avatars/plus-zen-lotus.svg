@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="100%" height="100%">
+  <defs>
+    <radialGradient id="lotus-pond" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#0f2923"/>
+      <stop offset="60%" stop-color="#081814"/>
+      <stop offset="100%" stop-color="#020806"/>
+    </radialGradient>
+    <linearGradient id="petal-outer" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#b78eaa"/>
+      <stop offset="50%" stop-color="#d4afc6"/>
+      <stop offset="100%" stop-color="#fdf2f8"/>
+    </linearGradient>
+    <linearGradient id="petal-mid" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#c6ad79"/>
+      <stop offset="60%" stop-color="#dfcda7"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+    <radialGradient id="core-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="35%" stop-color="#fef08a"/>
+      <stop offset="70%" stop-color="#b89b6b" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#b89b6b" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="lotus-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.2" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <style>
+    @keyframes aura-ripple-1 {
+      0% { r: 35px; opacity: 0.8; stroke-width: 2.5px; }
+      100% { r: 72px; opacity: 0; stroke-width: 0.5px; }
+    }
+    @keyframes aura-ripple-2 {
+      0% { r: 35px; opacity: 0.8; stroke-width: 2.5px; }
+      100% { r: 72px; opacity: 0; stroke-width: 0.5px; }
+    }
+    @keyframes lotus-breathe {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.015); }
+    }
+    @keyframes dew-sparkle {
+      0%, 100% { opacity: 0.3; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(-4px); }
+    }
+    @keyframes pond-ring {
+      0% { rx: 45px; ry: 16px; opacity: 0.6; }
+      100% { rx: 70px; ry: 24px; opacity: 0; }
+    }
+    .ripple-1 { transform-origin: 80px 85px; animation: aura-ripple-1 7.2s ease-out infinite; }
+    .ripple-2 { transform-origin: 80px 85px; animation: aura-ripple-2 7.2s ease-out infinite 2s; }
+    .lotus-flower { transform-origin: 80px 90px; animation: lotus-breathe 8.1s ease-in-out infinite; }
+    .dew-1 { animation: dew-sparkle 6s ease-in-out infinite; }
+    .dew-2 { animation: dew-sparkle 6s ease-in-out infinite 0.8s; }
+    .pond-ripple { transform-origin: 80px 125px; animation: pond-ring 9.0s ease-out infinite; }
+    @media (prefers-reduced-motion: reduce) {
+      .ripple-1, .ripple-2, .lotus-flower, .dew-1, .dew-2, .pond-ripple {
+        animation: none !important;
+      }
+    }
+  </style>
+
+  <!-- Deep Emerald Water Background -->
+  <circle cx="80" cy="80" r="76" fill="url(#lotus-pond)"/>
+
+  <!-- Concentric Golden Aura Waves Expanding Outward -->
+  <circle cx="80" cy="85" r="35" fill="none" stroke="#c6ad79" class="ripple-1"/>
+  <circle cx="80" cy="85" r="35" fill="none" stroke="#d4afc6" class="ripple-2"/>
+
+  <!-- Water Surface Reflections -->
+  <ellipse cx="80" cy="125" rx="55" ry="18" fill="#064e3b" fill-opacity="0.5"/>
+  <ellipse cx="80" cy="125" rx="45" ry="16" fill="none" stroke="#9abca9" stroke-opacity="0.4" class="pond-ripple"/>
+
+  <!-- Emerald Lily Pad Foundation -->
+  <ellipse cx="80" cy="120" rx="52" ry="15" fill="#047857"/>
+  <ellipse cx="80" cy="120" rx="48" ry="13" fill="#059669"/>
+  <!-- Leaf Veins -->
+  <line x1="80" y1="120" x2="36" y2="116" stroke="#85aa9b" stroke-width="1.2"/>
+  <line x1="80" y1="120" x2="124" y2="116" stroke="#85aa9b" stroke-width="1.2"/>
+  <line x1="80" y1="120" x2="80" y2="133" stroke="#85aa9b" stroke-width="1.2"/>
+
+  <!-- Blooming Lotus Group -->
+  <g class="lotus-flower">
+    <!-- Tier 1: Outer Wide Petals (Deep Pink / Magenta) -->
+    <path d="M 80 110 C 45 115 25 90 35 70 C 45 85 65 95 80 110 Z" fill="url(#petal-outer)"/>
+    <path d="M 80 110 C 115 115 135 90 125 70 C 115 85 95 95 80 110 Z" fill="url(#petal-outer)"/>
+    <path d="M 80 115 C 50 110 32 100 48 85 C 60 98 70 106 80 115 Z" fill="#db2777"/>
+    <path d="M 80 115 C 110 110 128 100 112 85 C 100 98 90 106 80 115 Z" fill="#db2777"/>
+
+    <!-- Tier 2: Mid Petals (Soft Rose to Cream) -->
+    <path d="M 80 110 C 55 100 45 75 58 55 C 68 75 75 90 80 110 Z" fill="url(#petal-outer)"/>
+    <path d="M 80 110 C 105 100 115 75 102 55 C 92 75 85 90 80 110 Z" fill="url(#petal-outer)"/>
+
+    <!-- Tier 3: Upright Center Petals (Golden Lotus Heart) -->
+    <path d="M 80 105 C 65 90 62 60 80 42 C 98 60 95 90 80 105 Z" fill="url(#petal-mid)"/>
+    <path d="M 80 105 C 70 85 68 62 80 48 C 92 62 90 85 80 105 Z" fill="#ffffff" fill-opacity="0.6"/>
+
+    <!-- Golden Stamen & Luminous Heart Core -->
+    <circle cx="80" cy="85" r="16" fill="url(#core-glow)" filter="url(#lotus-glow)"/>
+    <circle cx="80" cy="85" r="6" fill="#fef08a"/>
+    <circle cx="80" cy="85" r="3" fill="#ffffff"/>
+
+    <!-- Sacred Golden Pollen Drops -->
+    <circle cx="75" cy="80" r="1.5" fill="#b89b6b"/>
+    <circle cx="85" cy="80" r="1.5" fill="#b89b6b"/>
+    <circle cx="73" cy="88" r="1.5" fill="#b89b6b"/>
+    <circle cx="87" cy="88" r="1.5" fill="#b89b6b"/>
+    <circle cx="80" cy="92" r="1.5" fill="#b89b6b"/>
+  </g>
+
+  <!-- Floating Starlight & Dewdrop Sparkles -->
+  <g class="dew-1">
+    <circle cx="48" cy="45" r="2" fill="#fef08a" filter="url(#lotus-glow)"/>
+    <polygon points="48,40 50,44 54,45 50,46 48,50 46,46 42,45 46,44" fill="#ffffff"/>
+  </g>
+  <g class="dew-2">
+    <circle cx="115" cy="40" r="2.2" fill="#d4afc6" filter="url(#lotus-glow)"/>
+    <polygon points="115,36 117,39 120,40 117,41 115,44 113,41 110,40 113,39" fill="#ffffff"/>
+  </g>
+  <circle cx="34" cy="95" r="1.5" fill="#67e8f9" class="dew-1"/>
+  <circle cx="126" cy="98" r="1.5" fill="#fef08a" class="dew-2"/>
+
+  <!-- Border Frame -->
+  <circle cx="80" cy="80" r="76" fill="none" stroke="#85aa9b" stroke-opacity="0.35" stroke-width="2"/>
+</svg>

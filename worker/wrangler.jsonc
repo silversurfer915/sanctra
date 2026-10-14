@@ -1,0 +1,27 @@
+{
+  "name": "sanctra-ai",
+  "main": "ai-gateway.ts",
+  "compatibility_date": "2026-10-04",
+  "routes": [
+    {
+      "pattern": "api.sanctrastudy.live",
+      "custom_domain": true
+    }
+  ],
+  "ratelimits": [
+    {
+      "name": "PERSONAL_RATE_LIMIT",
+      "namespace_id": "731204",
+      "simple": {
+        "limit": 120,
+        "period": 60
+      }
+    }
+  ],
+  "vars": {
+    "FIREBASE_PROJECT_ID": "studyapp-4137d",
+    "ALLOWED_ORIGIN": "https://sanctrastudy.live",
+    "GEMINI_MODEL": "gemini-3.5-flash-lite",
+    "PERSONAL_OWNER_UID": "8PUcobJCJigbMtqaApB5q7OfGGb2"
+  }
+}

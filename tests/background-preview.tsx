@@ -1,0 +1,7 @@
+import {useState} from 'react';
+import {createRoot} from 'react-dom/client';
+import {ScenicWallpaper} from '../src/components/ScenicWallpaper.tsx';
+import {SettingsModal} from '../src/components/modals/SettingsModal.tsx';
+import {DEFAULT_USER_SETTINGS} from '../src/utils/storage.ts';
+import '../src/index.css';import '../src/styles-sanctra.css';
+function Preview(){const [settings,setSettings]=useState(()=>({...DEFAULT_USER_SETTINGS,...JSON.parse(localStorage.getItem('background-fixture')||'{}'),activeWallpaperId:'wp-video-ocean',plusMotionWallpaperEnabled:true}));const [open,setOpen]=useState(false);return <div className="sanctra-app" id="sanctra-root" style={{height:'100dvh',isolation:'isolate'}}><ScenicWallpaper settings={settings}/><button className="analytics-button" onClick={()=>setOpen(true)}>Appearance settings</button><output style={{display:'block'}}>Background preview</output><button className="analytics-button" onClick={()=>document.querySelector("video")?.dispatchEvent(new Event("error"))}>Simulate stream failure</button><SettingsModal isOpen={open} settings={settings} currentUser={null} subscription={{isPlus:true,status:'active',currentPeriodEnd:Date.now()+86400000} as any} onClose={()=>setOpen(false)} onUpdateSettings={patch=>setSettings((s:any)=>{const next={...s,...patch};localStorage.setItem('background-fixture',JSON.stringify(next));return next;})} onOpenAuth={()=>{}} onResetStudyTimes={()=>{}}/></div>;}createRoot(document.getElementById('root')!).render(<Preview/>);

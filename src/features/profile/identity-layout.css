@@ -1,0 +1,5 @@
+/* Identity badges form one group; artwork overflow has reserved layout space. */
+.sanctra-app .ranking-personal-tags{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-block:8px;}
+.sanctra-app .ranking-personal-tags :is(.admin-badge,.plus-badge,.group-streak){margin:0;}
+.sanctra-app .profile-page .profile-studio .identity-context-row{grid-template-columns:52px minmax(0,1fr);gap:12px;}
+.sanctra-app .profile-page .profile-studio .identity-context-row>.profile-avatar.small{margin:4px;align-self:start;}

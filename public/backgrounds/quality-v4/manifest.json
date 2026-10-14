@@ -1,0 +1,152 @@
+{
+  "landing-stillness": {
+    "width": 1672,
+    "height": 941,
+    "widths": [
+      640,
+      1280,
+      1672
+    ],
+    "source": "/Users/ponhareeshn/.codex/generated_images/01a0f787-0b2e-7d61-be5c-73c501726293/exec-d147496d-cfb2-4fdb-8825-6e96059c71e8.png"
+  },
+  "timer-stillness": {
+    "width": 1672,
+    "height": 941,
+    "widths": [
+      640,
+      1280,
+      1672
+    ],
+    "source": "/Users/ponhareeshn/.codex/generated_images/01a0f787-0b2e-7d61-be5c-73c501726293/exec-380a6016-2106-4cf1-aad6-f4946d545c07.png"
+  },
+  "illustrated-forest.v2": {
+    "width": 1672,
+    "height": 941,
+    "widths": [
+      640,
+      1280,
+      1672
+    ],
+    "source": "/Users/ponhareeshn/Documents/StudyTimer/public/backgrounds/illustrated-forest.v2.webp"
+  },
+  "illustrated-study-desk.v2": {
+    "width": 1672,
+    "height": 941,
+    "widths": [
+      640,
+      1280,
+      1672
+    ],
+    "source": "/Users/ponhareeshn/Documents/StudyTimer/public/backgrounds/illustrated-study-desk.v2.webp"
+  },
+  "illustrated-lavender-lake.v2": {
+    "width": 1672,
+    "height": 941,
+    "widths": [
+      640,
+      1280,
+      1672
+    ],
+    "source": "/Users/ponhareeshn/Documents/StudyTimer/public/backgrounds/illustrated-lavender-lake.v2.webp"
+  },
+  "illustrated-sand-nook": {
+    "width": 1672,
+    "height": 941,
+    "widths": [
+      640,
+      1280,
+      1672
+    ],
+    "source": "/Users/ponhareeshn/Documents/StudyTimer/public/backgrounds/illustrated-sand-nook.webp"
+  },
+  "illustrated-rose-terrace": {
+    "width": 1672,
+    "height": 940,
+    "widths": [
+      640,
+      1280,
+      1672
+    ],
+    "source": "/Users/ponhareeshn/Documents/StudyTimer/public/backgrounds/illustrated-rose-terrace.webp"
+  },
+  "illustrated-charcoal-library": {
+    "width": 1672,
+    "height": 941,
+    "widths": [
+      640,
+      1280,
+      1672
+    ],
+    "source": "/Users/ponhareeshn/Documents/StudyTimer/public/backgrounds/illustrated-charcoal-library.webp"
+  },
+  "ocean-landing-hd": {
+    "width": 1920,
+    "height": 1080,
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "source": "/Users/ponhareeshn/Documents/StudyTimer/public/backgrounds/quality-v4/ocean-landing-hd-source.jpg"
+  },
+  "river-still": {
+    "width": 1920,
+    "height": 1080,
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "source": "/Users/ponhareeshn/Documents/StudyTimer/public/backgrounds/quality-v4/river-still-source.jpg"
+  },
+  "stream-still": {
+    "width": 1920,
+    "height": 1080,
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "source": "/Users/ponhareeshn/Documents/StudyTimer/public/backgrounds/quality-v4/stream-still-source.jpg"
+  },
+  "lake-still": {
+    "width": 1920,
+    "height": 1080,
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "source": "/Users/ponhareeshn/Documents/StudyTimer/public/backgrounds/quality-v4/lake-still-source.jpg"
+  },
+  "fire-still": {
+    "width": 1920,
+    "height": 1080,
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "source": "/Users/ponhareeshn/Documents/StudyTimer/public/backgrounds/quality-v4/fire-still-source.jpg"
+  },
+  "waterfall-still": {
+    "width": 1920,
+    "height": 1080,
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "source": "/Users/ponhareeshn/Documents/StudyTimer/public/backgrounds/quality-v4/waterfall-still-source.jpg"
+  },
+  "rain-still": {
+    "width": 1920,
+    "height": 1080,
+    "widths": [
+      640,
+      1280,
+      1920
+    ],
+    "source": "/Users/ponhareeshn/Documents/StudyTimer/public/backgrounds/quality-v4/rain-still-source.jpg"
+  }
+}
