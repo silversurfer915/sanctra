@@ -396,6 +396,7 @@ export const App: React.FC = () => {
     }) => {
       if (!currentUser?.uid || hydratedUidRef.current !== currentUser.uid) return;
       setIsSyncingCloud(true);
+      const syncingSessions = overrideData?.sessions || dataRef.current.sessions;
       try {
         await syncUserDataToFirestore(currentUser.uid, {
           ...(overrideData || {
@@ -403,7 +404,7 @@ export const App: React.FC = () => {
             tasks:dataRef.current.tasks,settings:settingsRef.current,
           }),
         });
-        for (const session of overrideData?.sessions || []) {
+        for (const session of syncingSessions) {
           if (pendingSessionSavesRef.current.get(session.id) === session) pendingSessionSavesRef.current.delete(session.id);
         }
       } catch {
