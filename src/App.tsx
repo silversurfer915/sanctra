@@ -77,6 +77,7 @@ import {
   getCloudDatabase,
 } from './utils/firebase.ts';
 import { doc, getDoc } from 'firebase/firestore';
+import {subscribeStudyRecords,reconcileStudyRecords} from './utils/studyDataSync.ts';
 import {readSessionOutbox,persistSessionWithRetry,confirmSessionSaves,writeSessionOutbox} from './utils/sessionOutbox.ts';
 import {mergeStudyRecords} from './utils/mergeStudyRecords.ts';
 import {mirrorFocusSession} from './utils/focusMirror.ts';
@@ -591,6 +592,25 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('online',retrySavedHistory);
   },[currentUser?.uid,triggerCloudSync]);
 
+  useEffect(() => {
+    const uid=currentUser?.uid;
+    const db=getCloudDatabase();
+    if(!accountReady||!uid||hydratedUidRef.current!==uid||!db)return;
+    let previous=dataRef.current;
+    let pendingAtSubscription=[...pendingSessionSavesRef.current.values()];
+    return subscribeStudyRecords(db,uid,remote=>{
+      if(hydratedUidRef.current!==uid||userInfoRef.current?.uid!==uid)return;
+      const local=dataRef.current;
+      const merged=reconcileStudyRecords(previous,local,remote,[...pendingAtSubscription,...pendingSessionSavesRef.current.values()]);
+      pendingAtSubscription=[];
+      previous={...previous,...remote};
+      dataRef.current=merged;
+      if(JSON.stringify(merged.sessions)!==JSON.stringify(local.sessions)){setSessions(merged.sessions);persistSessions(merged.sessions);}
+      if(JSON.stringify(merged.subjects)!==JSON.stringify(local.subjects)){setSubjects(merged.subjects);persistSubjects(merged.subjects);}
+      if(JSON.stringify(merged.tasks)!==JSON.stringify(local.tasks)){setTasks(merged.tasks);persistTasks(merged.tasks);}
+    },()=>{if(hydratedUidRef.current===uid)setCloudSyncError('Live study updates are unavailable. Your local records are preserved; reconnect to sync.');});
+  },[currentUser?.uid,accountReady]);
+
   // Source of Truth: Listen to Firebase Auth state & resolve startup gate without landing page flash
   useEffect(() => {
     const unsubscribe = subscribeToAuthChanges(
@@ -744,22 +764,9 @@ export const App: React.FC = () => {
       void flushIntegrityRef.current('idle');
     }
 
-    // Refresh user sessions from cloud so the session saved by takeover appears in history
-    if (currentUser?.uid && !currentUser.uid.startsWith('guest-')) {
-      const refreshUid = currentUser.uid;
-      const historyAtRefresh = dataRef.current.sessions;
-      const pendingAtRefresh = [...pendingSessionSavesRef.current.values()];
-      void loadUserDataFromFirestore(refreshUid).then((remote) => {
-        if (remote?.sessions && hydratedUidRef.current === refreshUid) {
-          // A background resume/read can finish after Save. Preserve edits made
-          // since this read began instead of replacing them with its snapshot.
-          const history = mergeStudyRecords(historyAtRefresh, dataRef.current.sessions, remote.sessions, [...pendingAtRefresh, ...pendingSessionSavesRef.current.values()]);
-          dataRef.current = {...dataRef.current, sessions: history};
-          setSessions(history);
-          persistSessions(history);
-        }
-      });
-    }
+    // Saved history is observed by subscribeStudyRecords independently of the
+    // timer state. Avoid an overlapping one-shot read replacing newer updates.
+
   }, [currentUser?.uid]);
 
   // Listen to active session doc in real time (one active session per account)
@@ -1269,7 +1276,7 @@ export const App: React.FC = () => {
     }
     if(nextSubjects!==subjects){setSubjects(nextSubjects);persistSubjects(nextSubjects);}
     pendingSessionSavesRef.current.set(newSession.id, newSession);
-    const updatedSessions = [newSession, ...sessions.filter(session=>session.id!==newSession.id)];
+    const updatedSessions = [newSession, ...dataRef.current.sessions.filter(session=>session.id!==newSession.id)];
     dataRef.current = {...dataRef.current, sessions: updatedSessions, subjects: nextSubjects};
     setSessions(updatedSessions);
     triggerCloudSync({ sessions: updatedSessions,subjects:nextSubjects });
