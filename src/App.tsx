@@ -79,6 +79,7 @@ import {
   getCloudDatabase,
 } from './utils/firebase.ts';
 import { doc, getDoc } from 'firebase/firestore';
+import {mergeStudyRecords} from './utils/mergeStudyRecords.ts';
 import {mirrorFocusSession} from './utils/focusMirror.ts';
 import {
   getDeviceId,
@@ -383,6 +384,8 @@ export const App: React.FC = () => {
     setIsSettingsModalOpen(true);
   };
 
+  const pendingSessionSavesRef = useRef(new Map<string, StudySession>());
+
   // Cloud Sync helper
   const triggerCloudSync = useCallback(
     async (overrideData?: {
@@ -400,6 +403,9 @@ export const App: React.FC = () => {
             tasks:dataRef.current.tasks,settings:settingsRef.current,
           }),
         });
+        for (const session of overrideData?.sessions || []) {
+          if (pendingSessionSavesRef.current.get(session.id) === session) pendingSessionSavesRef.current.delete(session.id);
+        }
       } catch {
         setCloudSyncError('Cloud sync failed. Changes remain on this device.');
       } finally {
@@ -427,6 +433,7 @@ export const App: React.FC = () => {
     if (newUser?.isAnonymous) newUser = null;
     setCurrentUser(newUser);
     if (!newUser?.uid) {
+      pendingSessionSavesRef.current.clear();
       authRequestRef.current++;
       loadingUidRef.current = null;
       hydratedUidRef.current = null;
@@ -486,6 +493,7 @@ export const App: React.FC = () => {
     const localSettings = cacheOwnerRef.current === newUser.uid || localStorage.getItem(getSettingsStorageKey(newUser.uid))
       ? getUserSettings(newUser.uid) : { ...DEFAULT_USER_SETTINGS };
     if (cacheOwnerRef.current !== newUser.uid) {
+      pendingSessionSavesRef.current.clear();
       try {
         const previousDraft = getTimerDraft();
         if (cacheOwnerRef.current && previousDraft) localStorage.setItem(`sanctra_account_timer_${cacheOwnerRef.current}`,JSON.stringify(previousDraft));
@@ -717,10 +725,17 @@ export const App: React.FC = () => {
 
     // Refresh user sessions from cloud so the session saved by takeover appears in history
     if (currentUser?.uid && !currentUser.uid.startsWith('guest-')) {
-      void loadUserDataFromFirestore(currentUser.uid).then((remote) => {
-        if (remote?.sessions) {
-          setSessions(remote.sessions);
-          persistSessions(remote.sessions);
+      const refreshUid = currentUser.uid;
+      const historyAtRefresh = dataRef.current.sessions;
+      const pendingAtRefresh = [...pendingSessionSavesRef.current.values()];
+      void loadUserDataFromFirestore(refreshUid).then((remote) => {
+        if (remote?.sessions && hydratedUidRef.current === refreshUid) {
+          // A background resume/read can finish after Save. Preserve edits made
+          // since this read began instead of replacing them with its snapshot.
+          const history = mergeStudyRecords(historyAtRefresh, dataRef.current.sessions, remote.sessions, [...pendingAtRefresh, ...pendingSessionSavesRef.current.values()]);
+          dataRef.current = {...dataRef.current, sessions: history};
+          setSessions(history);
+          persistSessions(history);
         }
       });
     }
@@ -1223,7 +1238,9 @@ export const App: React.FC = () => {
       return false;
     }
     if(nextSubjects!==subjects){setSubjects(nextSubjects);persistSubjects(nextSubjects);}
+    pendingSessionSavesRef.current.set(newSession.id, newSession);
     const updatedSessions = [newSession, ...sessions.filter(session=>session.id!==newSession.id)];
+    dataRef.current = {...dataRef.current, sessions: updatedSessions, subjects: nextSubjects};
     setSessions(updatedSessions);
     triggerCloudSync({ sessions: updatedSessions,subjects:nextSubjects });
 
@@ -1232,15 +1249,7 @@ export const App: React.FC = () => {
       void flushIntegrityRef.current('idle');
     }
 
-    if (currentUser?.uid && !currentUser.uid.startsWith('guest-')) {
-      const db = getCloudDatabase();
-      if (db) {
-        void deleteActiveSession(db, currentUser.uid, activeSessionRemote?.sessionId === currentSessionIdRef.current ? activeSessionRemote.deviceId : getDeviceId(), currentSessionIdRef.current || undefined);
-      }
-    }
-    currentSessionIdRef.current = null;
-
-    // Reset timer
+    // Reset clears this exact active session once, after its history is staged.
     handleConfirmReset();
     return true;
   };
@@ -1262,6 +1271,8 @@ export const App: React.FC = () => {
       updatedSessions = [session, ...sessions];
     }
 
+    pendingSessionSavesRef.current.set(session.id, session);
+    dataRef.current = {...dataRef.current, sessions: updatedSessions, subjects: nextSubjects};
     setSessions(updatedSessions);
     const cloudSave = triggerCloudSync({ sessions: updatedSessions,subjects:nextSubjects });
     setIsManualModalOpen(false);
@@ -1281,8 +1292,10 @@ export const App: React.FC = () => {
       setCloudSyncError('The session was kept because its ranking could not be updated. Reconnect and try deleting it again.');
       return;
     } finally {deletingSessions.current.delete(id);}
+    pendingSessionSavesRef.current.delete(id);
     removeSession(id);
     const updatedSessions = getSessions();
+    dataRef.current = {...dataRef.current, sessions: updatedSessions};
     setSessions(updatedSessions);
     triggerCloudSync({ sessions: updatedSessions });
   };
