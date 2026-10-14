@@ -3644,11 +3644,16 @@
                       "category": {
                         "type": "string",
                         "enum": [
+                          "issue",
+                          "suggestion",
+                          "account",
+                          "timer",
+                          "appeal",
+                          "other",
+                          "premium",
                           "bug",
                           "feature",
-                          "account",
-                          "payment",
-                          "other"
+                          "payment"
                         ]
                       },
                       "text": {

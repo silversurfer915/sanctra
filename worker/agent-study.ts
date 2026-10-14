@@ -336,6 +336,7 @@ export async function changeStudy(
   checkVersion(canonical.version, expected, "session");
   const history = records(a.sessions),
     index = history.findIndex((s) => s.id === itemId);
+  if (canonical.data?.deletedAt) throw new AgentError("missing","Session was deleted. Restore it before editing.",404);
   if (!canonical.data && index < 0)
     throw new AgentError("missing", "Session not found.", 404);
   if (canonical.data?.status === "active")

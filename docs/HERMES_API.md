@@ -146,7 +146,7 @@ Direct completed sessions use `input:{sessionId?,subjectId,startTime:epochMillis
 
 Application profile provisioning is separate from Firebase Authentication account creation; the supplied UID should belong to an already registered user. Credential/password changes remain in Firebase's authorized authentication flow.
 
-Ticket create input is `{ownerUid,title,category,text}`, with category bug/feature/account/payment/other and the target account version. The initial message is attributed to Hermes administration. Attachments are available through the dedicated read, not embedded in paginated ticket lists.
+Ticket create input is `{ownerUid,title,category,text}`, with Sanctra categories issue/suggestion/account/timer/appeal/other/premium (bug/feature/payment aliases are accepted) and the target account version. The initial message is attributed to Hermes administration. Attachments are available through the dedicated read, not embedded in paginated ticket lists.
 
 ### Atomic batch example
 
