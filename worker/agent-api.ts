@@ -540,7 +540,7 @@ export function createAgentApi(deps: AgentDependencies) {
                 const expected=object(b.expectedVersions||n.expectedVersions,['account','session','jeeChapter','ticket','aiAccess','aiConfig','platform']);
                 const result=await executeMutation(buffered.tx,target,b.input||{},expected,g,`${operationKey}-${i}`,now,targetUrl.search==='?hard=true');
                 items.push({path:op.path,data:result.data,versions:result.versions||{}});for(const c of result.changed||[])changed.add(c);
-                if(target.uid)versions[target.uid]={account:versionAfter(`users/${target.uid}`)};
+                if(target.uid&&['study:write','study:delete','users:write'].includes(target.scope!))versions[target.uid]={account:versionAfter(`users/${target.uid}`)};
               }
               outcome={data:{items},versions,changed:[...changed]};
             }else outcome=await executeMutation(buffered.tx,r,n.input,n.expectedVersions,g,operationKey,now,url.search==='?hard=true');
@@ -614,7 +614,7 @@ async function executeMutation(tx:AgentTransaction,r:ReturnType<typeof routeFor>
  if(['create_session','start_session','stop_session','complete_session'].includes(r.tool))return sessionLifecycle(tx,r.uid!,r.tool,r.item,input,expected,key,now);
  if(r.scope==='users:write')return changeUser(tx,r.uid,input,expected,now);
  if(r.tool==='create_ticket')return createTicket(tx,input,expected,key,now,g.creatorUid,g.id);
- if(r.scope==='study:write'){const result=await changeStudy(tx,r.uid!,r.tool,r.item,input,expected,g.creatorUid,g.id,key,now);return {...result,versions:{account:versionAfter(`users/${r.uid}`),...(r.item&&r.tool==='update_session'?{session:versionAfter(`users/${r.uid}/personal_sessions/${r.item}`)}:{})}};}
+ if(r.scope==='study:write'){const result=await changeStudy(tx,r.uid!,r.tool,r.item,input,expected,g.creatorUid,g.id,key,now);const cp=`users/${r.uid}/personal_sessions/${r.item}`;const canonical=r.item&&r.tool==='update_session'?await tx.read(cp):null;return {...result,versions:{account:versionAfter(`users/${r.uid}`),...(canonical?{session:canonical.data?versionAfter(cp):''}:{})}};}
  if(r.scope==='support:write')return changeTicket(tx,r.item!,r.kind!,input,expected,g.creatorUid,g.id,key);
  const kind=r.tool==='set_user_ai'?'aiAccess':r.tool==='set_global_ai'?'aiConfig':'platform';
  return changeControls(tx,kind,kind==='aiAccess'?`ai_access/${r.uid}`:kind==='aiConfig'?'ai_config/global':'platform/controls',input,expected,g.creatorUid,now,key);
