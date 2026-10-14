@@ -396,7 +396,7 @@ export const App: React.FC = () => {
     }) => {
       if (!currentUser?.uid || hydratedUidRef.current !== currentUser.uid) return;
       setIsSyncingCloud(true);
-      const syncingSessions = overrideData?.sessions || dataRef.current.sessions;
+      const syncingSessions = overrideData ? overrideData.sessions || [] : dataRef.current.sessions;
       try {
         await syncUserDataToFirestore(currentUser.uid, {
           ...(overrideData || {
