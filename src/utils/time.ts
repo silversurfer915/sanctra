@@ -1,3 +1,4 @@
+import {buildPeriodAnalytics} from './analytics.ts';
 import type { StudySession } from '../types/index.ts';
 
 /**
@@ -132,28 +133,13 @@ export function calculateStreak(sessions: StudySession[], thresholdSeconds: numb
 /**
  * Get total seconds studied today
  */
-export function getTodaySeconds(sessions: StudySession[]): number {
-  const todayStr = getLocalDateString();
-  return sessions
-    .filter(s => s.date === todayStr)
-    .reduce((acc, s) => acc + s.durationSeconds, 0);
+export function getTodaySeconds(sessions: StudySession[], now = new Date()): number {
+  return buildPeriodAnalytics(sessions, [], now, 'day', now).totalSeconds;
 }
 
 /**
  * Get total seconds studied in current calendar week (Monday to Sunday)
  */
-export function getThisWeekSeconds(sessions: StudySession[]): number {
-  const now = new Date();
-  const day = now.getDay();
-  // Adjust so Monday is 0, Sunday is 6
-  const diffToMonday = (day === 0 ? 6 : day - 1);
-  const monday = new Date(now);
-  monday.setDate(now.getDate() - diffToMonday);
-  monday.setHours(0, 0, 0, 0);
-
-  const mondayTimestamp = monday.getTime();
-
-  return sessions
-    .filter(s => s.startTime >= mondayTimestamp)
-    .reduce((acc, s) => acc + s.durationSeconds, 0);
+export function getThisWeekSeconds(sessions: StudySession[], now = new Date()): number {
+  return buildPeriodAnalytics(sessions, [], now, 'week', now).totalSeconds;
 }

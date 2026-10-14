@@ -139,6 +139,7 @@ export interface UserSettings {
 }
 
 export interface TimerDraft {
+  sessionId?: string;
   jee?:JeeSessionTag;
   rankingCapped?: boolean;
   strictMode?: boolean;
