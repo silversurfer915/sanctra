@@ -285,3 +285,16 @@ export async function deleteActiveSession(
     tx.delete(sessionRef);
   });
 }
+
+/** Recover a locally started timer without replacing any different active identity. */
+export async function recoverActiveSession(db:Firestore,uid:string,sessionData:Omit<ActiveSession,'updatedAt'|'lastHeartbeat'>):Promise<{success:boolean;conflict?:ActiveSession}>{
+ const ref=doc(db,'activeSessions',uid);
+ return runTransaction(db,async tx=>{
+  const snapshot=await tx.get(ref);
+  if(snapshot.exists()){
+   const existing=snapshot.data() as ActiveSession;
+   if(['running','paused','break-running','break-paused'].includes(existing.status)&&existing.sessionId!==sessionData.sessionId)return {success:false,conflict:existing};
+  }
+  const now=Date.now();tx.set(ref,{...sessionData,updatedAt:now,lastHeartbeat:now});return {success:true};
+ });
+}

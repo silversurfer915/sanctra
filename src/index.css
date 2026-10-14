@@ -357,6 +357,8 @@ html { scroll-behavior:smooth; }
 }
 .app-scroll-stage footer { position:static; flex-shrink:0; }
 .planner-view .glass-card:hover { transform:none; }
+/* Backdrop filters isolate each glass card; lift the composer itself above the task list. */
+.planner-task-composer { position:relative; z-index:10; overflow:visible; }
 @media(max-width:640px) {
   .app-page-content { padding:16px 12px 28px; }
   .planner-view { padding-inline:0; }
