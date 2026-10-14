@@ -42,9 +42,7 @@ import { watchSubscription } from './utils/subscriptionService.ts';
 import { WALLPAPER_PRESETS } from './utils/storage.ts';
 import {
   getSessions,
-  saveSession as persistSession,
   persistSessions,
-  updateSession as persistUpdateSession,
   deleteSession as removeSession,
   getSubjects,
   saveSubjects as persistSubjects,
@@ -79,6 +77,8 @@ import {
   getCloudDatabase,
 } from './utils/firebase.ts';
 import { doc, getDoc } from 'firebase/firestore';
+import {subscribeStudyRecords,reconcileStudyRecords} from './utils/studyDataSync.ts';
+import {readSessionOutbox,persistSessionWithRetry,confirmSessionSaves,writeSessionOutbox} from './utils/sessionOutbox.ts';
 import {mergeStudyRecords} from './utils/mergeStudyRecords.ts';
 import {mirrorFocusSession} from './utils/focusMirror.ts';
 import {
@@ -291,7 +291,7 @@ export const App: React.FC = () => {
   const [activeSessionRemote, setActiveSessionRemote] = useState<ActiveSession | null>(null);
   const [isTakeOverModalOpen, setIsTakeOverModalOpen] = useState(false);
   const [isTakingOver, setIsTakingOver] = useState(false);
-  const currentSessionIdRef = useRef<string | null>(null);
+  const currentSessionIdRef = useRef<string | null>(initialTimer.restored?.sessionId || null);
   const statusRef = useRef<TimerStatus>(status);
   statusRef.current = status;
   const modeRef = useRef<TimerMode>(mode);
@@ -404,6 +404,7 @@ export const App: React.FC = () => {
             tasks:dataRef.current.tasks,settings:settingsRef.current,
           }),
         });
+        confirmSessionSaves(currentUser.uid, syncingSessions);
         for (const session of syncingSessions) {
           if (pendingSessionSavesRef.current.get(session.id) === session) pendingSessionSavesRef.current.delete(session.id);
         }
@@ -508,6 +509,7 @@ export const App: React.FC = () => {
         setActivePomodoroConfig(normalizePomodoroConfig(draft?.pomodoroConfig||localSettings.pomodoroConfig||POMODORO_PRESETS[draft?.mode==='pomodoro-50'?1:draft?.mode==='pomodoro-90'?2:0]));
         setPomodoroCompletedSessions(Math.max(0,Math.floor(draft?.pomodoroCompletedSessions||0)));
         setDisplaySeconds(restored?.displaySeconds || 0);
+        currentSessionIdRef.current = restored?.sessionId || null;
         accumulatedSecondsRef.current = restored?.elapsedSeconds || 0; sessionRankingCappedRef.current = draft?.rankingCapped === true;
         runningSinceRef.current = restored?.runningSince || null;
         sessionStartTimeRef.current = restored?.sessionStartTime || Date.now();
@@ -538,7 +540,12 @@ export const App: React.FC = () => {
     try {
       const remote = await loadUserDataFromFirestore(newUser.uid);
       if (request !== authRequestRef.current) return;
+      const savedOutbox = readSessionOutbox(newUser.uid);
+      const deletedIds = (remote as (typeof remote & {deletedSessionIds?:string[]}))?.deletedSessionIds || [];
+      const recoverable = savedOutbox.filter(session=>!deletedIds.includes(session.id));
+      pendingSessionSavesRef.current = new Map(recoverable.map(session=>[session.id,session]));
       const accountData = resolveAccountData(local, remote);
+      accountData.sessions = mergeStudyRecords(local.sessions, [...recoverable,...local.sessions.filter(s=>!recoverable.some(p=>p.id===s.id))], accountData.sessions, recoverable);
       const remoteSettings = remote?.settings;
       // A selection made while cloud hydration was pending must remain the newest preference.
       const latestLocal = getUserSettings(newUser.uid);
@@ -556,7 +563,11 @@ export const App: React.FC = () => {
       setAccountReady(true);
       dataRef.current = resolved;
       hydratedUidRef.current = newUser.uid;
-      if (!remote || (currentLocal.updatedAt || 0) > (remoteSettings?.updatedAt || 0)) await syncUserDataToFirestore(newUser.uid, { ...resolved, settings: mergedSettings });
+      if (!remote || recoverable.length || (currentLocal.updatedAt || 0) > (remoteSettings?.updatedAt || 0)) {
+        await syncUserDataToFirestore(newUser.uid, { ...resolved, settings: mergedSettings });
+        confirmSessionSaves(newUser.uid,recoverable);
+        for(const session of recoverable)if(pendingSessionSavesRef.current.get(session.id)===session)pendingSessionSavesRef.current.delete(session.id);
+      }
     } catch {
       if (request === authRequestRef.current) {
         loadingUidRef.current = null;
@@ -570,6 +581,35 @@ export const App: React.FC = () => {
       try { localStorage.setItem(`sanctra_account_data_${currentUser.uid}`, JSON.stringify({sessions,subjects,tasks})); } catch { /* Existing legacy storage remains available. */ }
     }
   }, [currentUser?.uid, sessions, subjects, tasks]);
+
+  useEffect(() => {
+    const retrySavedHistory = () => {
+      if (currentUser?.uid && hydratedUidRef.current === currentUser.uid && pendingSessionSavesRef.current.size) {
+        void triggerCloudSync({sessions:dataRef.current.sessions,subjects:dataRef.current.subjects});
+      }
+    };
+    window.addEventListener('online',retrySavedHistory);
+    return () => window.removeEventListener('online',retrySavedHistory);
+  },[currentUser?.uid,triggerCloudSync]);
+
+  useEffect(() => {
+    const uid=currentUser?.uid;
+    const db=getCloudDatabase();
+    if(!accountReady||!uid||hydratedUidRef.current!==uid||!db)return;
+    let previous=dataRef.current;
+    let pendingAtSubscription=[...pendingSessionSavesRef.current.values()];
+    return subscribeStudyRecords(db,uid,remote=>{
+      if(hydratedUidRef.current!==uid||userInfoRef.current?.uid!==uid)return;
+      const local=dataRef.current;
+      const merged=reconcileStudyRecords(previous,local,remote,[...pendingAtSubscription,...pendingSessionSavesRef.current.values()]);
+      pendingAtSubscription=[];
+      previous={...previous,...remote};
+      dataRef.current=merged;
+      if(JSON.stringify(merged.sessions)!==JSON.stringify(local.sessions)){setSessions(merged.sessions);persistSessions(merged.sessions);}
+      if(JSON.stringify(merged.subjects)!==JSON.stringify(local.subjects)){setSubjects(merged.subjects);persistSubjects(merged.subjects);}
+      if(JSON.stringify(merged.tasks)!==JSON.stringify(local.tasks)){setTasks(merged.tasks);persistTasks(merged.tasks);}
+    },()=>{if(hydratedUidRef.current===uid)setCloudSyncError('Live study updates are unavailable. Your local records are preserved; reconnect to sync.');});
+  },[currentUser?.uid,accountReady]);
 
   // Source of Truth: Listen to Firebase Auth state & resolve startup gate without landing page flash
   useEffect(() => {
@@ -684,7 +724,7 @@ export const App: React.FC = () => {
 
   // Persist transitions immediately, including pauses and completed focus blocks.
   useEffect(() => {
-    saveTimerDraft({ rankingCapped: sessionRankingCappedRef.current, workspaceId: sessionWorkspaceRef.current, version: 2, sessionStartTime: sessionStartTimeRef.current, mode, status, strictMode: sessionStrictMode,
+    saveTimerDraft({ ...(currentSessionIdRef.current ? {sessionId:currentSessionIdRef.current} : {}), rankingCapped: sessionRankingCappedRef.current, workspaceId: sessionWorkspaceRef.current, version: 2, sessionStartTime: sessionStartTimeRef.current, mode, status, strictMode: sessionStrictMode,
       accumulatedSeconds: accumulatedSecondsRef.current, runningSince: runningSinceRef.current,
       targetSeconds, breakSeconds, pomodoroConfig:activePomodoroConfig, pomodoroCompletedSessions, subjectId: settings.activeSubjectId, ...(jeeFocusTag?{jee:jeeFocusTag}:{}), lastUpdated: Date.now() });
   }, [mode, status, displaySeconds, targetSeconds, breakSeconds, settings.activeSubjectId, activePomodoroConfig, pomodoroCompletedSessions, sessionStrictMode,jeeFocusTag]);
@@ -724,22 +764,9 @@ export const App: React.FC = () => {
       void flushIntegrityRef.current('idle');
     }
 
-    // Refresh user sessions from cloud so the session saved by takeover appears in history
-    if (currentUser?.uid && !currentUser.uid.startsWith('guest-')) {
-      const refreshUid = currentUser.uid;
-      const historyAtRefresh = dataRef.current.sessions;
-      const pendingAtRefresh = [...pendingSessionSavesRef.current.values()];
-      void loadUserDataFromFirestore(refreshUid).then((remote) => {
-        if (remote?.sessions && hydratedUidRef.current === refreshUid) {
-          // A background resume/read can finish after Save. Preserve edits made
-          // since this read began instead of replacing them with its snapshot.
-          const history = mergeStudyRecords(historyAtRefresh, dataRef.current.sessions, remote.sessions, [...pendingAtRefresh, ...pendingSessionSavesRef.current.values()]);
-          dataRef.current = {...dataRef.current, sessions: history};
-          setSessions(history);
-          persistSessions(history);
-        }
-      });
-    }
+    // Saved history is observed by subscribeStudyRecords independently of the
+    // timer state. Avoid an overlapping one-shot read replacing newer updates.
+
   }, [currentUser?.uid]);
 
   // Listen to active session doc in real time (one active session per account)
@@ -871,6 +898,8 @@ export const App: React.FC = () => {
       const newSessionId = `sess-${now}-${Math.random().toString(36).substring(2, 7)}`;
       const matchedSubject = subjects.find((s) => s.id === settings.activeSubjectId);
 
+      const historyBeforeTakeover = dataRef.current.sessions;
+      const pendingBeforeTakeover = [...pendingSessionSavesRef.current.values()];
       const res = await takeOverActiveSession(db, currentUser.uid, getDeviceId(), {
         sessionId: newSessionId,
         startTime: now,
@@ -891,10 +920,13 @@ export const App: React.FC = () => {
         date: getLocalDateString(new Date(now)),
       });
 
+      if(userInfoRef.current?.uid!==currentUser.uid)return;
       if (res.success) {
         if (res.savedSession && res.updatedSessions) {
-          setSessions(res.updatedSessions);
-          persistSessions(res.updatedSessions);
+          const merged = mergeStudyRecords(historyBeforeTakeover, dataRef.current.sessions, res.updatedSessions, [...pendingBeforeTakeover,...pendingSessionSavesRef.current.values()]);
+          dataRef.current = {...dataRef.current, sessions:merged};
+          setSessions(merged);
+          persistSessions(merged);
         }
         setSessionStrictMode(settings.strictMode === true);
         strictAutoPausedRef.current = false;
@@ -968,12 +1000,14 @@ export const App: React.FC = () => {
             date: getLocalDateString(new Date(now)),
           });
 
+          if(userInfoRef.current?.uid!==currentUser.uid)return;
           if (!res.success && res.conflict) {
             setActiveSessionRemote(res.conflict);
             setIsTakeOverModalOpen(true);
             return;
           }
         } catch (err) {
+          if(userInfoRef.current?.uid!==currentUser.uid)return;
           console.warn('Could not start active session in cloud; continuing locally:', err);
         }
       }
@@ -1091,7 +1125,7 @@ export const App: React.FC = () => {
         strictAutoPausedRef.current = true;
         strictStatusRef.current = 'paused';
         setStatus('paused');
-        saveTimerDraft({ rankingCapped: sessionRankingCappedRef.current, workspaceId: sessionWorkspaceRef.current, version: 2, sessionStartTime: sessionStartTimeRef.current, mode, status: 'paused', strictMode: true, accumulatedSeconds: accumulatedSecondsRef.current, runningSince: null, targetSeconds, breakSeconds, pomodoroConfig: activePomodoroConfig, pomodoroCompletedSessions, subjectId: settings.activeSubjectId, ...(jeeFocusTag?{jee:jeeFocusTag}:{}), lastUpdated: now });
+        saveTimerDraft({ ...(currentSessionIdRef.current ? {sessionId:currentSessionIdRef.current} : {}), rankingCapped: sessionRankingCappedRef.current, workspaceId: sessionWorkspaceRef.current, version: 2, sessionStartTime: sessionStartTimeRef.current, mode, status: 'paused', strictMode: true, accumulatedSeconds: accumulatedSecondsRef.current, runningSince: null, targetSeconds, breakSeconds, pomodoroConfig: activePomodoroConfig, pomodoroCompletedSessions, subjectId: settings.activeSubjectId, ...(jeeFocusTag?{jee:jeeFocusTag}:{}), lastUpdated: now });
         void flushIntegrityRef.current('paused');
       } else {
         strictAutoPausedRef.current = false;
@@ -1234,13 +1268,15 @@ export const App: React.FC = () => {
       date: getLocalDateString(new Date(sessionStartTimeRef.current)),
     };
 
-    try { persistSession(newSession); } catch {
+    try {
+      persistSessionWithRetry(currentUser?.uid&&!currentUser.uid.startsWith('guest-')?currentUser.uid:null,newSession);
+    } catch {
       setCloudSyncError('This device could not save the session. Your timer has been kept; free some browser storage and try again.');
       return false;
     }
     if(nextSubjects!==subjects){setSubjects(nextSubjects);persistSubjects(nextSubjects);}
     pendingSessionSavesRef.current.set(newSession.id, newSession);
-    const updatedSessions = [newSession, ...sessions.filter(session=>session.id!==newSession.id)];
+    const updatedSessions = [newSession, ...dataRef.current.sessions.filter(session=>session.id!==newSession.id)];
     dataRef.current = {...dataRef.current, sessions: updatedSessions, subjects: nextSubjects};
     setSessions(updatedSessions);
     triggerCloudSync({ sessions: updatedSessions,subjects:nextSubjects });
@@ -1265,10 +1301,10 @@ export const App: React.FC = () => {
     let updatedSessions: StudySession[];
 
     if (exists) {
-      persistUpdateSession(session);
+      persistSessionWithRetry(currentUser?.uid&&!currentUser.uid.startsWith('guest-')?currentUser.uid:null,session,true);
       updatedSessions = sessions.map((s) => (s.id === session.id ? session : s));
     } else {
-      persistSession(session);
+      persistSessionWithRetry(currentUser?.uid&&!currentUser.uid.startsWith('guest-')?currentUser.uid:null,session);
       updatedSessions = [session, ...sessions];
     }
 
@@ -1293,6 +1329,7 @@ export const App: React.FC = () => {
       setCloudSyncError('The session was kept because its ranking could not be updated. Reconnect and try deleting it again.');
       return;
     } finally {deletingSessions.current.delete(id);}
+    if(currentUser?.uid)writeSessionOutbox(currentUser.uid,readSessionOutbox(currentUser.uid).filter(s=>s.id!==id));
     pendingSessionSavesRef.current.delete(id);
     removeSession(id);
     const updatedSessions = getSessions();

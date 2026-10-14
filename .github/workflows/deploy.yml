@@ -44,6 +44,7 @@ jobs:
           VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ vars.VITE_FIREBASE_MESSAGING_SENDER_ID }}
           VITE_FIREBASE_APP_ID: ${{ vars.VITE_FIREBASE_APP_ID }}
           VITE_AI_GATEWAY_URL: https://api.sanctrastudy.live
+      - run: npm run test:session
       - run: npm run check:seo
       - run: node --test tests/agent-*.test.ts tests/personal-sessions.test.ts tests/mergeStudyRecords.test.ts
       - run: npm --prefix integrations/hermes test

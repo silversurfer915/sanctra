@@ -9,6 +9,7 @@ export function restoreTimerDraft(draft: TimerDraft, now: number) {
   const isBreak = draft.status.startsWith('break-');
   const target = isBreak ? draft.breakSeconds : draft.targetSeconds;
   return {
+    sessionId: typeof draft.sessionId === 'string' && /^[A-Za-z0-9_-]{1,128}$/.test(draft.sessionId) ? draft.sessionId : null,
     status: strictRunning ? 'paused' as const : draft.status === 'idle' && elapsedSeconds > 0 ? 'paused' as const : draft.status,
     elapsedSeconds,
     displaySeconds: draft.mode === 'countup' && !isBreak ? elapsedSeconds : Math.max(0, target - elapsedSeconds),

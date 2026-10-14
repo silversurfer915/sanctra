@@ -161,7 +161,7 @@ export function getSessions(): StudySession[] {
 export function saveSession(session: StudySession): void {
   try {
     const current = getSessions();
-    const updated = [session, ...current];
+    const updated = [session, ...current.filter(record=>record.id!==session.id)];
     localStorage.setItem(STORAGE_KEYS.SESSIONS, JSON.stringify(updated));
   } catch (err) {
     throw new Error('Failed to save this study session.', { cause: err });

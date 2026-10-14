@@ -68,10 +68,12 @@ export function listenActiveSession(
   const sessionRef = doc(db, 'activeSessions', uid);
   return onSnapshot(
     sessionRef,
+    {includeMetadataChanges:true},
     (snap) => {
       if (snap.exists()) {
         onUpdate(snap.data() as ActiveSession);
-      } else {
+      } else if (!snap.metadata.fromCache) {
+        // An empty offline cache is not proof that the server ended the timer.
         onUpdate(null);
       }
     },

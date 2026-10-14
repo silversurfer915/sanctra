@@ -22,3 +22,8 @@ test('mode changes protect unfinished focus but do not treat break minutes as st
   assert.equal(hasUnsavedFocus('break-running',20),false);
   assert.equal(hasUnsavedFocus('idle',0),false);
 });
+test('reload retains the canonical timer identity across background elapsed restoration',()=>{
+ const result=restoreTimerDraft({...base,version:2,sessionId:'sess-ipad-15min'},1010000);
+ assert.equal(result.sessionId,'sess-ipad-15min');assert.equal(result.elapsedSeconds,940);
+ assert.equal(restoreTimerDraft({...base,version:2},120000).sessionId,null);
+});
