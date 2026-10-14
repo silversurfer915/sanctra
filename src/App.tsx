@@ -86,6 +86,7 @@ import {
   listenActiveSession,
   startActiveSession,
   takeOverActiveSession,
+  recoverActiveSession,
   updateActiveSession,
   heartbeatActiveSession,
   deleteActiveSession,
@@ -292,6 +293,7 @@ export const App: React.FC = () => {
   const [isTakeOverModalOpen, setIsTakeOverModalOpen] = useState(false);
   const [isTakingOver, setIsTakingOver] = useState(false);
   const currentSessionIdRef = useRef<string | null>(initialTimer.restored?.sessionId || null);
+  const localOnlySessionRef = useRef(initialTimer.draft?.localOnly === true);
   const statusRef = useRef<TimerStatus>(status);
   statusRef.current = status;
   const modeRef = useRef<TimerMode>(mode);
@@ -461,6 +463,7 @@ export const App: React.FC = () => {
 
       clearTimerDraft();
       currentSessionIdRef.current = null;
+    localOnlySessionRef.current = false;
       setActiveSessionRemote(null);
       setMode('countup');
       setStatus('idle');
@@ -510,6 +513,7 @@ export const App: React.FC = () => {
         setPomodoroCompletedSessions(Math.max(0,Math.floor(draft?.pomodoroCompletedSessions||0)));
         setDisplaySeconds(restored?.displaySeconds || 0);
         currentSessionIdRef.current = restored?.sessionId || null;
+        localOnlySessionRef.current = draft?.localOnly === true;
         accumulatedSecondsRef.current = restored?.elapsedSeconds || 0; sessionRankingCappedRef.current = draft?.rankingCapped === true;
         runningSinceRef.current = restored?.runningSince || null;
         sessionStartTimeRef.current = restored?.sessionStartTime || Date.now();
@@ -528,6 +532,7 @@ export const App: React.FC = () => {
                   accumulatedSecondsRef.current = 0; sessionRankingCappedRef.current = false;
                   runningSinceRef.current = null;
                   currentSessionIdRef.current = null;
+    localOnlySessionRef.current = false;
                   clearTimerDraft();
                   setDisplaySeconds(draft.mode === 'countup' ? 0 : (draft.targetSeconds || 0));
                 }
@@ -724,7 +729,7 @@ export const App: React.FC = () => {
 
   // Persist transitions immediately, including pauses and completed focus blocks.
   useEffect(() => {
-    saveTimerDraft({ ...(currentSessionIdRef.current ? {sessionId:currentSessionIdRef.current} : {}), rankingCapped: sessionRankingCappedRef.current, workspaceId: sessionWorkspaceRef.current, version: 2, sessionStartTime: sessionStartTimeRef.current, mode, status, strictMode: sessionStrictMode,
+    saveTimerDraft({ localOnly:localOnlySessionRef.current, ...(currentSessionIdRef.current ? {sessionId:currentSessionIdRef.current} : {}), rankingCapped: sessionRankingCappedRef.current, workspaceId: sessionWorkspaceRef.current, version: 2, sessionStartTime: sessionStartTimeRef.current, mode, status, strictMode: sessionStrictMode,
       accumulatedSeconds: accumulatedSecondsRef.current, runningSince: runningSinceRef.current,
       targetSeconds, breakSeconds, pomodoroConfig:activePomodoroConfig, pomodoroCompletedSessions, subjectId: settings.activeSubjectId, ...(jeeFocusTag?{jee:jeeFocusTag}:{}), lastUpdated: Date.now() });
   }, [mode, status, displaySeconds, targetSeconds, breakSeconds, settings.activeSubjectId, activePomodoroConfig, pomodoroCompletedSessions, sessionStrictMode,jeeFocusTag]);
@@ -752,6 +757,7 @@ export const App: React.FC = () => {
     accumulatedSecondsRef.current = 0; sessionRankingCappedRef.current = false;
     runningSinceRef.current = null;
     currentSessionIdRef.current = null;
+    localOnlySessionRef.current = false;
     clearTimerDraft();
 
     if (modeRef.current === 'countup') {
@@ -785,6 +791,7 @@ export const App: React.FC = () => {
       currentUser.uid,
       (remoteSession) => {
         setActiveSessionRemote(remoteSession);
+        if(localOnlySessionRef.current)return;
 
         if (remoteSession) {
           const mirrored = mirrorFocusSession(remoteSession,currentSessionIdRef.current,myDeviceId);
@@ -853,6 +860,17 @@ export const App: React.FC = () => {
       if (!db) return;
 
       try {
+        if(localOnlySessionRef.current&&currentSessionIdRef.current&&['running','paused'].includes(statusRef.current)){
+          const sessionId=currentSessionIdRef.current;
+          const selected=dataRef.current.subjects.find(s=>s.id===settingsRef.current.activeSubjectId);
+          const result=await recoverActiveSession(db,currentUser.uid,{uid:currentUser.uid,deviceId:getDeviceId(),sessionId,startTime:sessionStartTimeRef.current,runningSince:runningSinceRef.current,accumulatedSeconds:accumulatedSecondsRef.current,mode:modeRef.current,targetSeconds:targetSecondsRef.current,breakSeconds:breakSeconds,status:statusRef.current,strictMode:sessionStrictMode,workspaceId:sessionWorkspaceRef.current,...(jeeFocusTag?{jee:jeeFocusTag}:{}),date:getLocalDateString(new Date(sessionStartTimeRef.current)),...(selected?{subjectId:selected.id,subjectName:selected.name,subjectColor:selected.color}:{})});
+          if(userInfoRef.current?.uid!==currentUser.uid)return;
+          if(result.success){
+            if(currentSessionIdRef.current!==sessionId){void deleteActiveSession(db,currentUser.uid,getDeviceId(),sessionId);return;}
+            localOnlySessionRef.current=false;
+          }else if(result.conflict)setActiveSessionRemote(result.conflict);
+          return;
+        }
         const snap = await getDoc(doc(db, 'activeSessions', currentUser.uid));
         const myDeviceId = getDeviceId();
         if (snap.exists()) {
@@ -884,13 +902,15 @@ export const App: React.FC = () => {
 
     window.addEventListener('online', handleOnline);
     return () => window.removeEventListener('online', handleOnline);
-  }, [currentUser?.uid, handleRemoteSessionEnded]);
+  }, [currentUser?.uid, handleRemoteSessionEnded, breakSeconds, sessionStrictMode, jeeFocusTag]);
 
   // Take over remote session from another device
   const handleConfirmTakeOver = async () => {
     if (!currentUser?.uid || currentUser.uid.startsWith('guest-')) return;
     const db = getCloudDatabase();
     if (!db) return;
+    const offlineElapsed=accumulatedSecondsRef.current+(runningSinceRef.current?Math.max(0,Math.floor((Date.now()-runningSinceRef.current)/1000)):0);
+    if(localOnlySessionRef.current&&offlineElapsed>0){setIsTakeOverModalOpen(false);setIsSaveModalOpen(true);setCloudSyncError('Save your offline focus before taking over another timer.');return;}
 
     setIsTakingOver(true);
     try {
@@ -922,6 +942,7 @@ export const App: React.FC = () => {
 
       if(userInfoRef.current?.uid!==currentUser.uid)return;
       if (res.success) {
+        localOnlySessionRef.current=false;
         if (res.savedSession && res.updatedSessions) {
           const merged = mergeStudyRecords(historyBeforeTakeover, dataRef.current.sessions, res.updatedSessions, [...pendingBeforeTakeover,...pendingSessionSavesRef.current.values()]);
           dataRef.current = {...dataRef.current, sessions:merged};
@@ -973,6 +994,7 @@ export const App: React.FC = () => {
       }
 
       const newSessionId = `sess-${now}-${Math.random().toString(36).substring(2, 7)}`;
+      let localOnly=false;
 
       // Attempt atomic start via transaction to prevent race conditions with another device
       if (currentUser?.uid && !currentUser.uid.startsWith('guest-') && db) {
@@ -1008,10 +1030,12 @@ export const App: React.FC = () => {
           }
         } catch (err) {
           if(userInfoRef.current?.uid!==currentUser.uid)return;
+          localOnly=true;
           console.warn('Could not start active session in cloud; continuing locally:', err);
         }
       }
 
+      localOnlySessionRef.current=localOnly;
       setSessionStrictMode(settings.strictMode === true);
       strictAutoPausedRef.current = false;
       currentSessionIdRef.current = newSessionId;
@@ -1125,7 +1149,7 @@ export const App: React.FC = () => {
         strictAutoPausedRef.current = true;
         strictStatusRef.current = 'paused';
         setStatus('paused');
-        saveTimerDraft({ ...(currentSessionIdRef.current ? {sessionId:currentSessionIdRef.current} : {}), rankingCapped: sessionRankingCappedRef.current, workspaceId: sessionWorkspaceRef.current, version: 2, sessionStartTime: sessionStartTimeRef.current, mode, status: 'paused', strictMode: true, accumulatedSeconds: accumulatedSecondsRef.current, runningSince: null, targetSeconds, breakSeconds, pomodoroConfig: activePomodoroConfig, pomodoroCompletedSessions, subjectId: settings.activeSubjectId, ...(jeeFocusTag?{jee:jeeFocusTag}:{}), lastUpdated: now });
+        saveTimerDraft({ localOnly:localOnlySessionRef.current, ...(currentSessionIdRef.current ? {sessionId:currentSessionIdRef.current} : {}), rankingCapped: sessionRankingCappedRef.current, workspaceId: sessionWorkspaceRef.current, version: 2, sessionStartTime: sessionStartTimeRef.current, mode, status: 'paused', strictMode: true, accumulatedSeconds: accumulatedSecondsRef.current, runningSince: null, targetSeconds, breakSeconds, pomodoroConfig: activePomodoroConfig, pomodoroCompletedSessions, subjectId: settings.activeSubjectId, ...(jeeFocusTag?{jee:jeeFocusTag}:{}), lastUpdated: now });
         void flushIntegrityRef.current('paused');
       } else {
         strictAutoPausedRef.current = false;
@@ -1218,6 +1242,7 @@ export const App: React.FC = () => {
       }
     }
     currentSessionIdRef.current = null;
+    localOnlySessionRef.current = false;
     setStatus('idle');
     accumulatedSecondsRef.current = 0; sessionRankingCappedRef.current = false;
     runningSinceRef.current = null;
@@ -1388,6 +1413,7 @@ export const App: React.FC = () => {
       }
     }
     currentSessionIdRef.current = null;
+    localOnlySessionRef.current = false;
     clearAllSessions();
     setSessions([]);
     clearTimerDraft();
