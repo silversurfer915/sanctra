@@ -19,6 +19,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: npm ci --prefix integrations/hermes
       - run: npm run build
+      - run: npm run test:session
       - run: npm run check:seo
       - run: node --test tests/agent-*.test.ts tests/personal-sessions.test.ts tests/mergeStudyRecords.test.ts tests/groupConversation.test.ts tests/jee-integration.test.ts
       - run: npm --prefix integrations/hermes test
