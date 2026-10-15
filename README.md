@@ -24,6 +24,10 @@ npm --prefix integrations/hermes test
 
 Some legacy live Firebase AI SDK tests target a retired integration and are not CI release gates. Tests under `tests/firebase` require the Firestore emulator (`npm run test:rules`). A build is not a substitute for exercising the changed UI.
 
+## Current engineering handoff
+
+[Hermes continuation handoff — 15 October 2026](docs/HERMES_HANDOFF_2026-10-15.md): verified deployments, session fixes, unresolved work, architecture, Linux setup and release instructions. Read this alongside AGENTS.md before continuing development.
+
 ## Agent contribution workflow
 
 Read [AGENTS.md](AGENTS.md), [PRODUCT.md](PRODUCT.md) and [DESIGN.md](DESIGN.md). Clone this private repository, create a branch, commit your work and open a PR to `main`. Checks run on PRs and main pushes. Avoid changing features outside the requested scope.
