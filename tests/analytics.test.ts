@@ -35,6 +35,7 @@ test('day clips cross-midnight focus but history retains full duration', async (
   const { buildPeriodAnalytics } = await import('../src/utils/analytics.ts');
   const stats = buildPeriodAnalytics([session('night',new Date(2026,9,1,23,30),3600,{notes:'Review'})],[],new Date(2026,9,2),'day',new Date(2026,9,2,12));
   assert.equal(stats.totalSeconds,1800); assert.equal(stats.sessions[0].durationSeconds,3600);
+  assert.equal(stats.averageSession,1800);assert.equal(stats.medianSession,1800);assert.equal(stats.longestSession,1800);
   assert.equal(stats.sessions[0].notes,'Review'); assert.equal(stats.peakHour,0);
 });
 test('period navigation handles year and leap-month boundaries', async () => {

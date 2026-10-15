@@ -1,3 +1,4 @@
+import {focusSnapshot} from './utils/focusTiming.ts';
 import {resolveHydratedSettings} from './utils/settingsPersistence.ts';
 import {taskJeeTag, completeJeeTask, jeeCalendarEvents, jeeManualSessions, jeeReminders, jeeStudyStreak} from './utils/jeeIntegration.ts';
 import type {JeeTrackSubTab} from './types/jeetrack.ts';
@@ -277,6 +278,7 @@ export const App: React.FC = () => {
   const [pomodoroCompletedSessions,setPomodoroCompletedSessions]=useState(()=>Math.max(0,Math.floor(initialTimer.draft?.pomodoroCompletedSessions||0)));
 
   const [displaySeconds, setDisplaySeconds] = useState(initialTimer.restored?.displaySeconds || 0);
+  const focusEndedAtRef = useRef<number|null>(initialTimer.restored?.focusEndedAt??null);
   const runningSinceRef = useRef<number | null>(initialTimer.restored?.runningSince || null);
   const sessionRankingCappedRef = useRef(initialTimer.draft?.rankingCapped === true);
   const accumulatedSecondsRef = useRef(initialTimer.restored?.elapsedSeconds || 0);
@@ -516,6 +518,7 @@ export const App: React.FC = () => {
         localOnlySessionRef.current = draft?.localOnly === true;
         accumulatedSecondsRef.current = restored?.elapsedSeconds || 0; sessionRankingCappedRef.current = draft?.rankingCapped === true;
         runningSinceRef.current = restored?.runningSince || null;
+        focusEndedAtRef.current=restored?.focusEndedAt??null;
         sessionStartTimeRef.current = restored?.sessionStartTime || Date.now();
         sessionWorkspaceRef.current = draft?.workspaceId || activeWorkspace(localSettings).id;
         setIsPomodoroCompleteOpen(restored?.status === 'break-ready');
@@ -682,7 +685,7 @@ export const App: React.FC = () => {
       const totalActiveSeconds = accumulatedSecondsRef.current + currentRunSegment;
 
       if (status === 'running') {
-        if (currentRunSegment > 10800) sessionRankingCappedRef.current = true;
+        if (focusSnapshot(mode,targetSeconds,accumulatedSecondsRef.current,runningSinceRef.current,now).capped) sessionRankingCappedRef.current = true;
         if (mode === 'countup') {
           setDisplaySeconds(totalActiveSeconds);
         } else {
@@ -690,7 +693,8 @@ export const App: React.FC = () => {
           setDisplaySeconds(remaining);
 
           if (remaining <= 0) {
-            // Focus timer completed!
+            // Record the deadline before clearing the running segment. Save may happen much later.
+            focusEndedAtRef.current=focusSnapshot(mode,targetSeconds,accumulatedSecondsRef.current,runningSinceRef.current,now).endTime;
             accumulatedSecondsRef.current = targetSeconds;
             runningSinceRef.current = null;
 
@@ -729,7 +733,7 @@ export const App: React.FC = () => {
 
   // Persist transitions immediately, including pauses and completed focus blocks.
   useEffect(() => {
-    saveTimerDraft({ localOnly:localOnlySessionRef.current, ...(currentSessionIdRef.current ? {sessionId:currentSessionIdRef.current} : {}), rankingCapped: sessionRankingCappedRef.current, workspaceId: sessionWorkspaceRef.current, version: 2, sessionStartTime: sessionStartTimeRef.current, mode, status, strictMode: sessionStrictMode,
+    saveTimerDraft({ focusEndedAt:focusEndedAtRef.current, localOnly:localOnlySessionRef.current, ...(currentSessionIdRef.current ? {sessionId:currentSessionIdRef.current} : {}), rankingCapped: sessionRankingCappedRef.current, workspaceId: sessionWorkspaceRef.current, version: 2, sessionStartTime: sessionStartTimeRef.current, mode, status, strictMode: sessionStrictMode,
       accumulatedSeconds: accumulatedSecondsRef.current, runningSince: runningSinceRef.current,
       targetSeconds, breakSeconds, pomodoroConfig:activePomodoroConfig, pomodoroCompletedSessions, subjectId: settings.activeSubjectId, ...(jeeFocusTag?{jee:jeeFocusTag}:{}), lastUpdated: Date.now() });
   }, [mode, status, displaySeconds, targetSeconds, breakSeconds, settings.activeSubjectId, activePomodoroConfig, pomodoroCompletedSessions, sessionStrictMode,jeeFocusTag]);
@@ -952,6 +956,7 @@ export const App: React.FC = () => {
         setSessionStrictMode(settings.strictMode === true);
         strictAutoPausedRef.current = false;
         currentSessionIdRef.current = newSessionId;
+        focusEndedAtRef.current=null;
         sessionStartTimeRef.current = now;
         sessionWorkspaceRef.current = space.id;
         runningSinceRef.current = now;
@@ -1039,6 +1044,7 @@ export const App: React.FC = () => {
       setSessionStrictMode(settings.strictMode === true);
       strictAutoPausedRef.current = false;
       currentSessionIdRef.current = newSessionId;
+      focusEndedAtRef.current=null;
       sessionStartTimeRef.current = now;
       sessionWorkspaceRef.current = space.id;
       runningSinceRef.current = now;
@@ -1053,10 +1059,8 @@ export const App: React.FC = () => {
     } else if (status === 'running') {
       strictAutoPausedRef.current = false;
       // Pause
-      const elapsedSegment = runningSinceRef.current
-        ? Math.floor((now - runningSinceRef.current) / 1000)
-        : 0;
-      const newAccum = accumulatedSecondsRef.current + elapsedSegment;
+      focusEndedAtRef.current=focusSnapshot(mode,targetSeconds,accumulatedSecondsRef.current,runningSinceRef.current,now).endTime;
+      const newAccum = focusSnapshot(mode,targetSeconds,accumulatedSecondsRef.current,runningSinceRef.current,now).seconds;
       accumulatedSecondsRef.current = newAccum;
       runningSinceRef.current = null;
       setStatus('paused');
@@ -1144,12 +1148,13 @@ export const App: React.FC = () => {
       if (!action) return;
       const now = Date.now();
       if (action === 'pause') {
-        accumulatedSecondsRef.current += runningSinceRef.current ? Math.max(0, Math.floor((now - runningSinceRef.current) / 1000)) : 0;
+        focusEndedAtRef.current=focusSnapshot(mode,targetSeconds,accumulatedSecondsRef.current,runningSinceRef.current,now).endTime;
+        accumulatedSecondsRef.current = focusSnapshot(mode,targetSeconds,accumulatedSecondsRef.current,runningSinceRef.current,now).seconds;
         runningSinceRef.current = null;
         strictAutoPausedRef.current = true;
         strictStatusRef.current = 'paused';
         setStatus('paused');
-        saveTimerDraft({ localOnly:localOnlySessionRef.current, ...(currentSessionIdRef.current ? {sessionId:currentSessionIdRef.current} : {}), rankingCapped: sessionRankingCappedRef.current, workspaceId: sessionWorkspaceRef.current, version: 2, sessionStartTime: sessionStartTimeRef.current, mode, status: 'paused', strictMode: true, accumulatedSeconds: accumulatedSecondsRef.current, runningSince: null, targetSeconds, breakSeconds, pomodoroConfig: activePomodoroConfig, pomodoroCompletedSessions, subjectId: settings.activeSubjectId, ...(jeeFocusTag?{jee:jeeFocusTag}:{}), lastUpdated: now });
+        saveTimerDraft({ focusEndedAt:focusEndedAtRef.current, localOnly:localOnlySessionRef.current, ...(currentSessionIdRef.current ? {sessionId:currentSessionIdRef.current} : {}), rankingCapped: sessionRankingCappedRef.current, workspaceId: sessionWorkspaceRef.current, version: 2, sessionStartTime: sessionStartTimeRef.current, mode, status: 'paused', strictMode: true, accumulatedSeconds: accumulatedSecondsRef.current, runningSince: null, targetSeconds, breakSeconds, pomodoroConfig: activePomodoroConfig, pomodoroCompletedSessions, subjectId: settings.activeSubjectId, ...(jeeFocusTag?{jee:jeeFocusTag}:{}), lastUpdated: now });
         void flushIntegrityRef.current('paused');
       } else {
         strictAutoPausedRef.current = false;
@@ -1261,9 +1266,8 @@ export const App: React.FC = () => {
 
   // Save Session from timer dial
   const handleSaveSession = (subjectId: string | undefined, notes: string, questions?:number, suggestedTag?:JeeSessionTag|null) => {
-    const studiedSeconds =
-      accumulatedSecondsRef.current +
-      (runningSinceRef.current ? Math.floor((Date.now() - runningSinceRef.current) / 1000) : 0);
+    const timing=focusSnapshot(mode,targetSeconds,accumulatedSecondsRef.current,runningSinceRef.current,Date.now(),focusEndedAtRef.current);
+    const studiedSeconds=timing.seconds;
 
     if (studiedSeconds <= 0) return false;
 
@@ -1282,11 +1286,11 @@ export const App: React.FC = () => {
       subjectName: matchedSubject?.name,
       subjectColor: matchedSubject?.color,
       startTime: sessionStartTimeRef.current,
-      endTime: Date.now(),
+      endTime: timing.endTime,
       durationSeconds: studiedSeconds,
       strictMode: sessionStrictMode,
       rankingDurationSeconds: studiedSeconds,
-      rankingCapped: sessionRankingCappedRef.current || (!!runningSinceRef.current && Date.now()-runningSinceRef.current>10800000),
+      rankingCapped: studiedSeconds>10800 && (sessionRankingCappedRef.current || timing.capped),
       mode,
       ...(sessionTag?{jee:normalizeJeeFocusTag({...sessionTag,...(sessionTag.kind==='practice'&&questions!==undefined?{questions}:{})})}:{}),
       notes: [focusedTask ? `Task: ${focusedTask.text}` : '', notes].filter(Boolean).join('\n'),
@@ -1592,9 +1596,7 @@ export const App: React.FC = () => {
   }, [visibleWallpaperId]);
 
   // Exact studied time for Save Session modal
-  const currentStudiedSeconds =
-    accumulatedSecondsRef.current +
-    (runningSinceRef.current ? Math.floor((Date.now() - runningSinceRef.current) / 1000) : 0);
+  const currentStudiedSeconds = focusSnapshot(mode,targetSeconds,accumulatedSecondsRef.current,runningSinceRef.current,Date.now(),focusEndedAtRef.current).seconds;
 
   const communityUser = useMemo(()=>activeUser ? {...activeUser,displayName:settings.customDisplayName||activeUser.displayName,photoURL:subscription?.isPlus && settings.plusAnimatedAvatarUrl ? settings.plusAnimatedAvatarUrl : settings.avatarUrl??activeUser.photoURL} : null,[activeUser,settings.customDisplayName,settings.avatarUrl,settings.plusAnimatedAvatarUrl,subscription?.isPlus]);
   useCompetitivePresence(accountReady ? communityUser : null, settings, sessions, status, activeSubject?.name || '', streakInfo.currentStreak,subscription);
