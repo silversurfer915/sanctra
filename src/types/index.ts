@@ -139,6 +139,7 @@ export interface UserSettings {
 }
 
 export interface TimerDraft {
+  focusEndedAt?: number | null;
   localOnly?: boolean;
   sessionId?: string;
   jee?:JeeSessionTag;

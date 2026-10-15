@@ -27,6 +27,7 @@ export function buildPeriodAnalytics(records: StudySession[], subjects: Subject[
   const modes = new Map<string, number>();
   const seen = new Set<string>();
   const sessions: StudySession[] = [];
+  const periodDurations: number[] = [];
   let totalSeconds = 0;
   for (const session of records) {
     if (seen.has(session.id) || !Number.isFinite(session.durationSeconds) || session.durationSeconds <= 0 || !Number.isFinite(session.startTime)) continue;
@@ -46,14 +47,14 @@ export function buildPeriodAnalytics(records: StudySession[], subjects: Subject[
       if (day) day.seconds += seconds;
       if(!session.timeOfDayUnknown)hours[date.getHours()] += seconds; contribution += seconds; cursor = boundary;
     }
-    totalSeconds += contribution; sessions.push(session);
+    totalSeconds += contribution; periodDurations.push(contribution); sessions.push(session);
     const subject = subjects.find(s => s.id === session.subjectId), id = session.subjectId || 'untagged';
     const group = groups.get(id) || { id, name: subject?.name || session.subjectName || 'Untagged', color: subject?.color || session.subjectColor || '#b7cdea', seconds: 0 };
     group.seconds += contribution; groups.set(id, group);
     modes.set(session.mode, (modes.get(session.mode) || 0) + contribution);
   }
   const daysElapsed = days.filter(d => +d.date <= +now).length;
-  const durations = sessions.map(s => s.durationSeconds).sort((a,b) => a-b);
+  const durations = periodDurations.sort((a,b) => a-b);
   const activeDays = days.filter(d => d.seconds > 0).length;
   return { start, end, totalSeconds, sessionCount: sessions.length, averageSession: sessions.length ? durations.reduce((a,b)=>a+b,0) / sessions.length : 0,
     medianSession: durations.length ? (durations[Math.floor((durations.length - 1) / 2)] + durations[Math.floor(durations.length / 2)]) / 2 : 0,
