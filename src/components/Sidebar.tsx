@@ -82,6 +82,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
       icon: Clock,
       badge: null,
       desc: 'Desk Clock & Timer',
+      pastel: 'text-[#fde68a]', // Soft pastel butter
+      pastelBg: 'bg-[#fde68a]/10',
+      pastelBorder: 'border-[#fde68a]/25',
     },
     {
       id: 'planner' as ViewMode,
@@ -89,14 +92,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
       icon: CalendarCheck,
       badge: null,
       desc: 'Your daily plan',
+      pastel: 'text-[#fbcfe8]', // Soft pastel blush
+      pastelBg: 'bg-[#fbcfe8]/10',
+      pastelBorder: 'border-[#fbcfe8]/25',
     },
-    {id:'calendar' as ViewMode,label:'Calendar',icon:CalendarDays,badge:null,desc:'Tasks and events'},
+    {
+      id: 'calendar' as ViewMode,
+      label: 'Calendar',
+      icon: CalendarDays,
+      badge: null,
+      desc: 'Tasks and events',
+      pastel: 'text-[#fed7aa]', // Soft pastel apricot
+      pastelBg: 'bg-[#fed7aa]/10',
+      pastelBorder: 'border-[#fed7aa]/25',
+    },
     {
       id: 'analytics' as ViewMode,
       label: 'Analytics',
       icon: BarChart3,
       badge: null,
       desc: 'Heatmaps & Reports',
+      pastel: 'text-[#bae6fd]', // Soft pastel sky blue
+      pastelBg: 'bg-[#bae6fd]/10',
+      pastelBorder: 'border-[#bae6fd]/25',
     },
     {
       id: 'jeetrack' as ViewMode,
@@ -104,6 +122,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
       icon: GraduationCap,
       badge: jeeTrackEnabled ? 'NEW' : 'Paused',
       desc: 'Mocks, Syllabus & Coach',
+      pastel: 'text-[#e9d5ff]', // Soft pastel lilac
+      pastelBg: 'bg-[#e9d5ff]/10',
+      pastelBorder: 'border-[#e9d5ff]/25',
     },
     {
       id: 'groups' as ViewMode,
@@ -111,6 +132,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
       icon: Users,
       badge: null,
       desc: 'Study circles & rooms',
+      pastel: 'text-[#a7f3d0]', // Soft pastel mint
+      pastelBg: 'bg-[#a7f3d0]/10',
+      pastelBorder: 'border-[#a7f3d0]/25',
     },
     {
       id: 'rankings' as ViewMode,
@@ -118,6 +142,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
       icon: Trophy,
       badge: null,
       desc: 'Community momentum',
+      pastel: 'text-[#fef08a]', // Soft pastel mimosa
+      pastelBg: 'bg-[#fef08a]/10',
+      pastelBorder: 'border-[#fef08a]/25',
     },
     {
       id: 'inbox' as ViewMode,
@@ -125,6 +152,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
       icon: Inbox,
       badge: unreadInbox ? String(Math.min(unreadInbox, 99)) : null,
       desc: 'Updates & group mentions',
+      pastel: 'text-[#c7d2fe]', // Soft pastel periwinkle
+      pastelBg: 'bg-[#c7d2fe]/10',
+      pastelBorder: 'border-[#c7d2fe]/25',
     },
   ];
 
@@ -200,13 +230,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     title={item.label}
                     className={`w-11 h-11 mx-auto flex items-center justify-center rounded-xl transition-all cursor-pointer relative group ${
                       isActive
-                        ? 'bg-white/10 text-white border border-white/15 shadow-sm'
+                        ? `${item.pastelBg} ${item.pastel} border ${item.pastelBorder} shadow-sm`
                         : 'text-slate-400 hover:text-white hover:bg-white/5'
                     }`}
                   >
-                    <Icon className="w-4 h-4 transition-transform group-hover:scale-110" />
+                    <Icon className={`w-4 h-4 transition-transform group-hover:scale-110 ${isActive ? item.pastel : `${item.pastel} opacity-75 group-hover:opacity-100`}`} />
                     {isActive && (
-                      <span className="absolute right-1.5 top-1.5 w-1.5 h-1.5 rounded-full bg-[var(--sanctra-sage)]" />
+                      <span className={`absolute right-1.5 top-1.5 w-1.5 h-1.5 rounded-full ${item.pastel}`} />
                     )}
                   </button>
                 );
@@ -216,20 +246,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer group ${
+                  className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium transition-all cursor-pointer group ${
                     isActive
-                      ? 'bg-white/10 text-white font-semibold border border-white/15 shadow-sm'
-                      : 'text-slate-400 hover:text-white hover:bg-white/5'
+                      ? `${item.pastelBg} text-white font-semibold border ${item.pastelBorder} shadow-sm`
+                      : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
                   }`}
                 >
-                  <Icon
-                    className={`w-4 h-4 transition-colors shrink-0 ${
-                      isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-200'
-                    }`}
-                  />
+                  <div className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-all ${
+                    isActive ? `${item.pastelBg}` : 'bg-white/[0.02] group-hover:bg-white/5'
+                  }`}>
+                    <Icon
+                      className={`w-3.5 h-3.5 transition-transform group-hover:scale-110 shrink-0 ${
+                        isActive ? item.pastel : `${item.pastel} opacity-75 group-hover:opacity-100`
+                      }`}
+                    />
+                  </div>
                   <span className="truncate flex-1 text-left">{item.id==='jeetrack'&&userSettings.jeeTrackOptIn===false?'Explore JEE Track':item.label}</span>
                   {item.badge && (
-                    <span className="text-[9px] px-1.5 py-0.2 rounded-md bg-white/10 text-slate-200 font-bold border border-white/20">
+                    <span className={`text-[9px] px-1.5 py-0.2 rounded-md font-bold border ${
+                      isActive ? `${item.pastelBg} ${item.pastel} ${item.pastelBorder}` : 'bg-white/10 text-slate-200 border-white/20'
+                    }`}>
                       {item.badge}
                     </span>
                   )}
@@ -244,9 +280,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           compact ? 'px-2' : 'px-3'
         }`}>
           {admin && (compact ? (
-            <button onClick={()=>handleNavClick('admin')} title="Admin" className={`w-11 h-11 mx-auto flex items-center justify-center rounded-xl transition-all ${currentView==='admin'?'bg-white/10 text-white':'text-slate-400 hover:text-white hover:bg-white/5'}`}><Shield className="w-4 h-4"/></button>
+            <button onClick={()=>handleNavClick('admin')} title="Admin" className={`w-11 h-11 mx-auto flex items-center justify-center rounded-xl transition-all ${currentView==='admin'?'bg-white/10 text-white':'text-slate-400 hover:text-white hover:bg-white/5'}`}><Shield className="w-4 h-4 text-[#fde68a]"/></button>
           ) : (
-            <button onClick={()=>handleNavClick('admin')} className={`flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-all ${currentView==='admin'?'bg-white/10 text-white border border-white/15':'text-slate-400 hover:text-white hover:bg-white/5'}`}><Shield className="w-4 h-4 text-slate-300"/><span>Admin</span>{openTickets>0&&<span className="admin-ticket-count" role="status" aria-label={`${openTickets} open support tickets`}>{openTickets>99?'99+':openTickets}</span>}</button>
+            <button onClick={()=>handleNavClick('admin')} className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium transition-all ${currentView==='admin'?'bg-white/10 text-white border border-white/15':'text-slate-400 hover:text-white hover:bg-white/5'}`}><Shield className="w-3.5 h-3.5 text-[#fde68a] opacity-80"/><span>Admin</span>{openTickets>0&&<span className="admin-ticket-count" role="status" aria-label={`${openTickets} open support tickets`}>{openTickets>99?'99+':openTickets}</span>}</button>
           ))}
           {/* Settings Button (includes Background Image & Themes) */}
           {compact ? (
@@ -256,9 +292,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onCloseMobile();
               }}
               title="Settings & Background Image"
-              className="w-11 h-11 mx-auto flex items-center justify-center rounded-xl text-slate-400 hover:text-[var(--sanctra-sage)] hover:bg-white/5 transition-all cursor-pointer"
+              className="w-11 h-11 mx-auto flex items-center justify-center rounded-xl text-slate-400 hover:text-[#fde68a] hover:bg-white/5 transition-all cursor-pointer"
             >
-              <Settings className="w-4 h-4" />
+              <Settings className="w-4 h-4 text-[#cbd5e1] opacity-75 group-hover:opacity-100" />
             </button>
           ) : (
             <button
@@ -266,9 +302,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onOpenSettings('wallpaper');
                 onCloseMobile();
               }}
-              className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-all cursor-pointer group"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-all cursor-pointer group"
             >
-              <Settings className="w-4 h-4 text-slate-400 group-hover:text-[var(--sanctra-sage)] transition-transform group-hover:rotate-45" />
+              <div className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-all bg-white/[0.02] group-hover:bg-white/5">
+                <Settings className="w-3.5 h-3.5 text-[#cbd5e1] opacity-75 group-hover:opacity-100 group-hover:text-[#fde68a] transition-transform group-hover:rotate-45" />
+              </div>
               <span>Settings</span>
             </button>
           )}
@@ -281,9 +319,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onCloseMobile();
               }}
               title="Support Desk & Feedback"
-              className="w-11 h-11 mx-auto flex items-center justify-center rounded-xl text-slate-400 hover:text-[var(--sanctra-sage)] hover:bg-white/5 transition-all cursor-pointer"
+              className="w-11 h-11 mx-auto flex items-center justify-center rounded-xl text-slate-400 hover:text-[#99f6e4] hover:bg-white/5 transition-all cursor-pointer"
             >
-              <HelpCircle className="w-4 h-4" />
+              <HelpCircle className="w-4 h-4 text-[#99f6e4] opacity-75 group-hover:opacity-100" />
             </button>
           ) : (
             <button
@@ -291,9 +329,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onOpenSupport();
                 onCloseMobile();
               }}
-              className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-all cursor-pointer group"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-all cursor-pointer group"
             >
-              <HelpCircle className="w-4 h-4 text-slate-400 group-hover:text-[var(--sanctra-sage)] transition-colors" />
+              <div className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-all bg-white/[0.02] group-hover:bg-white/5">
+                <HelpCircle className="w-3.5 h-3.5 text-[#99f6e4] opacity-75 group-hover:opacity-100 group-hover:text-[#5eead4] transition-colors" />
+              </div>
               <span>Help & Feedback</span>
             </button>
           ))}

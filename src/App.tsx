@@ -1605,6 +1605,10 @@ export const App: React.FC = () => {
   flushIntegrityRef.current = flushIntegrity;
   useEffect(()=>{if(rankingCapped) sessionRankingCappedRef.current=true;},[rankingCapped]);
 
+  if (typeof window !== 'undefined' && window.location.search.includes('preview_loading=true')) {
+    return <LoadingScreen wallpaperId="default" />;
+  }
+
   // Only block the saved account while authentication is actually resolving.
   if (currentUser && !isLandingForced && (isAuthResolving || (!subscriptionReady && (WALLPAPER_PRESETS.find(p=>p.id===appearanceSettings.activeWallpaperId)?.isPlusOnly || appearanceSettings.plusMotionWallpaperUrl)))) return <LoadingScreen wallpaperId={appearanceSettings.activeWallpaperId} settings={appearanceSettings} />;
 

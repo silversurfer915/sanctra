@@ -13,6 +13,7 @@ export const DEFAULT_SUBJECTS: Subject[] = [
 export {THEME_PALETTES, PRESET_THEME_MAP, getThemeName} from './wallpaperTheme.ts';
 export type {ThemeName} from './wallpaperTheme.ts';
 export const WALLPAPER_PRESETS: WallpaperPreset[] = [
+  {id:'wp-sanctra-noir',name:'Botanical Obsidian Noir',category:'Sanctra · Botanical Noir',type:'scenic',url:'/backgrounds/botanical-noir.webp',thumbnail:'/backgrounds/botanical-noir.webp'},
   {id:'wp-video-lofi-meadow',name:'Sunlit Meadow',category:'Illustrated · Video',type:'motion',isPlusOnly:true,url:'/backgrounds/video/quality-v4/lofi-meadow-poster.jpg',thumbnail:'/backgrounds/video/quality-v4/lofi-meadow-poster.jpg',motionUrl:'/backgrounds/video/quality-v4/lofi-meadow.mp4'},
   {id:'wp-art-rain',name:'Cloudside Study Desk',category:'Illustrated · Blue Mist',type:'scenic',url:'/backgrounds/illustrated-study-desk.v2.webp',thumbnail:'/backgrounds/illustrated-study-desk.thumb.v2.webp'},
   {id:'wp-art-lavender-lake',name:'Lavender Lake',category:'Illustrated · Lavender',type:'scenic',url:'/backgrounds/illustrated-lavender-lake.v2.webp',thumbnail:'/backgrounds/illustrated-lavender-lake.thumb.v2.webp'},
@@ -127,7 +128,7 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   weeklyTargetHours: 30,
   subjectTrackingEnabled: true,
   activeSubjectId: 'sub-1',
-  activeWallpaperId: 'wp-art-rain',
+  activeWallpaperId: 'wp-sanctra-noir',
   wallpaperFitMode: 'fill',
   backgroundDimness: 25,
   timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
