@@ -2394,13 +2394,7 @@ html,body {background:var(--sanctra-boot-ink,#131b28);min-height:100%;}
 .settings-modal button[class*="text-xs"] {font-size:13px;min-height:44px;}
 .sanctra-app :is(.analytics-view,.planner-view,.settings-modal,.timer-metrics,.inbox-view,.sanctra-prose) :is([class*="text-[10px]"],[class*="text-[11px]"],[class*="text-[9px]"]) {font-size:12px;}
 .sanctra-app .timer-metrics {padding:0;gap:12px;margin-block:12px;align-items:stretch;}
-.sanctra-app .timer-metrics>* {display:grid;grid-template-rows:32px 18px 26px 18px;justify-items:center;align-content:center;gap:6px;padding:14px;}
-.sanctra-app .timer-metrics>*>div:first-child {margin:0;display:grid;place-items:center;width:32px;height:32px;color:var(--sanctra-sage);}
-.sanctra-app .timer-metrics>*>div:first-child svg {color:var(--sanctra-sage)!important;}
-.sanctra-app .timer-metrics>*>span {font-size:12px;letter-spacing:.08em;margin:0;align-self:center;}
-.sanctra-app .timer-metrics>*>div:nth-child(3) {font-size:20px;font-weight:600;color:var(--sanctra-paper);line-height:26px;}
-.sanctra-app .timer-metrics>*>div:nth-child(3) .text-xs {font-size:13px;}
-.sanctra-app .timer-metrics .bg-emerald-400 {display:none;}
+.sanctra-app:not(.focus-context) .timer-metrics>* {gap:6px;padding:14px;}
 .sanctra-app .timer-quote {margin-block:8px;}
 .sanctra-app .timer-quote p {white-space:normal;overflow:visible;text-overflow:clip;font-size:14px;line-height:1.5;}
 .sanctra-app .timer-actions button {text-transform:none;letter-spacing:0;min-height:44px;font-size:14px;}
@@ -2433,7 +2427,7 @@ html,body {background:var(--sanctra-boot-ink,#131b28);min-height:100%;}
 .sanctra-app .timer-actions svg {color:inherit!important;}
 .sanctra-app .inbox-view .analytics-card:hover {background:var(--sanctra-glass-bg-hover)!important;border-color:var(--sanctra-glass-border-hover)!important;}
 @media(max-width:767px){.sanctra-app .timer-quote>div{border-radius:18px;padding:10px 14px;}.sanctra-app .guest-notice{padding:12px;}.sanctra-app .guest-notice>div{min-width:0;}.sanctra-app .guest-notice>button{min-height:44px;}.sanctra-app .timer-metrics>*>span{font-size:11px;}.sanctra-app .timer-metrics>*>div:nth-child(3){font-size:20px;}}
-.sanctra-app .timer-metrics>* {grid-template-rows:32px 30px 26px 18px;}
+.sanctra-app:not(.focus-context) .timer-metrics>* {min-height:80px;}
 .sanctra-app .timer-metrics>*>span {display:flex;align-items:center;justify-content:center;line-height:1.25;font-size:12px;}
 @media(max-width:767px){.sanctra-app .timer-metrics>*{grid-template-rows:30px 26px 18px;}.sanctra-app .timer-metrics>*>span{font-size:12px;letter-spacing:.04em;}}
 .wallpaper-layer {animation:none;}
@@ -2982,7 +2976,7 @@ html,body {background:var(--sanctra-boot-ink,#131b28);min-height:100%;}
 .sanctra-app .group-invitation-form button {height:44px;margin:0;white-space:nowrap;padding:10px 18px;}
 .sanctra-app .timer-ring { container-type:inline-size; -webkit-backdrop-filter:var(--sanctra-glass-blur); backdrop-filter:var(--sanctra-glass-blur); }
 @media(prefers-reduced-transparency:reduce){.sanctra-app .timer-ring{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--sanctra-ink);}}
-.sanctra-app .timer-ring .timer-readout { font-size:clamp(28px,14.5cqw,82px) !important; max-width:82%; white-space:nowrap; line-height:1.15; letter-spacing:-.035em; }
+.sanctra-app .timer-ring .timer-readout { font-family: "Instrument Serif", Georgia, serif !important; font-size:clamp(32px,16cqw,88px) !important; max-width:85%; white-space:nowrap; line-height:1.05; letter-spacing:-.025em; text-shadow: 0 0 28px rgba(229, 184, 105, 0.4) !important; }
 @media (min-width:768px) and (max-width:1194px) {
  .focus-audio-panel { max-height:calc(100dvh - 40px); }
  .profile-live-preview-card { min-width:0; }
@@ -3319,23 +3313,37 @@ html,body {background:var(--sanctra-boot-ink,#131b28);min-height:100%;}
 
 /* A centred focus canvas, with supporting information above and below. */
 .sanctra-app:not(.timer-only) .timer-content {padding:16px clamp(16px,3vw,40px);overflow:visible;}
-.focus-workspace {--sanctra-glass-bg:linear-gradient(135deg,#e7f4ff14,#e7f4ff05),rgba(16,36,53,.34);--sanctra-glass-bg-hover:linear-gradient(135deg,#e7f4ff1c,#e7f4ff08),rgba(16,36,53,.40);--sanctra-glass-blur:blur(18px);--sanctra-glass-shadow:inset 0 1px #ffffff24,0 8px 24px #07162512;--sanctra-glass-border:#e7f4ff42;width:100%;max-width:1100px;margin:auto;display:grid;grid-template-columns:1fr 1fr;grid-template-areas:"quote task" "clock clock" "metrics metrics";gap:18px 24px;align-items:center;}
+.focus-workspace {--sanctra-glass-bg:rgba(18,21,27,0.75);--sanctra-glass-bg-hover:rgba(24,28,36,0.85);--sanctra-glass-blur:blur(20px);--sanctra-glass-shadow:0 8px 32px rgba(0,0,0,0.35);--sanctra-glass-border:rgba(255,255,255,0.08);width:100%;max-width:1100px;margin:auto;display:grid;grid-template-columns:1fr 1fr;grid-template-areas:"quote task" "clock clock" "metrics metrics";gap:16px 24px;align-items:center;}
 .focus-workspace.minimal {display:block;max-width:none;}
 .focus-context {display:contents;}
 .focus-task-context {grid-area:task;min-width:0;display:flex;flex-direction:column;gap:10px;}
-.sanctra-app .focus-workspace:not(.minimal)>.timer-dial {grid-area:clock;order:0;margin:0;padding:6px 0;min-width:0;gap:22px;}
-.sanctra-app .focus-workspace:not(.minimal) .timer-ring {width:min(80vw,48dvh,440px);height:auto;aspect-ratio:1;flex-shrink:0;}
-.sanctra-app .focus-workspace .timer-actions {display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:0;width:100%;padding:0;}
+.sanctra-app .focus-workspace:not(.minimal)>.timer-dial {grid-area:clock;order:0;margin:0;padding:4px 0;min-width:0;gap:18px;}
+.sanctra-app .focus-workspace:not(.minimal) .timer-ring {width:min(80vw,44dvh,420px);height:auto;aspect-ratio:1;flex-shrink:0;}
+.sanctra-app .focus-workspace .timer-actions {display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:10px;width:100%;padding:0;}
 .sanctra-app .focus-workspace .timer-actions>button {min-height:44px;padding:10px 18px;font-size:13px;}
-.sanctra-app .focus-context .timer-metrics {grid-area:metrics;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 auto;padding:0;max-width:900px;order:0;}
-.sanctra-app .focus-context .timer-metrics>* {grid-template-rows:18px 28px 18px;gap:3px;padding:12px;min-height:88px;border-radius:18px;}
-.sanctra-app .focus-context .timer-metrics>*>div:first-child {display:none;}
-.sanctra-app .focus-context .timer-metrics>*>span {font-size:10px;letter-spacing:.08em;}
-.sanctra-app .focus-context .timer-metrics>*>div:nth-child(3) {font-size:22px;line-height:28px;}
-.sanctra-app .focus-context .timer-metrics>*>div:nth-child(4) {font-size:11px;line-height:16px;}
-.sanctra-app .focus-context .current-task-bar {max-width:none;margin:0;padding:12px 16px;border-radius:18px;gap:10px 14px;display:flex;flex-wrap:wrap;align-items:center;min-height:var(--focus-card-h);box-sizing:border-box;}
+.sanctra-app .focus-context .timer-metrics {grid-area:metrics;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:0 auto;padding:0;max-width:960px;order:0;}
+.sanctra-app .focus-context .timer-metrics>* {display:flex!important;flex-direction:column!important;justify-content:space-between!important;align-items:stretch!important;text-align:left!important;min-height:104px!important;padding:14px 16px!important;border-radius:18px!important;backdrop-filter:blur(16px)!important;-webkit-backdrop-filter:blur(16px)!important;transition:transform 0.2s ease,border-color 0.2s ease,box-shadow 0.2s ease!important;}
+.sanctra-app .focus-context .timer-metrics>*:hover {transform:translateY(-2px)!important;}
+
+/* Unified sleek obsidian glass metric cards - cohesive dark minimalism */
+.sanctra-app .focus-context .timer-metrics>* {
+  background: rgba(14, 18, 24, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+.sanctra-app .focus-context .timer-metrics>*:hover {
+  background: rgba(20, 24, 32, 0.85) !important;
+  border-color: rgba(229, 184, 105, 0.25) !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  transform: translateY(-2px) !important;
+}
+
+.sanctra-app .focus-context .timer-metrics>*>div:first-child {display:flex!important;width:100%!important;height:auto!important;background:transparent!important;border:none!important;box-shadow:none!important;margin:0!important;padding:0!important;border-radius:0!important;align-items:center!important;justify-content:space-between!important;}
+.sanctra-app .focus-context .timer-metrics>*>div:first-child svg {display:block!important;width:14px!important;height:14px!important;flex-shrink:0!important;}
+.sanctra-app .focus-context .current-task-bar {max-width:none;margin:0;padding:12px 18px;border-radius:18px;background:linear-gradient(135deg,rgba(22,26,40,0.80) 0%,rgba(16,18,24,0.85) 100%)!important;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(129,140,248,0.18)!important;box-shadow:0 4px 20px rgba(99,102,241,0.05)!important;gap:10px 14px;display:flex;flex-wrap:wrap;align-items:center;min-height:var(--focus-card-h);box-sizing:border-box;}
+.sanctra-app .focus-context .current-task-bar:hover {border-color:rgba(129,140,248,0.35)!important;}
 .sanctra-app .focus-context .current-task-bar h2 {font-family:inherit;font-size:14px;line-height:1.5;}
-.sanctra-app .focus-context .current-task-bar.is-focusing {border-color:color-mix(in srgb,var(--sanctra-sage) 38%,transparent)!important;background:color-mix(in srgb,var(--sanctra-sage) 7%,transparent);}
+.sanctra-app .focus-context .current-task-bar.is-focusing {border-color:rgba(229,184,105,0.4)!important;background:rgba(229,184,105,0.06)!important;}
 .sanctra-app .focus-context .current-task-bar .analytics-button {min-height:40px;padding:8px 14px;white-space:nowrap;}
 /* Quote and task cards share one row height and align to the top edge, so a second (different) focus card stacks below without stretching the quote. */
 .focus-workspace {--focus-card-h:86px;}

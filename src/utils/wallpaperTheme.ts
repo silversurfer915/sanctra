@@ -1,5 +1,6 @@
 // Scenery can suggest a pastel accent; it never recolors the reading surfaces.
 export const THEME_PALETTES = {
+  noir: { ink: '#080b11', surface: '#12151b', accent: '#e5b869', muted: '#f5f2eb' },
   sage: { ink: '#17181d', surface: '#292b33', accent: '#bdd7c9', muted: '#c7c7cf' },
   sand: { ink: '#17181d', surface: '#292b33', accent: '#e8c7ad', muted: '#c7c7cf' },
   blue: { ink: '#17181d', surface: '#292b33', accent: '#b8d4ea', muted: '#c7c7cf' },
@@ -10,6 +11,7 @@ export const THEME_PALETTES = {
 export type ThemeName = keyof typeof THEME_PALETTES;
 
 export const PRESET_THEME_MAP: Record<string, ThemeName> = {
+  'wp-sanctra-noir': 'noir',
   'wp-video-lofi-meadow': 'blue',
   'wp-abstract-sage': 'sage',
   'wp-abstract-warm': 'sand',
