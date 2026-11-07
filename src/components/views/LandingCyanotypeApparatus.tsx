@@ -147,97 +147,9 @@ export function LandingCyanotypeApparatus({
                 <stop offset="50%" stopColor="var(--rs-amber)" />
                 <stop offset="100%" stopColor="#c49742" />
               </linearGradient>
-              {/* Frosted Smoky Glass Dial Plate */}
-              <radialGradient id="heroDialGlassPlate" cx="50%" cy="42%" r="65%">
-                <stop offset="0%" stopColor="rgba(24, 30, 42, 0.55)" />
-                <stop offset="55%" stopColor="rgba(14, 18, 26, 0.78)" />
-                <stop offset="100%" stopColor="rgba(8, 11, 16, 0.94)" />
-              </radialGradient>
-              {/* Specular Curved Reflection Arc */}
-              <linearGradient id="heroGlassSpecular" x1="15%" y1="0%" x2="85%" y2="100%">
-                <stop offset="0%" stopColor="rgba(255, 255, 255, 0.45)" />
-                <stop offset="35%" stopColor="rgba(255, 255, 255, 0.10)" />
-                <stop offset="100%" stopColor="rgba(255, 255, 255, 0)" />
-              </linearGradient>
-              {/* Beveled Glass Rim */}
-              <linearGradient id="heroGlassRim" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="rgba(255, 255, 255, 0.22)" />
-                <stop offset="50%" stopColor="rgba(255, 255, 255, 0.06)" />
-                <stop offset="100%" stopColor="rgba(255, 255, 255, 0.02)" />
-              </linearGradient>
             </defs>
 
-            {/* Frosted Glass Backing Lens */}
-            <circle
-              cx="160"
-              cy="160"
-              r="126"
-              fill="url(#heroDialGlassPlate)"
-              stroke="url(#heroGlassRim)"
-              strokeWidth="1"
-            />
-
-            {/* Specular Curved Highlight Arc across top glass */}
-            <path
-              d="M 64 125 A 118 118 0 0 1 256 125"
-              stroke="url(#heroGlassSpecular)"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              fill="none"
-              opacity="0.35"
-            />
-
-            {/* Concentric Precision Gauge Track Rings */}
-            <circle
-              cx="160"
-              cy="160"
-              r="96"
-              fill="none"
-              stroke="rgba(229, 184, 105, 0.16)"
-              strokeWidth="1"
-              strokeDasharray="2 4"
-            />
-            <circle
-              cx="160"
-              cy="160"
-              r="66"
-              fill="none"
-              stroke="rgba(255, 255, 255, 0.05)"
-              strokeWidth="0.75"
-            />
-
-            {/* 60-Second Chronometer Micro-Graduation Ticks */}
-            {Array.from({ length: 60 }).map((_, i) => {
-              const tickAngle = (i * 360) / 60;
-              const is5Min = i % 5 === 0;
-              const is15Min = i % 15 === 0;
-              return (
-                <line
-                  key={`micro-${i}`}
-                  x1="160"
-                  y1={is15Min ? '118' : is5Min ? '120' : '122'}
-                  x2="160"
-                  y2="125"
-                  stroke={
-                    is15Min
-                      ? 'rgba(229, 184, 105, 0.75)'
-                      : is5Min
-                      ? 'rgba(229, 184, 105, 0.45)'
-                      : 'rgba(255, 255, 255, 0.14)'
-                  }
-                  strokeWidth={is15Min ? '1.5' : is5Min ? '1.2' : '0.75'}
-                  transform={`rotate(${tickAngle} 160 160)`}
-                />
-              );
-            })}
-
-            {/* Cardinal Chronometer Numerals (60, 15, 30, 45) */}
-            <text x="160" y="112" textAnchor="middle" fill="rgba(229, 184, 105, 0.55)" fontSize="7" fontFamily="var(--rs-serif)" fontWeight="500">60</text>
-            <text x="210" y="162.5" textAnchor="middle" fill="rgba(229, 184, 105, 0.55)" fontSize="7" fontFamily="var(--rs-serif)" fontWeight="500">15</text>
-            <text x="160" y="214" textAnchor="middle" fill="rgba(229, 184, 105, 0.55)" fontSize="7" fontFamily="var(--rs-serif)" fontWeight="500">30</text>
-            <text x="110" y="162.5" textAnchor="middle" fill="rgba(229, 184, 105, 0.55)" fontSize="7" fontFamily="var(--rs-serif)" fontWeight="500">45</text>
-
-            {/* Outer Astronomical Graduation Ring */}
+            {/* Subtle Astronomical 24-Tick Graduation Ring */}
             {Array.from({ length: 24 }).map((_, i) => {
               const tickAngle = (i * 360) / 24;
               const isMajor = i % 2 === 0;
