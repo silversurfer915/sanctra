@@ -3333,9 +3333,12 @@ html,body {background:var(--sanctra-boot-ink,#131b28);min-height:100%;}
 }
 .sanctra-app .focus-context .timer-metrics>*:hover {
   background: rgba(20, 24, 32, 0.85) !important;
-  border-color: rgba(229, 184, 105, 0.25) !important;
+  border-color: var(--theme-card-border-hover, rgba(229, 184, 105, 0.35)) !important;
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
   transform: translateY(-2px) !important;
+}
+.sanctra-app .focus-context .timer-metrics button:hover svg {
+  color: var(--theme-accent, #e5b869) !important;
 }
 
 .sanctra-app .focus-context .timer-metrics>*>div:first-child {display:flex!important;width:100%!important;height:auto!important;background:transparent!important;border:none!important;box-shadow:none!important;margin:0!important;padding:0!important;border-radius:0!important;align-items:center!important;justify-content:space-between!important;}

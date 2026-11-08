@@ -38,6 +38,7 @@ import type {
   TaskItem,
   TimerDraft,
   UserSubscription,
+  ThemeId,
 } from './types/index.ts';
 import { watchSubscription } from './utils/subscriptionService.ts';
 import { WALLPAPER_PRESETS } from './utils/storage.ts';
@@ -107,6 +108,8 @@ import { LocalClock } from './components/LocalClock.tsx';
 import { SoundscapeProvider, CenteredHiddenMusicBar } from './components/SoundscapeContext.tsx';
 
 import { TimerModeModal } from './components/modals/TimerModeModal.tsx';
+import { ThemeModal } from './components/modals/ThemeModal.tsx';
+import { applyThemeToDocument, getThemePreset, resolveThemeId } from './utils/themeRegistry.ts';
 import { SubjectModal } from './components/modals/SubjectModal.tsx';
 import { SaveSessionModal } from './components/modals/SaveSessionModal.tsx';
 import { ResetConfirmModal } from './components/modals/ResetConfirmModal.tsx';
@@ -252,6 +255,10 @@ export const App: React.FC = () => {
   const [subjects, setSubjects] = useState<Subject[]>(() => getSubjects());
   const [landingWallpaperId,setLandingWallpaperId]=useState(getLandingWallpaperId);
   const [settings, setSettings] = useState<UserSettings>(() => getUserSettings(getStoredUser()?.uid));
+  const activeThemeId = resolveThemeId(settings.activeThemeId);
+  useEffect(() => {
+    applyThemeToDocument(getThemePreset(activeThemeId));
+  }, [activeThemeId]);
   useGlassClarity(settings.uiGlassBlur);
   const [tasks, setTasks] = useState<TaskItem[]>(() => getTasks());
   const spaces = resolveWorkspaces(settings);
@@ -310,6 +317,7 @@ export const App: React.FC = () => {
 
   // Modals state
   const [isModeModalOpen, setIsModeModalOpen] = useState(false);
+  const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [isSubjectModalOpen, setIsSubjectModalOpen] = useState(false);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
@@ -1770,6 +1778,7 @@ export const App: React.FC = () => {
               </div>
               {/* 4 Metric Overview Cards */}
               <MetricCards
+                activeThemeId={activeThemeId}
                 subjects={spaceSubjects}
                 categoryLabel="Subjects"
                 subjectTrackingEnabled={settings.subjectTrackingEnabled}
@@ -1786,6 +1795,8 @@ export const App: React.FC = () => {
               </aside>}
               {/* Circular Focus Clock Dial */}
               <TimerDial
+                activeThemeId={activeThemeId}
+                onOpenThemeModal={() => setIsThemeModalOpen(true)}
                 minimal={timerOnly}
                 onToggleMinimal={()=>setTimerOnly(value=>!value)}
                 seconds={displaySeconds}
@@ -1872,6 +1883,14 @@ export const App: React.FC = () => {
       </div>
 
       {/* Modals */}
+      {isThemeModalOpen && (
+        <ThemeModal
+          activeThemeId={activeThemeId}
+          onSelectTheme={(newThemeId: ThemeId) => handleUpdateSettings({ activeThemeId: newThemeId })}
+          onClose={() => setIsThemeModalOpen(false)}
+        />
+      )}
+
       <TimerModeModal
         isOpen={isModeModalOpen}
         currentMode={mode}

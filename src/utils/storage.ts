@@ -1,5 +1,6 @@
 import {getCalendarEvents} from '../features/calendar/calendarStorage.ts';
 import {activeWorkspace,workspaceSettings} from './workspaces.ts';
+import {resolveThemeId} from './themeRegistry.ts';
 import type { StudySession, Subject, UserSettings, TimerDraft, WallpaperPreset, AvatarPreset, TaskItem } from '../types/index.ts';
 
 export const DEFAULT_SUBJECTS: Subject[] = [
@@ -129,6 +130,7 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   subjectTrackingEnabled: true,
   activeSubjectId: 'sub-1',
   activeWallpaperId: 'wp-sanctra-noir',
+  activeThemeId: 'nocturne-gold',
   wallpaperFitMode: 'fill',
   backgroundDimness: 25,
   timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
@@ -306,6 +308,7 @@ export function getUserSettings(userId?: string | null): UserSettings {
       jeeTrackOptIn:parsed.jeeTrackOptIn===true,
       uiGlassBlur: typeof parsed.uiGlassBlur === 'number' && Number.isFinite(parsed.uiGlassBlur) ? Math.max(0, Math.min(24, parsed.uiGlassBlur)) : 12,
       activeWallpaperId,
+      activeThemeId: resolveThemeId(parsed.activeThemeId),
     };
     return restored.workspaces?.length ? workspaceSettings(restored,activeWorkspace(restored)) : restored;
   } catch (err) {
