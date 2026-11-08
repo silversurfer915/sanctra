@@ -519,11 +519,19 @@ export function applyThemeToDocument(preset: ThemePreset): void {
   root.style.setProperty('--theme-button-glow', preset.buttonGlow);
   root.style.setProperty('--theme-button-ring', preset.buttonRing);
   root.style.setProperty('--theme-font-timer', preset.fontTimer);
-  root.style.setProperty('--theme-card-border', `${preset.accent}24`);
+  root.style.setProperty('--theme-card-border', `${preset.accent}28`);
   root.style.setProperty('--theme-card-border-hover', preset.cardBorderHover);
-  root.style.setProperty('--theme-card-glow', `${preset.accent}14`);
+  root.style.setProperty('--theme-card-glow', `${preset.accent}18`);
   root.style.setProperty('--theme-surface', preset.surface);
   root.style.setProperty('--theme-canvas', preset.canvas);
+
+  // Universal Sanctra Design Token synchronization
+  root.style.setProperty('--sanctra-sage', preset.accent);
+  root.style.setProperty('--sanctra-surface', preset.surface);
+  root.style.setProperty('--sanctra-ink', preset.canvas);
+  root.style.setProperty('--sanctra-glass-border', `color-mix(in srgb, ${preset.accent} 22%, rgba(255, 255, 255, 0.16))`);
+  root.style.setProperty('--sanctra-glass-border-hover', `color-mix(in srgb, ${preset.accent} 40%, rgba(255, 255, 255, 0.32))`);
+  root.style.setProperty('--sanctra-glass-shadow-hover', `inset 0 1px 2px rgba(255, 255, 255, 0.32), 0 16px 44px -4px rgba(0, 0, 0, 0.42), 0 0 24px color-mix(in srgb, ${preset.accent} 22%, transparent)`);
 }
 
 /** Check whether a given scene ID aligns with a theme's coordinated set */

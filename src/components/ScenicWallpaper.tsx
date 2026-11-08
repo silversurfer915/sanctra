@@ -4,55 +4,18 @@ import {getThemePreset, resolveThemeId} from '../utils/themeRegistry.ts';
 import {VipMedia} from './VipMedia.tsx';
 import {SceneImage} from './SceneImage.tsx';
 import {WeatherOverlay} from './WeatherOverlay.tsx';
-import {LandingAtmosphereCanvas} from './views/LandingAtmosphereCanvas.tsx';
 import {backgroundImageSources} from '../utils/backgroundImages.ts';
 import './background-quality.css';
 
 export function ScenicWallpaper({settings}:{settings:UserSettings}){
   const preset=WALLPAPER_PRESETS.find(p=>p.id===resolveWallpaperId(settings.activeWallpaperId))||WALLPAPER_PRESETS[0];
-
-  if (preset.id === 'wp-sanctra-noir' && !settings.customWallpaperUrl) {
-    const activeTheme = getThemePreset(resolveThemeId(settings.activeThemeId));
-    return (
-      <div className="scenic-wallpaper-container fixed inset-0 -z-10 overflow-hidden pointer-events-none select-none bg-[#05070c]" aria-hidden="true">
-        {/* Deep Pristine Velvet Obsidian Base: No murky muddy stops */}
-        <div className="absolute inset-0 bg-[radial-gradient(130%_85%_at_50%_0%,#0c1220_0%,#070a12_50%,#040508_100%)]" />
-        
-        {/* Dynamic Theme-Adaptive Radiant Core Spotlight (centered behind the clock dial) */}
-        <div
-          className="absolute top-[28%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[58vw] h-[58vw] max-w-[680px] max-h-[680px] rounded-full blur-[110px] transition-all duration-700 pointer-events-none"
-          style={{
-            background: `radial-gradient(circle, ${activeTheme.accent}2e 0%, ${activeTheme.accent}0d 48%, transparent 74%)`,
-          }}
-        />
-        
-        {/* Dynamic Upper Zenith Celestial Wash (harmonized with active pastel palette) */}
-        <div
-          className="absolute top-[-10%] left-[50%] -translate-x-1/2 w-[72vw] h-[36vw] rounded-full blur-[100px] transition-all duration-700 pointer-events-none"
-          style={{
-            background: `radial-gradient(ellipse, ${activeTheme.accentSoft}18 0%, transparent 70%)`,
-          }}
-        />
-
-        {/* Dynamic Lower Ambient Floor Reflection */}
-        <div
-          className="absolute bottom-0 left-0 right-0 h-[25vh] blur-[90px] transition-all duration-700 pointer-events-none"
-          style={{
-            background: `radial-gradient(ellipse at 50% 100%, ${activeTheme.accent}14 0%, transparent 65%)`,
-          }}
-        />
-
-        {/* Living Atmospheric Rain Canvas & Crystalline Starlight Spores */}
-        <LandingAtmosphereCanvas />
-
-        {/* Clean, Non-Muddy Obsidian Vignette */}
-        <div className="absolute inset-0 bg-[radial-gradient(130%_95%_at_50%_40%,transparent_55%,rgba(4,5,8,0.72))]" />
-      </div>
-    );
-  }
+  const activeTheme = getThemePreset(resolveThemeId(settings.activeThemeId));
 
   const image=settings.customWallpaperUrl||preset.url;
-  const video=settings.plusMotionWallpaperEnabled&&!settings.customWallpaperUrl?settings.plusMotionWallpaperUrl||preset.motionUrl:undefined;
+  const isMotionAllowed = !preset.isPlusOnly || settings.plusMotionWallpaperEnabled;
+  const video = !settings.customWallpaperUrl && isMotionAllowed
+    ? (preset.motionUrl || (settings.plusMotionWallpaperEnabled ? settings.plusMotionWallpaperUrl : undefined))
+    : undefined;
   const sources=backgroundImageSources(image);
   const isWeather=preset.type==='weather'||Boolean(preset.weatherType);
   return (
@@ -65,6 +28,17 @@ export function ScenicWallpaper({settings}:{settings:UserSettings}){
       {isWeather&&!settings.customWallpaperUrl&&<WeatherOverlay weatherType={preset.weatherType || 'rain'} />}
       <div className="absolute inset-0 z-[2] bg-black" style={{opacity:(settings.backgroundDimness??25)/100}}/>
       <div className="absolute inset-0 z-[3]" style={{background:'linear-gradient(0deg,color-mix(in srgb,var(--sanctra-ink) 70%,transparent),transparent 50%,color-mix(in srgb,var(--sanctra-ink) 35%,transparent))'}}/>
+      
+      {/* Dynamic Theme-Adaptive Radiant Core Spotlight (blooms gently behind the clock dial) */}
+      <div
+        className="absolute top-[32%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[54vw] h-[54vw] max-w-[640px] max-h-[640px] rounded-full blur-[110px] transition-all duration-700 pointer-events-none z-[4]"
+        style={{
+          background: `radial-gradient(circle, ${activeTheme.accent}24 0%, ${activeTheme.accent}08 48%, transparent 72%)`,
+        }}
+      />
+
+      {/* Cinematic Vignette Scrim for flawless text legibility */}
+      <div className="absolute inset-0 z-[5] bg-[radial-gradient(130%_95%_at_50%_40%,transparent_50%,rgba(4,5,8,0.65))] pointer-events-none" />
     </div>
   );
 }

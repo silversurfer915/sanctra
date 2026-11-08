@@ -230,13 +230,27 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     title={item.label}
                     className={`w-11 h-11 mx-auto flex items-center justify-center rounded-xl transition-all cursor-pointer relative group ${
                       isActive
-                        ? `${item.pastelBg} ${item.pastel} border ${item.pastelBorder} shadow-sm`
+                        ? 'shadow-sm text-white'
                         : 'text-slate-400 hover:text-white hover:bg-white/5'
                     }`}
+                    style={isActive ? {
+                      backgroundColor: 'var(--theme-accent-wash)',
+                      border: '1px solid var(--theme-card-border)',
+                      boxShadow: '0 0 16px var(--theme-card-glow)',
+                    } : undefined}
                   >
-                    <Icon className={`w-4 h-4 transition-transform group-hover:scale-110 ${isActive ? item.pastel : `${item.pastel} opacity-75 group-hover:opacity-100`}`} />
+                    <Icon
+                      className="w-4 h-4 transition-transform group-hover:scale-110"
+                      style={{ color: isActive ? 'var(--theme-accent)' : undefined }}
+                    />
                     {isActive && (
-                      <span className={`absolute right-1.5 top-1.5 w-1.5 h-1.5 rounded-full ${item.pastel}`} />
+                      <span
+                        className="absolute right-1.5 top-1.5 w-1.5 h-1.5 rounded-full"
+                        style={{
+                          backgroundColor: 'var(--theme-accent)',
+                          boxShadow: '0 0 8px var(--theme-accent)',
+                        }}
+                      />
                     )}
                   </button>
                 );
@@ -248,17 +262,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onClick={() => handleNavClick(item.id)}
                   className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium transition-all cursor-pointer group ${
                     isActive
-                      ? `${item.pastelBg} text-white font-semibold border ${item.pastelBorder} shadow-sm`
+                      ? 'text-white font-semibold shadow-sm'
                       : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
                   }`}
+                  style={isActive ? {
+                    backgroundColor: 'var(--theme-accent-wash)',
+                    border: '1px solid var(--theme-card-border)',
+                    boxShadow: '0 0 16px var(--theme-card-glow)',
+                  } : undefined}
                 >
-                  <div className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-all ${
-                    isActive ? `${item.pastelBg}` : 'bg-white/[0.02] group-hover:bg-white/5'
-                  }`}>
+                  <div
+                    className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-all"
+                    style={{
+                      backgroundColor: isActive ? 'var(--theme-card-border)' : undefined,
+                    }}
+                  >
                     <Icon
-                      className={`w-3.5 h-3.5 transition-transform group-hover:scale-110 shrink-0 ${
-                        isActive ? item.pastel : `${item.pastel} opacity-75 group-hover:opacity-100`
-                      }`}
+                      className="w-3.5 h-3.5 transition-transform group-hover:scale-110 shrink-0"
+                      style={{
+                        color: isActive ? 'var(--theme-accent)' : undefined,
+                      }}
                     />
                   </div>
                   <span className="truncate flex-1 text-left">{item.id==='jeetrack'&&userSettings.jeeTrackOptIn===false?'Explore JEE Track':item.label}</span>
@@ -268,6 +291,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     }`}>
                       {item.badge}
                     </span>
+                  )}
+                  {isActive && (
+                    <span
+                      className="w-1.5 h-1.5 rounded-full shrink-0"
+                      style={{
+                        backgroundColor: 'var(--theme-accent)',
+                        boxShadow: '0 0 8px var(--theme-accent)',
+                      }}
+                    />
                   )}
                 </button>
               );

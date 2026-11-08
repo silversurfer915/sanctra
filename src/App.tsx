@@ -253,10 +253,12 @@ export const App: React.FC = () => {
   const [subjects, setSubjects] = useState<Subject[]>(() => getSubjects());
   const [landingWallpaperId,setLandingWallpaperId]=useState(getLandingWallpaperId);
   const [settings, setSettings] = useState<UserSettings>(() => getUserSettings(getStoredUser()?.uid));
-  const activeThemeId = resolveThemeId(settings.activeThemeId);
+  const queryTheme = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('theme') : null;
+  const activeThemeId = resolveThemeId(queryTheme || settings.activeThemeId);
+  const activeTheme = getThemePreset(activeThemeId);
   useEffect(() => {
-    applyThemeToDocument(getThemePreset(activeThemeId));
-  }, [activeThemeId]);
+    applyThemeToDocument(activeTheme);
+  }, [activeTheme]);
   useGlassClarity(settings.uiGlassBlur);
   const [tasks, setTasks] = useState<TaskItem[]>(() => getTasks());
   const spaces = resolveWorkspaces(settings);
@@ -1531,7 +1533,7 @@ export const App: React.FC = () => {
     triggerCloudSync({ tasks: updatedTasks });
   };
 
-  const hasViewParam = typeof window !== 'undefined' && Boolean(new URLSearchParams(window.location.search).get('view'));
+  const hasViewParam = typeof window !== 'undefined' && (Boolean(new URLSearchParams(window.location.search).get('view')) || new URLSearchParams(window.location.search).get('desk') === 'true');
   const previewUser = useMemo<AuthUser>(() => ({
     uid: 'preview-scholar',
     email: 'scholar@sanctra.app',
@@ -1682,7 +1684,28 @@ export const App: React.FC = () => {
       onOpenYouTube={() => setIsYouTubeModalOpen(true)}
       onOpenPlusEnquiry={() => { setSupportInitialCategory('premium'); handleSelectView('support'); }}
     >
-      <div id="sanctra-root" style={{ "--sanctra-panel-blur": `${Math.max(0,Math.min(24,Number.isFinite(settings.uiGlassBlur)?settings.uiGlassBlur!:12))}px`, "--sanctra-ink": THEME_PALETTES[getThemeName(appearanceSettings.activeWallpaperId)].ink, "--sanctra-surface": THEME_PALETTES[getThemeName(appearanceSettings.activeWallpaperId)].surface, "--sanctra-sage": THEME_PALETTES[getThemeName(appearanceSettings.activeWallpaperId)].accent, "--sanctra-muted": THEME_PALETTES[getThemeName(appearanceSettings.activeWallpaperId)].muted } as React.CSSProperties} className={`sanctra-app relative h-dvh flex text-slate-100 overflow-hidden ${timerOnly && currentView === 'timer' ? 'timer-only' : ''}`}>
+      <div
+        id="sanctra-root"
+        style={{
+          "--sanctra-panel-blur": `${Math.max(0,Math.min(24,Number.isFinite(settings.uiGlassBlur)?settings.uiGlassBlur!:12))}px`,
+          "--sanctra-ink": activeTheme.canvas,
+          "--sanctra-surface": activeTheme.surface,
+          "--sanctra-sage": activeTheme.accent,
+          "--sanctra-muted": activeTheme.textMuted,
+          "--theme-accent": activeTheme.accent,
+          "--theme-accent-hover": activeTheme.accentHover,
+          "--theme-accent-soft": activeTheme.accentSoft,
+          "--theme-accent-wash": activeTheme.accentWash,
+          "--theme-card-border": `${activeTheme.accent}28`,
+          "--theme-card-border-hover": activeTheme.cardBorderHover,
+          "--theme-card-glow": `${activeTheme.accent}18`,
+          "--theme-button-bg": activeTheme.buttonBg,
+          "--theme-button-text": activeTheme.buttonText,
+          "--theme-button-glow": activeTheme.buttonGlow,
+          "--theme-button-ring": activeTheme.buttonRing,
+        } as React.CSSProperties}
+        className={`sanctra-app relative h-dvh flex text-slate-100 overflow-hidden ${timerOnly && currentView === 'timer' ? 'timer-only' : ''}`}
+      >
       {activeUser&&!activeUser.isAnonymous&&<AdminTicketAlert user={activeUser} onOpen={()=>handleSelectView('admin')}/>}
       {/* 1. Full-screen Scenic Background */}
       <ScenicWallpaper settings={subscription?.isPlus ? appearanceSettings : {...appearanceSettings,plusMotionWallpaperEnabled:false,plusMotionWallpaperUrl:undefined,activeWallpaperId:WALLPAPER_PRESETS.find(p=>p.id===appearanceSettings.activeWallpaperId)?.isPlusOnly ? DEFAULT_USER_SETTINGS.activeWallpaperId : appearanceSettings.activeWallpaperId}} />
