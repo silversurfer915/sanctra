@@ -1,287 +1,207 @@
 /* ==========================================================================
-   SANCTRA CINEMATIC ARRIVAL — BOTANICAL NOIR & CYANOTYPE ARCHITECTURE
-   Deep obsidian noir, blueprint grid, living atmospheric rain, Didone typography
+   SANCTRA LUXURY LOADING SCREEN — CLEAN OBSIDIAN & PASTEL MINIMALISM
+   Pure velvet obsidian, soft pastel ambient glow, refined typography
    ========================================================================== */
 
-.sanctra-loading {
+.sanctra-loading-v2 {
   position: fixed;
   inset: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #0b0e14;
-  background-image: 
-    linear-gradient(rgba(140, 195, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(140, 195, 255, 0.035) 1px, transparent 1px),
-    radial-gradient(130% 110% at 50% 45%, rgba(20, 36, 62, 0.75) 0%, rgba(11, 14, 20, 0.98) 75%);
-  background-size: 28px 28px, 28px 28px, auto;
+  background-color: #05070c;
   z-index: 1000;
   overflow: hidden;
   user-select: none;
   isolation: isolate;
+  padding: 24px;
 }
 
-.sanctra-loading .loading-scene {
+/* Deep Obsidian Radial Background Base */
+.loading-bg-base {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.25;
-}
-
-.sanctra-loading .loading-veil {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% 50%, transparent 15%, rgba(11, 14, 20, 0.9) 80%);
+  background: radial-gradient(130% 85% at 50% 35%, #0c1220 0%, #070a12 55%, #040508 100%);
   pointer-events: none;
 }
 
-.sanctra-loading .loading-grain {
+/* Dynamic Theme Pastel Core Glow */
+.loading-theme-glow {
   position: absolute;
-  inset: -10%;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50vw;
+  height: 50vw;
+  max-width: 540px;
+  max-height: 540px;
+  border-radius: 50%;
+  filter: blur(100px);
   pointer-events: none;
-  opacity: 0.28;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.96 0 0 0 0 0.94 0 0 0 0 0.88 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation: loading-grain-shift 0.8s steps(4) infinite;
+  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes loading-grain-shift {
-  0% { transform: translate(0, 0); }
-  25% { transform: translate(-2%, 2%); }
-  50% { transform: translate(2%, -1%); }
-  75% { transform: translate(-1%, -2%); }
-  100% { transform: translate(0, 0); }
-}
-
-/* Corner Architectural Crosshairs */
-.loading-crosshair {
-  position: absolute;
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 15px;
-  color: rgba(229, 184, 105, 0.45);
-  pointer-events: none;
+/* Central Minimalist Glass Card */
+.loading-card {
+  position: relative;
   z-index: 10;
-  line-height: 1;
-}
-.loading-crosshair--tl { top: clamp(16px, 2.5vw, 32px); left: clamp(16px, 2.5vw, 32px); }
-.loading-crosshair--tr { top: clamp(16px, 2.5vw, 32px); right: clamp(16px, 2.5vw, 32px); }
-.loading-crosshair--bl { bottom: clamp(16px, 2.5vw, 32px); left: clamp(16px, 2.5vw, 32px); }
-.loading-crosshair--br { bottom: clamp(16px, 2.5vw, 32px); right: clamp(16px, 2.5vw, 32px); }
-
-/* Top Architectural Ribbon */
-.loading-topbar {
-  position: absolute;
-  top: 0;
-  left: clamp(24px, 4vw, 56px);
-  right: clamp(24px, 4vw, 56px);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  padding: clamp(14px, 2vw, 22px) 0 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 10.5px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(245, 242, 235, 0.45);
-  pointer-events: none;
-  z-index: 10;
+  text-align: center;
+  max-width: 440px;
+  width: 100%;
+  padding: 40px 32px;
+  border-radius: 28px;
+  background: rgba(14, 18, 28, 0.55);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 24px 64px -12px rgba(0, 0, 0, 0.75), inset 0 1px 1px rgba(255, 255, 255, 0.12);
+  animation: loadingCardArrive 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
-.loading-topbar__right {
+
+@keyframes loadingCardArrive {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Breathing Logo Emblem */
+.loading-emblem-wrap {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  color: #e5b869;
-}
-.loading-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #e5b869;
-  box-shadow: 0 0 10px rgba(229, 184, 105, 0.8);
-  animation: loading-dot-pulse 1.8s ease-in-out infinite alternate;
-}
-@keyframes loading-dot-pulse {
-  from { opacity: 0.4; transform: scale(0.85); }
-  to { opacity: 1; transform: scale(1.15); }
-}
-
-/* Central Stage & Exposure Dial */
-.loading-stage {
-  position: relative;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 28px;
-  text-align: center;
-  padding: 20px;
-  max-width: 480px;
-}
-
-.loading-dial-wrapper {
-  position: relative;
-  width: 190px;
-  height: 190px;
-  display: flex;
-  align-items: center;
   justify-content: center;
+  margin-bottom: 12px;
 }
 
-.loading-sun-core {
+.loading-emblem-halo {
   position: absolute;
-  top: 14px;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  inset: -16px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(229, 184, 105, 0.2) 0%, transparent 70%);
-  animation: sun-pulse 2.4s ease-in-out infinite alternate;
-  z-index: 5;
+  filter: blur(20px);
+  animation: loadingHaloPulse 3s ease-in-out infinite alternate;
 }
 
-@keyframes sun-pulse {
-  from { transform: scale(0.9); opacity: 0.7; }
-  to { transform: scale(1.1); opacity: 1; }
+@keyframes loadingHaloPulse {
+  0% {
+    opacity: 0.45;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 0.9;
+    transform: scale(1.1);
+  }
 }
 
-.loading-exposure-ring {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
+.loading-emblem-wrap .sanctra-brand-mark {
+  filter: drop-shadow(0 2px 14px rgba(255, 255, 255, 0.25));
 }
 
-.loading-dial-content {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: 12px;
-  margin-top: 16px;
-}
-
-.loading-dial-content .sanctra-wordmark {
-  font-family: "Instrument Serif", Georgia, serif;
-  font-size: 34px;
-  font-weight: 400;
+.loading-emblem-wrap .sanctra-wordmark {
+  font-size: 22px;
   letter-spacing: -0.02em;
   color: #f5f2eb;
 }
 
-.loading-dial-content .sanctra-brand-period {
-  color: #e5b869;
-}
-
-.loading-dial-sub {
-  margin: 0;
+/* Editorial Subtitle */
+.loading-tagline {
   font-family: "Instrument Serif", Georgia, serif;
-  font-size: 15px;
-  color: rgba(245, 242, 235, 0.72);
+  font-size: 19px;
+  color: rgba(245, 242, 235, 0.85);
+  margin: 0 0 28px 0;
   letter-spacing: -0.01em;
-  line-height: 1.1;
-}
-.loading-dial-sub em {
-  font-style: italic;
-  color: #e5b869;
 }
 
-/* Tactile Progress Track & Status */
-.loading-track-box {
+.loading-tagline em {
+  font-style: italic;
+  color: #ffffff;
+}
+
+/* Refined Glass Progress Bar */
+.loading-progress-box {
   width: 100%;
-  max-width: 320px;
+  max-width: 280px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.loading-track-bar {
+.loading-track {
   width: 100%;
-  height: 2px;
+  height: 4px;
   background: rgba(255, 255, 255, 0.08);
   border-radius: 999px;
   overflow: hidden;
   position: relative;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
-.loading-track-fill {
+.loading-fill {
   height: 100%;
-  background: linear-gradient(90deg, #8fb0ff, #e5b869);
   border-radius: 999px;
-  transition: width 0.25s ease-out;
-  box-shadow: 0 0 8px rgba(229, 184, 105, 0.6);
+  transition: width 0.22s cubic-bezier(0.2, 0, 0.2, 1);
 }
 
-.loading-status-row {
+.loading-meta-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 11px;
-  letter-spacing: 0.03em;
-}
-
-.loading-status-text {
+  font-family: "Inter", -apple-system, system-ui, sans-serif;
+  font-size: 11.5px;
   color: rgba(245, 242, 235, 0.55);
-  font-weight: 400;
 }
 
-.loading-status-pct {
-  color: #e5b869;
-  font-weight: 500;
+.loading-stage-label {
+  font-weight: 450;
+  letter-spacing: 0.01em;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 230px;
 }
 
-/* Bottom Frame Stamp */
-.loading-bottombar {
+.loading-pct-label {
+  font-weight: 600;
+  color: rgba(245, 242, 235, 0.85);
+  margin-left: 8px;
+}
+
+/* Elegant Bottom Footnote */
+.loading-footer {
   position: absolute;
-  bottom: clamp(16px, 2.5vw, 32px);
-  left: clamp(24px, 4vw, 56px);
-  right: clamp(24px, 4vw, 56px);
+  bottom: 24px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(245, 242, 235, 0.32);
+  gap: 8px;
+  font-family: "Inter", -apple-system, system-ui, sans-serif;
+  font-size: 11px;
+  color: rgba(245, 242, 235, 0.35);
+  letter-spacing: 0.04em;
   pointer-events: none;
   z-index: 10;
 }
 
-@media (max-width: 640px) {
-  .loading-topbar {
-    left: 20px;
-    right: 20px;
-    font-size: 9px;
-    letter-spacing: 0.08em;
+.loading-footer-sep {
+  opacity: 0.5;
+}
+
+@media (max-width: 480px) {
+  .loading-card {
+    padding: 32px 20px;
+    border-radius: 22px;
   }
-  .loading-crosshair--tl { top: 12px; left: 10px; font-size: 11px; }
-  .loading-crosshair--tr { top: 12px; right: 10px; font-size: 11px; }
-  .loading-crosshair--bl { bottom: 12px; left: 10px; font-size: 11px; }
-  .loading-crosshair--br { bottom: 12px; right: 10px; font-size: 11px; }
-  .loading-topbar__left { padding-left: 12px; }
-  .loading-topbar__right { padding-right: 12px; }
-  .loading-topbar__center { display: none; }
-  .loading-stage { padding: 12px; width: 100%; max-width: 320px; gap: 20px; }
-  .loading-dial-wrapper { width: 160px; height: 160px; }
-  .loading-dial-content .sanctra-wordmark { font-size: 28px; }
-  .loading-dial-sub { font-size: 13px; }
-  .loading-track-box { max-width: 260px; }
-  .loading-bottombar {
-    left: 16px;
-    right: 16px;
-    font-size: 8.5px;
-    letter-spacing: 0.06em;
-    gap: 6px;
-    white-space: nowrap;
-    overflow: hidden;
+  .loading-tagline {
+    font-size: 17px;
+    margin-bottom: 22px;
   }
 }

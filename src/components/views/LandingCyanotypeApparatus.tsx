@@ -377,6 +377,7 @@ export function LandingCyanotypeApparatus({
               type="button"
               onClick={onToggleRunning}
               aria-label={isRunning ? 'Pause focus timer' : 'Start focus timer'}
+              title={isRunning ? 'Pause focus timer (Space)' : 'Start focus timer (Space)'}
               className="flex items-center justify-center gap-2 px-5 sm:px-8 py-2.5 rounded-full font-sans text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0"
               style={{
                 backgroundColor: currentPalette.accent,

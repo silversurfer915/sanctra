@@ -353,6 +353,7 @@ export const TimerDial: React.FC<TimerDialProps> = ({
           <button
             onClick={onToggleStart}
             aria-label={isRunning ? 'Pause focus timer' : 'Start focus timer'}
+            title={isRunning ? 'Pause focus timer (Space)' : 'Start focus timer (Space)'}
             className="btn-sheen flex items-center justify-center gap-2.5 px-8 sm:px-10 py-3 sm:py-3.5 rounded-full font-sans font-bold text-sm sm:text-base tracking-wide transition-all duration-200 cursor-pointer"
             style={{
               backgroundColor: theme.buttonBg,
@@ -372,12 +373,6 @@ export const TimerDial: React.FC<TimerDialProps> = ({
                 <span>{status === 'paused' || status === 'break-paused' ? 'Resume' : 'Start Focus'}</span>
               </>
             )}
-            <span
-              className="hidden sm:inline-block text-[10px] font-sans uppercase font-bold px-1.5 py-0.5 rounded bg-black/20 ml-1"
-              style={{ color: theme.buttonText }}
-            >
-              Space
-            </span>
           </button>
         </div>
 
