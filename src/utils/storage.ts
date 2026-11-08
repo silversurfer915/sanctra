@@ -15,7 +15,7 @@ export {THEME_PALETTES, PRESET_THEME_MAP, getThemeName} from './wallpaperTheme.t
 export type {ThemeName} from './wallpaperTheme.ts';
 export const WALLPAPER_PRESETS: WallpaperPreset[] = [
   {id:'wp-video-lofi-meadow',name:'Sunlit Meadow',category:'Illustrated · Video',type:'motion',isPlusOnly:true,url:'/backgrounds/video/quality-v4/lofi-meadow-poster.jpg',thumbnail:'/backgrounds/video/quality-v4/lofi-meadow-poster.jpg',motionUrl:'/backgrounds/video/quality-v4/lofi-meadow.mp4'},
-  {id:'wp-art-rain',name:'Cloudside Study Desk',category:'Illustrated · Blue Mist',type:'scenic',url:'/backgrounds/illustrated-study-desk.v2.webp',thumbnail:'/backgrounds/illustrated-study-desk.thumb.v2.webp',motionUrl:'/backgrounds/video/quality-v4/starlit-study.mp4'},
+  {id:'wp-art-rain',name:'Cloudside Study Desk',category:'Illustrated · Blue Mist',type:'scenic',url:'/backgrounds/illustrated-study-desk.v2.webp',thumbnail:'/backgrounds/illustrated-study-desk.thumb.v2.webp',motionUrl:'/backgrounds/video/quality-v4/sanctra-desk-ambient-v2.mp4'},
   {id:'wp-art-lavender-lake',name:'Lavender Lake',category:'Illustrated · Lavender',type:'scenic',url:'/backgrounds/illustrated-lavender-lake.v2.webp',thumbnail:'/backgrounds/illustrated-lavender-lake.thumb.v2.webp'},
   {id:'wp-art-sand-nook',name:'Golden Reading Nook',category:'Illustrated · Warm Sand',type:'scenic',url:'/backgrounds/illustrated-sand-nook.webp',thumbnail:'/backgrounds/illustrated-sand-nook.thumb.webp'},
   {id:'wp-art-rose-terrace',name:'Rose Garden Terrace',category:'Illustrated · Soft Rose',type:'scenic',url:'/backgrounds/illustrated-rose-terrace.webp',thumbnail:'/backgrounds/illustrated-rose-terrace.thumb.webp'},

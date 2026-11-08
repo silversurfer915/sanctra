@@ -68,8 +68,8 @@ export function ObservatoryScene({paused = false}: ObservatorySceneProps) {
 
   return (
     <div className={`observatory-scene ${paused ? 'is-paused' : ''}`} aria-hidden="true">
-      <picture><source type="image/webp" srcSet="/backgrounds/landing-screen-poster.webp"/><img
-        src="/backgrounds/landing-screen-poster.jpg"
+      <picture><source type="image/webp" srcSet="/backgrounds/landing-sanctra-sanctuary-poster-v2.webp"/><img
+        src="/backgrounds/landing-sanctra-sanctuary-poster-v2.jpg"
         alt=""
         className={`observatory-poster ${isPlaying ? 'is-hidden' : ''}`}
         fetchPriority="high"
@@ -78,8 +78,8 @@ export function ObservatoryScene({paused = false}: ObservatorySceneProps) {
       <video
         ref={videoRef}
         className="observatory-video"
-        src="/backgrounds/landing-screen.mp4"
-        poster="/backgrounds/landing-screen-poster.jpg"
+        src="/backgrounds/landing-sanctra-sanctuary-v2.mp4"
+        poster="/backgrounds/landing-sanctra-sanctuary-poster-v2.jpg"
         autoPlay
         loop
         muted
