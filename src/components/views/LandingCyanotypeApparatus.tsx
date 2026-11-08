@@ -13,6 +13,33 @@ interface LandingCyanotypeApparatusProps {
   onOpenDesk: () => void;
 }
 
+export const LANDING_MODE_PALETTES = {
+  'pomodoro-25': {
+    accent: '#FDE68A', // Warm Pastel Champagne / Honey Starlight
+    accentSoft: '#FEF9C3',
+    textInk: '#1C1917',
+    stops: ['#FFFDF5', '#FEF3C7', '#FDE68A'],
+    glow: 'rgba(253, 230, 138, 0.40)',
+    wash: 'rgba(253, 230, 138, 0.14)',
+  },
+  'pomodoro-50': {
+    accent: '#BAE6FD', // Pastel Sky Blue
+    accentSoft: '#F0F9FF',
+    textInk: '#082136',
+    stops: ['#F0F9FF', '#E0F2FE', '#BAE6FD'],
+    glow: 'rgba(186, 230, 253, 0.40)',
+    wash: 'rgba(186, 230, 253, 0.14)',
+  },
+  countup: {
+    accent: '#A7F3D0', // Pastel Mint / Soft Sage
+    accentSoft: '#F0FDF4',
+    textInk: '#062518',
+    stops: ['#F0FDF4', '#D1FAE5', '#A7F3D0'],
+    glow: 'rgba(167, 243, 208, 0.40)',
+    wash: 'rgba(167, 243, 208, 0.14)',
+  },
+};
+
 export function LandingCyanotypeApparatus({
   timerMode,
   timerSeconds,
@@ -93,12 +120,6 @@ export function LandingCyanotypeApparatus({
 
   const strokeDashoffset = circumference - progressRatio * circumference;
 
-  // Active indicator bead position on the circular ring
-  // Native unrotated SVG coordinates:
-  // 12 o'clock is at angle 0 (x = 160, y = 160 - radius).
-  // Clockwise progression: x increases with sin(angle), y increases with -cos(angle).
-  // The progress circle has transform="rotate(-90 160 160)", which starts its stroke at 12 o'clock and fills clockwise.
-  // Therefore, (beadX, beadY) matches the stroke tip exactly with zero CSS rotation distortion.
   const angle = progressRatio * 2 * Math.PI;
   const beadX = 160 + radius * Math.sin(angle);
   const beadY = 160 - radius * Math.cos(angle);
@@ -109,33 +130,7 @@ export function LandingCyanotypeApparatus({
     return 'Free Count-Up';
   };
 
-  const modePalettes = {
-    'pomodoro-25': {
-      accent: '#C4B5FD', // Pastel Lavender
-      accentSoft: '#EDE9FE',
-      textInk: '#1E1238',
-      stops: ['#FAF5FF', '#DDD6FE', '#C4B5FD'],
-      glow: 'rgba(196, 181, 253, 0.45)',
-      wash: 'rgba(196, 181, 253, 0.18)',
-    },
-    'pomodoro-50': {
-      accent: '#BAE6FD', // Pastel Sky
-      accentSoft: '#F0F9FF',
-      textInk: '#082136',
-      stops: ['#F0F9FF', '#E0F2FE', '#BAE6FD'],
-      glow: 'rgba(186, 230, 253, 0.45)',
-      wash: 'rgba(186, 230, 253, 0.18)',
-    },
-    countup: {
-      accent: '#A7F3D0', // Pastel Mint
-      accentSoft: '#F0FDF4',
-      textInk: '#062518',
-      stops: ['#F0FDF4', '#D1FAE5', '#A7F3D0'],
-      glow: 'rgba(167, 243, 208, 0.45)',
-      wash: 'rgba(167, 243, 208, 0.18)',
-    },
-  };
-  const currentPalette = modePalettes[timerMode];
+  const currentPalette = LANDING_MODE_PALETTES[timerMode];
 
   return (
     <div
@@ -308,7 +303,7 @@ export function LandingCyanotypeApparatus({
                 }`}
                 style={
                   timerMode === 'pomodoro-25'
-                    ? { backgroundColor: '#C4B5FD', color: '#1E1238', boxShadow: '0 0 16px rgba(196, 181, 253, 0.4)' }
+                    ? { backgroundColor: currentPalette.accent, color: currentPalette.textInk, boxShadow: `0 0 16px ${currentPalette.glow}` }
                     : undefined
                 }
               >
