@@ -324,10 +324,8 @@ export function LandingView({
       </div>
       <div className="rs-vignette" aria-hidden="true" />
       <div className="rs-grain" aria-hidden="true" />
-      {/* First-paint scenic fallback for prerender & crawlers */}
-      <div className="hidden" aria-hidden="true">
-        <ObservatoryScene paused />
-      </div>
+      {/* Cinematic Looping Ambient Background Video */}
+      <ObservatoryScene />
 
       {/* Interactive Atmosphere Spores, Subtle Rain Streaks & Click Sparks */}
       <LandingAtmosphereCanvas />
