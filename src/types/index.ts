@@ -60,6 +60,12 @@ export interface StudySession {
 }
 
 export type ThemeId =
+  | 'nocturne-gold'
+  | 'cyber-cyan'
+  | 'sakura-dusk'
+  | 'emerald-solarium'
+  | 'starlight-violet'
+  | 'vintage-academy'
   | 'violet-night'
   | 'ocean-teal'
   | 'midnight-blue'

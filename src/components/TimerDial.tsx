@@ -1,7 +1,8 @@
 import React, { useEffect, useId } from 'react';
-import { Play, Pause, RotateCcw, BookmarkCheck, Maximize2, Minimize2, Sliders, Layers, Eye } from 'lucide-react';
-import type { TimerMode, TimerStatus, Subject } from '../types/index.ts';
+import { Play, Pause, RotateCcw, BookmarkCheck, Maximize2, Minimize2, Sliders, Layers, Eye, Palette } from 'lucide-react';
+import type { TimerMode, TimerStatus, Subject, ThemeId } from '../types/index.ts';
 import { canToggleTimerShortcut } from '../utils/timerShortcut.ts';
+import { getThemePreset } from '../utils/themeRegistry.ts';
 
 interface TimerDialProps {
   minimal?: boolean;
@@ -22,6 +23,8 @@ interface TimerDialProps {
   onRequestSave: () => void;
   onToggleFullscreen: () => void;
   onOpenModeModal: () => void;
+  activeThemeId?: ThemeId;
+  onOpenThemeModal?: () => void;
 }
 
 export const TimerDial: React.FC<TimerDialProps> = ({
@@ -43,8 +46,11 @@ export const TimerDial: React.FC<TimerDialProps> = ({
   onRequestSave,
   onToggleFullscreen,
   onOpenModeModal,
+  activeThemeId,
+  onOpenThemeModal,
 }) => {
   const gradientPrefix = useId();
+  const theme = getThemePreset(activeThemeId);
 
   // Listen for Spacebar to toggle Start/Pause
   useEffect(() => {
@@ -104,16 +110,16 @@ export const TimerDial: React.FC<TimerDialProps> = ({
     }
     if (status === 'paused') {
       return {
-        stroke: '#e5b869',
+        stroke: theme.accent,
         gradientId: gradientPrefix + '-pauseGradient',
-        glow: 'drop-shadow(0 0 10px rgba(229, 184, 105, 0.35))',
+        glow: `drop-shadow(0 0 12px ${theme.accent}66)`,
       };
     }
     if (status === 'running') {
       return {
-        stroke: '#e5b869',
+        stroke: theme.accent,
         gradientId: gradientPrefix + '-focusGradient',
-        glow: 'drop-shadow(0 0 18px rgba(229, 184, 105, 0.55))',
+        glow: theme.ringGlow,
       };
     }
     return {
@@ -171,7 +177,7 @@ export const TimerDial: React.FC<TimerDialProps> = ({
           className="absolute inset-2 rounded-full transition-all duration-700 pointer-events-none"
           style={{
             background: isRunning
-              ? 'radial-gradient(circle, rgba(229, 184, 105, 0.14) 0%, rgba(20, 36, 62, 0.08) 50%, transparent 75%)'
+              ? theme.ambientCoreGlow
               : 'radial-gradient(circle, rgba(255, 255, 255, 0.02) 0%, transparent 70%)',
           }}
         />
@@ -187,9 +193,9 @@ export const TimerDial: React.FC<TimerDialProps> = ({
         >
           <defs>
             <linearGradient id={gradientPrefix + '-focusGradient'} x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#fff2cc" />
-              <stop offset="50%" stopColor="#e5b869" />
-              <stop offset="100%" stopColor="#c8933e" />
+              <stop offset="0%" stopColor={theme.gradientStops[0]} />
+              <stop offset="50%" stopColor={theme.gradientStops[1]} />
+              <stop offset="100%" stopColor={theme.gradientStops[2]} />
             </linearGradient>
             <linearGradient id={gradientPrefix + '-breakGradient'} x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#a7f3d0" />
@@ -197,8 +203,8 @@ export const TimerDial: React.FC<TimerDialProps> = ({
               <stop offset="100%" stopColor="#059669" />
             </linearGradient>
             <linearGradient id={gradientPrefix + '-pauseGradient'} x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#fef08a" />
-              <stop offset="100%" stopColor="#e5b869" />
+              <stop offset="0%" stopColor={theme.accentSoft} />
+              <stop offset="100%" stopColor={theme.accent} />
             </linearGradient>
             <linearGradient id={gradientPrefix + '-idleGradient'} x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="rgba(255, 255, 255, 0.22)" />
@@ -217,7 +223,7 @@ export const TimerDial: React.FC<TimerDialProps> = ({
                 y1={isMajor ? '8' : '10'}
                 x2="160"
                 y2={isMajor ? '18' : '15'}
-                stroke={isMajor ? 'rgba(229, 184, 105, 0.35)' : 'rgba(255, 255, 255, 0.08)'}
+                stroke={isMajor ? `${theme.accent}55` : 'rgba(255, 255, 255, 0.08)'}
                 strokeWidth={isMajor ? '1.5' : '1'}
                 transform={`rotate(${tickAngle} 160 160)`}
               />
@@ -258,11 +264,11 @@ export const TimerDial: React.FC<TimerDialProps> = ({
               cx={beadX}
               cy={beadY}
               r="4.5"
-              fill="#fffdf8"
-              stroke="#e5b869"
+              fill={theme.beadColor}
+              stroke={theme.beadStroke}
               strokeWidth="2"
               style={{
-                filter: 'drop-shadow(0 0 10px rgba(229, 184, 105, 0.9))',
+                filter: `drop-shadow(0 0 10px ${theme.accent})`,
               }}
               aria-label="Timer progress indicator"
             />
@@ -273,29 +279,52 @@ export const TimerDial: React.FC<TimerDialProps> = ({
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
           {/* Status / Break indicator */}
           {!minimal && (
-            <span className="text-[11px] font-sans uppercase tracking-[0.22em] font-medium text-[#e5b869] mb-1">
+            <span
+              className="text-[11px] font-sans uppercase tracking-[0.22em] font-medium mb-1 transition-colors"
+              style={{ color: theme.accent }}
+            >
               {status === 'break-running' || status === 'break-ready' || status === 'break-paused'
                 ? 'Break Time'
                 : getModeLabel()}
             </span>
           )}
 
-          {/* Large Tabular Didone Time Readout */}
-          <div className="timer-readout font-serif text-6xl sm:text-7xl font-normal tracking-tight tabular-nums text-[#f5f2eb] drop-shadow-[0_2px_24px_rgba(229,184,105,0.35)] py-0.5 select-none leading-none">
+          {/* Large Tabular Time Readout */}
+          <div
+            className="timer-readout text-6xl sm:text-7xl font-normal tracking-tight tabular-nums text-[#f5f2eb] py-0.5 select-none leading-none transition-all"
+            style={{
+              fontFamily: theme.fontTimer,
+              filter: `drop-shadow(0 2px 24px ${theme.accent}55)`,
+            }}
+          >
             {formatDisplayTime(seconds)}
           </div>
 
-          {/* Quick Mode & Customization Trigger */}
+          {/* Quick Mode & Themes Triggers */}
           {!minimal && (
             <div className="mt-3 flex items-center gap-2 z-20">
               <button
+                type="button"
                 onClick={onOpenModeModal}
-                className="px-3.5 py-1.5 rounded-full text-xs font-sans font-medium text-slate-300 hover:text-white bg-black/40 hover:bg-black/60 border border-white/10 hover:border-white/25 flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
+                className="px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-sans font-medium text-slate-300 hover:text-white bg-black/40 hover:bg-black/60 border border-white/10 hover:border-white/25 flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
                 aria-label="Customize timer mode and duration"
               >
-                <Sliders className="w-3 h-3 text-[#e5b869]" />
+                <Sliders className="w-3 h-3" style={{ color: theme.accent }} />
                 <span>Customize</span>
               </button>
+
+              {onOpenThemeModal && (
+                <button
+                  type="button"
+                  onClick={onOpenThemeModal}
+                  className="px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-sans font-medium text-slate-300 hover:text-white bg-black/40 hover:bg-black/60 border border-white/10 hover:border-white/25 flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
+                  aria-label="Open timer themes"
+                  title="Switch theme"
+                >
+                  <Palette className="w-3 h-3" style={{ color: theme.accent }} />
+                  <span>Themes</span>
+                </button>
+              )}
             </div>
           )}
 
@@ -337,20 +366,29 @@ export const TimerDial: React.FC<TimerDialProps> = ({
         <button
           onClick={onToggleStart}
           aria-label={isRunning ? 'Pause focus timer' : 'Start focus timer'}
-          className="btn-sheen flex items-center gap-2 px-7 sm:px-9 py-3 rounded-full font-sans font-bold text-sm sm:text-base tracking-wide transition-all duration-200 cursor-pointer bg-[#e5b869] hover:bg-[#edd085] text-[#12151b] shadow-[0_4px_24px_rgba(229,184,105,0.4)] ring-1 ring-[#e5b869]/60"
+          className="btn-sheen flex items-center gap-2 px-7 sm:px-9 py-3 rounded-full font-sans font-bold text-sm sm:text-base tracking-wide transition-all duration-200 cursor-pointer"
+          style={{
+            backgroundColor: theme.buttonBg,
+            color: theme.buttonText,
+            boxShadow: theme.buttonGlow,
+            border: `1px solid ${theme.buttonRing}`,
+          }}
         >
           {isRunning ? (
             <>
-              <Pause className="w-4 h-4 fill-[#12151b]" />
+              <Pause className="w-4 h-4 fill-current" />
               <span>Pause</span>
             </>
           ) : (
             <>
-              <Play className="w-4 h-4 fill-[#12151b] ml-0.5" />
+              <Play className="w-4 h-4 fill-current ml-0.5" />
               <span>{status === 'paused' || status === 'break-paused' ? 'Resume' : 'Start'}</span>
             </>
           )}
-          <span className="hidden sm:inline-block text-[10px] font-sans uppercase font-bold px-1.5 py-0.5 rounded bg-black/20 text-[#12151b] ml-1">
+          <span
+            className="hidden sm:inline-block text-[10px] font-sans uppercase font-bold px-1.5 py-0.5 rounded bg-black/20 ml-1"
+            style={{ color: theme.buttonText }}
+          >
             Space
           </span>
         </button>
@@ -373,9 +411,14 @@ export const TimerDial: React.FC<TimerDialProps> = ({
           disabled={!canSave}
           aria-label="Save focus session"
           title={!canSave ? 'Start a session to save focus time' : 'Save focus session'}
-          className="btn-sheen-subtle flex items-center gap-2 px-4 sm:px-5 py-3 rounded-full text-xs sm:text-sm font-sans font-semibold tracking-wide text-[#e5b869] bg-[#e5b869]/10 hover:bg-[#e5b869]/20 border border-[#e5b869]/30 hover:border-[#e5b869]/50 shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+          className="btn-sheen-subtle flex items-center gap-2 px-4 sm:px-5 py-3 rounded-full text-xs sm:text-sm font-sans font-semibold tracking-wide shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+          style={{
+            color: theme.accent,
+            backgroundColor: `${theme.accent}15`,
+            borderColor: `${theme.accent}40`,
+          }}
         >
-          <BookmarkCheck className="w-4 h-4 text-[#e5b869]" />
+          <BookmarkCheck className="w-4 h-4" style={{ color: theme.accent }} />
           <span>Save session</span>
         </button>
 
