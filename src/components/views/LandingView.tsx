@@ -13,7 +13,7 @@ import {
 import { Brand } from '../Brand.tsx';
 import { ObservatoryScene } from '../ObservatoryScene.tsx';
 import { LandingAtmosphereCanvas } from './LandingAtmosphereCanvas.tsx';
-import { LandingCyanotypeApparatus } from './LandingCyanotypeApparatus.tsx';
+import { LandingCyanotypeApparatus, LANDING_MODE_PALETTES } from './LandingCyanotypeApparatus.tsx';
 import { playAmbientSound, stopAmbientSound } from '../../utils/landingSoundPreview.ts';
 import { PLUS_PRICING_PLANS } from '../../utils/subscriptionPlans.ts';
 import './landing-preview.css';
@@ -306,10 +306,20 @@ export function LandingView({
     '<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 0.96 0 0 0 0 0.94 0 0 0 0 0.88 0 0 0 0.08 0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>';
   const grainUrl = `url("data:image/svg+xml,${encodeURIComponent(grainSvg)}")`;
 
+  const activeLandingPalette = LANDING_MODE_PALETTES[timerMode];
+
   return (
     <div
       className="sanctra-landing landing-renewed min-h-screen pb-24 md:pb-12"
-      style={{ '--rs-grain': grainUrl } as React.CSSProperties}
+      style={{
+        '--rs-grain': grainUrl,
+        '--rs-amber': activeLandingPalette.accent,
+        '--rs-amber-soft': activeLandingPalette.wash,
+        '--rs-amber-glow': activeLandingPalette.glow,
+        '--rs-accent': activeLandingPalette.accent,
+        '--rs-accent-soft': activeLandingPalette.accentSoft,
+        '--rs-accent-glow': activeLandingPalette.glow,
+      } as React.CSSProperties}
     >
       <a className="os-skip-link" href="#landing-main">
         Skip to content
@@ -486,10 +496,12 @@ export function LandingView({
                   onOpenDesk={() => onStartStudying(activeSubject || undefined)}
                 />
 
-                {/* Floating Counter beneath the apparatus */}
-                <div className="rs-count pt-6 flex items-center justify-between w-full px-2">
-                  <span className="rs-count__n">0425</span>
-                  <span className="text-xs font-sans text-[var(--rs-cream-soft)]">hours focused in Sanctra today</span>
+                {/* Refined Telemetry Pill beneath the apparatus */}
+                <div className="pt-4 flex items-center justify-center w-full px-2">
+                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/10 bg-[#12151a]/70 backdrop-blur-md shadow-sm">
+                    <span className="font-serif text-base text-[var(--rs-cream)] tabular-nums font-normal">0425</span>
+                    <span className="text-[11px] font-sans text-[var(--rs-cream-dim)] font-medium">hours focused in Sanctra today</span>
+                  </div>
                 </div>
               </div>
             </div>

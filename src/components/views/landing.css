@@ -254,6 +254,8 @@
   font-family: var(--rs-serif) !important;
   font-weight: 400 !important;
   color: var(--rs-amber);
+  text-shadow: 0 0 24px var(--rs-amber-glow, rgba(253, 230, 138, 0.35));
+  transition: color 0.4s ease, text-shadow 0.4s ease;
 }
 
 .landing-renewed h2 em,
