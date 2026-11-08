@@ -106,7 +106,7 @@
   contain: strict;
   pointer-events: none;
   overflow: hidden;
-  background-color: #0b0d11;
+  background-color: #05070c;
 }
 
 .rs-blob {
@@ -117,13 +117,13 @@
   pointer-events: none;
 }
 
-/* Deep Prussian Blue, Honey Amber, Twilight Lilac & Emerald Moss ambient light drifts */
+/* Pristine celestial atmospheric lighting: zero muddy browns, zero swamp stops */
 .rs-blob--a {
   width: 65vmax;
   height: 55vmax;
   left: -15%;
   top: -10%;
-  background: radial-gradient(circle, rgba(14, 165, 233, 0.22) 0%, rgba(30, 58, 138, 0.14) 45%, rgba(11, 13, 17, 0) 70%);
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, rgba(30, 58, 138, 0.05) 50%, transparent 70%);
   animation: rs-drift-a 28s ease-in-out infinite alternate;
 }
 
@@ -132,7 +132,7 @@
   height: 60vmax;
   left: 32%;
   top: 8%;
-  background: radial-gradient(circle, rgba(245, 158, 11, 0.25) 0%, rgba(217, 119, 6, 0.12) 45%, rgba(45, 34, 18, 0) 70%);
+  background: radial-gradient(circle, rgba(229, 184, 105, 0.14) 0%, rgba(229, 184, 105, 0.03) 50%, transparent 70%);
   opacity: 0.9;
   animation: rs-drift-b 34s ease-in-out infinite alternate;
 }
@@ -142,18 +142,13 @@
   height: 44vmax;
   right: -10%;
   bottom: -5%;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.20) 0%, rgba(124, 58, 237, 0.10) 45%, rgba(55, 40, 20, 0) 70%);
+  background: radial-gradient(circle, rgba(129, 140, 248, 0.09) 0%, transparent 70%);
   opacity: 0.85;
   animation: rs-drift-c 30s ease-in-out infinite alternate;
 }
 
 .rs-blob--d {
-  width: 42vmax;
-  height: 50vmax;
-  left: -8%;
-  bottom: -15%;
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.18) 0%, rgba(6, 78, 59, 0.10) 45%, rgba(11, 15, 13, 0) 70%);
-  animation: rs-drift-a 38s ease-in-out infinite alternate-reverse;
+  display: none;
 }
 
 @keyframes rs-drift-a {
@@ -171,7 +166,7 @@
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: radial-gradient(130% 95% at 50% 40%, transparent 45%, rgba(8, 10, 14, 0.80));
+  background: radial-gradient(130% 95% at 50% 40%, transparent 55%, rgba(4, 5, 8, 0.72));
 }
 
 .rs-grain {
@@ -181,7 +176,7 @@
   pointer-events: none;
   background-image: var(--rs-grain);
   will-change: transform;
-  opacity: 0.32;
+  opacity: 0.045;
   animation: rs-grain 0.9s steps(6) infinite;
 }
 

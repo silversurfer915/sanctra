@@ -1,5 +1,5 @@
 import React, { useEffect, useId } from 'react';
-import { Play, Pause, RotateCcw, BookmarkCheck, Maximize2, Minimize2, Sliders, Layers, Eye, Palette } from 'lucide-react';
+import { Play, Pause, RotateCcw, BookmarkCheck, Maximize2, Minimize2, Sliders, Layers, Eye } from 'lucide-react';
 import type { TimerMode, TimerStatus, Subject, ThemeId } from '../types/index.ts';
 import { canToggleTimerShortcut } from '../utils/timerShortcut.ts';
 import { getThemePreset } from '../utils/themeRegistry.ts';
@@ -24,7 +24,6 @@ interface TimerDialProps {
   onToggleFullscreen: () => void;
   onOpenModeModal: () => void;
   activeThemeId?: ThemeId;
-  onOpenThemeModal?: () => void;
 }
 
 export const TimerDial: React.FC<TimerDialProps> = ({
@@ -47,7 +46,6 @@ export const TimerDial: React.FC<TimerDialProps> = ({
   onToggleFullscreen,
   onOpenModeModal,
   activeThemeId,
-  onOpenThemeModal,
 }) => {
   const gradientPrefix = useId();
   const theme = getThemePreset(activeThemeId);
@@ -300,31 +298,18 @@ export const TimerDial: React.FC<TimerDialProps> = ({
             {formatDisplayTime(seconds)}
           </div>
 
-          {/* Quick Mode & Themes Triggers */}
+          {/* Quick Mode Trigger */}
           {!minimal && (
-            <div className="mt-3 flex items-center gap-2 z-20">
+            <div className="mt-3 flex items-center justify-center gap-2 z-20">
               <button
                 type="button"
                 onClick={onOpenModeModal}
-                className="px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-sans font-medium text-slate-300 hover:text-white bg-black/40 hover:bg-black/60 border border-white/10 hover:border-white/25 flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
+                className="px-3.5 py-1.5 rounded-full text-xs font-sans font-medium text-slate-300 hover:text-white bg-black/40 hover:bg-black/60 border border-white/10 hover:border-white/25 flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
                 aria-label="Customize timer mode and duration"
               >
                 <Sliders className="w-3 h-3" style={{ color: theme.accent }} />
                 <span>Customize</span>
               </button>
-
-              {onOpenThemeModal && (
-                <button
-                  type="button"
-                  onClick={onOpenThemeModal}
-                  className="px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-sans font-medium text-slate-300 hover:text-white bg-black/40 hover:bg-black/60 border border-white/10 hover:border-white/25 flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
-                  aria-label="Open timer themes"
-                  title="Switch theme"
-                >
-                  <Palette className="w-3 h-3" style={{ color: theme.accent }} />
-                  <span>Themes</span>
-                </button>
-              )}
             </div>
           )}
 

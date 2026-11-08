@@ -1,12 +1,11 @@
 import { useEffect, useRef } from 'react';
 
-interface BokehOrb {
+interface StarlightDust {
   x: number;
   y: number;
   radius: number;
-  baseRadius: number;
-  alpha: number;
   baseAlpha: number;
+  alpha: number;
   color: string;
   pulseSpeed: number;
   pulsePhase: number;
@@ -56,32 +55,29 @@ export function LandingAtmosphereCanvas() {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    // 1. Soft Distant Bokeh Orbs (Streetlights & Candlelight seen through rain-blurred window)
-    const bokehColors = [
-      '245, 158, 11',   // Warm amber streetlight
-      '253, 230, 138',  // Soft champagne glow
-      '251, 146, 60',   // Cozy fireplace orange
-      '14, 165, 233',   // Distant cyan neon
-      '168, 85, 247',   // Twilight wisteria
+    // 1. Delicate Celestial Starlight Dust Spores (clean, non-muddy luminous dust)
+    const starlightColors = [
+      '240, 245, 255', // Pure crystalline white
+      '215, 230, 255', // Soft celestial blue
+      '255, 244, 225', // Warm starlight gold
     ];
 
-    const bokehCount = Math.min(18, Math.max(10, Math.floor((width * height) / 80000)));
-    const bokehOrbs: BokehOrb[] = [];
-    for (let i = 0; i < bokehCount; i++) {
-      const baseR = 50 + Math.random() * 85;
-      const baseA = 0.025 + Math.random() * 0.045;
-      bokehOrbs.push({
+    const dustCount = Math.min(28, Math.max(16, Math.floor((width * height) / 55000)));
+    const starlightParticles: StarlightDust[] = [];
+    for (let i = 0; i < dustCount; i++) {
+      const r = 1.0 + Math.random() * 1.6;
+      const baseA = 0.18 + Math.random() * 0.35;
+      starlightParticles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        baseRadius: baseR,
-        radius: baseR,
+        radius: r,
         baseAlpha: baseA,
         alpha: baseA,
-        color: bokehColors[Math.floor(Math.random() * bokehColors.length)],
-        pulseSpeed: 0.4 + Math.random() * 0.8,
+        color: starlightColors[Math.floor(Math.random() * starlightColors.length)],
+        pulseSpeed: 0.8 + Math.random() * 1.4,
         pulsePhase: Math.random() * Math.PI * 2,
-        vx: (Math.random() - 0.5) * 0.08,
-        vy: (Math.random() - 0.5) * 0.06,
+        vx: (Math.random() - 0.5) * 0.05,
+        vy: -0.04 - Math.random() * 0.06, // subtle upward drift
       });
     }
 
@@ -178,47 +174,32 @@ export function LandingAtmosphereCanvas() {
 
       ctx.clearRect(0, 0, width, height);
 
-      // A. Warm Amber Desk Corona Glow (Centered behind the desk dial)
-      const centerX = width * 0.5;
-      const centerY = height * 0.42;
-      const breathPhase = Math.sin(time * 0.0008); // Relaxed ~7.8s breathing period
-      const breathRadius = 320 + breathPhase * 45;
-      const breathAlpha = 0.12 + breathPhase * 0.03;
+      // Luminous Starlight Dust Spores (clean, non-muddy twinkling micro-points)
+      for (const p of starlightParticles) {
+        p.x += p.vx;
+        p.y += p.vy;
 
-      const solarGrad = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, breathRadius);
-      solarGrad.addColorStop(0, `rgba(229, 184, 105, ${breathAlpha})`);
-      solarGrad.addColorStop(0.4, `rgba(245, 158, 11, ${breathAlpha * 0.45})`);
-      solarGrad.addColorStop(0.75, `rgba(14, 165, 233, ${breathAlpha * 0.18})`);
-      solarGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        if (p.x < -10) p.x = width + 10;
+        if (p.x > width + 10) p.x = -10;
+        if (p.y < -10) p.y = height + 10;
+        if (p.y > height + 10) p.y = -10;
 
-      ctx.fillStyle = solarGrad;
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, breathRadius, 0, Math.PI * 2);
-      ctx.fill();
+        const pulse = Math.sin(time * 0.001 * p.pulseSpeed + p.pulsePhase);
+        const currentAlpha = Math.max(0.08, p.baseAlpha * (0.75 + pulse * 0.35));
 
-      // B. Warm Out-of-Focus Streetlamp Bokeh Lights
-      for (const orb of bokehOrbs) {
-        orb.x += orb.vx;
-        orb.y += orb.vy;
-
-        if (orb.x < -orb.radius) orb.x = width + orb.radius;
-        if (orb.x > width + orb.radius) orb.x = -orb.radius;
-        if (orb.y < -orb.radius) orb.y = height + orb.radius;
-        if (orb.y > height + orb.radius) orb.y = -orb.radius;
-
-        const pulse = Math.sin(time * 0.001 * orb.pulseSpeed + orb.pulsePhase);
-        orb.radius = orb.baseRadius * (0.92 + pulse * 0.15);
-        orb.alpha = Math.max(0.015, orb.baseAlpha * (0.85 + pulse * 0.3));
-
-        const orbGrad = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, orb.radius);
-        orbGrad.addColorStop(0, `rgba(${orb.color}, ${orb.alpha})`);
-        orbGrad.addColorStop(0.5, `rgba(${orb.color}, ${orb.alpha * 0.45})`);
-        orbGrad.addColorStop(1, `rgba(${orb.color}, 0)`);
-
-        ctx.fillStyle = orbGrad;
+        // Core bright star point
+        ctx.fillStyle = `rgba(${p.color}, ${currentAlpha})`;
         ctx.beginPath();
-        ctx.arc(orb.x, orb.y, orb.radius, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         ctx.fill();
+
+        // Subtle soft outer shimmer
+        if (p.radius > 1.4) {
+          ctx.fillStyle = `rgba(${p.color}, ${currentAlpha * 0.25})`;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius * 2.4, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
 
       // C. Background Soft Rain Mist
