@@ -272,28 +272,29 @@ export function LandingCyanotypeApparatus({
           </div>
         </div>
 
-        {/* Action Button Pill Bar - Mathematically Centered via CSS Grid */}
-        <div className="relative z-10 w-full pt-5 border-t border-white/10 grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-3">
-          {/* Left Column: Reset CTA pinned towards center */}
-          <div className="flex justify-end">
+        {/* Action Button Pill Bar - 100% Mathematically and Visually Centered */}
+        <div className="relative z-10 w-full pt-5 border-t border-white/10 flex items-center justify-between gap-2 sm:gap-3">
+          {/* Left Column: Reset CTA (Symmetric width) */}
+          <div className="w-[84px] sm:w-[104px] shrink-0 flex justify-start">
             <button
               type="button"
               onClick={onResetTimer}
               title="Reset focus timer"
               aria-label="Reset focus timer"
-              className="flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-2.5 rounded-full border border-white/10 bg-white/5 text-[var(--rs-cream-soft)] hover:text-white hover:bg-white/10 text-xs font-sans font-medium transition-all cursor-pointer whitespace-nowrap shrink-0"
+              className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-full border border-white/10 bg-white/5 text-[var(--rs-cream-soft)] hover:text-white hover:bg-white/10 text-xs font-sans font-medium transition-all cursor-pointer whitespace-nowrap shrink-0"
             >
               <RotateCcw size={13} />
               <span>Reset</span>
             </button>
           </div>
 
-          {/* Center Column: Start/Pause CTA in exact geometric center of the card */}
-          <div className="flex justify-center">
+          {/* Center Column: Start / Pause CTA (Dead-center of the card and dial) */}
+          <div className="flex-1 flex justify-center min-w-0">
             <button
               type="button"
               onClick={onToggleRunning}
-              className="flex items-center justify-center gap-2 px-6 sm:px-8 py-2.5 rounded-full bg-[var(--rs-amber)] text-[#0b0d11] font-sans text-xs font-bold hover:bg-[#ebd090] transition-all shadow-lg shadow-[rgba(229,184,105,0.25)] cursor-pointer whitespace-nowrap shrink-0 min-w-[130px]"
+              aria-label={isRunning ? 'Pause focus timer' : 'Start focus timer'}
+              className="flex items-center justify-center gap-2 px-5 sm:px-8 py-2.5 rounded-full bg-[var(--rs-amber)] text-[#0b0d11] font-sans text-xs font-bold hover:bg-[#ebd090] transition-all shadow-lg shadow-[rgba(229,184,105,0.25)] cursor-pointer whitespace-nowrap shrink-0"
             >
               {isRunning ? (
                 <>
@@ -306,18 +307,17 @@ export function LandingCyanotypeApparatus({
                   <span>Start Focus</span>
                 </>
               )}
-              <span className="text-[9px] uppercase font-bold px-1.5 py-0.5 rounded bg-black/20 text-[#0b0d11] ml-0.5 hidden sm:inline-block">
-                Space
-              </span>
             </button>
           </div>
 
-          {/* Right Column: Enter Desk CTA pinned towards center */}
-          <div className="flex justify-start">
+          {/* Right Column: Enter Desk CTA (Identical symmetric width to Reset) */}
+          <div className="w-[84px] sm:w-[104px] shrink-0 flex justify-end">
             <button
               type="button"
               onClick={onOpenDesk}
-              className="flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-2.5 rounded-full border border-white/10 bg-white/5 text-[var(--rs-cream-soft)] hover:text-[var(--rs-amber)] hover:border-[var(--rs-amber)]/30 hover:bg-white/10 text-xs font-sans font-medium transition-all cursor-pointer whitespace-nowrap shrink-0"
+              title="Enter full study desk"
+              aria-label="Enter full study desk"
+              className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-full border border-white/10 bg-white/5 text-[var(--rs-cream-soft)] hover:text-[var(--rs-amber)] hover:border-[var(--rs-amber)]/30 hover:bg-white/10 text-xs font-sans font-medium transition-all cursor-pointer whitespace-nowrap shrink-0"
             >
               <span>Enter Desk</span>
               <ArrowUpRight size={13} />
