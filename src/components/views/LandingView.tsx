@@ -112,7 +112,7 @@ const STUDY_CIRCLES_PLATES = [
     num: '04',
     room: 'Engineering Lab',
     count: '15 studying',
-    rhythm: 'Exam Countdown',
+    rhythm: 'Timed Countdown',
     subject: 'Physics Mechanics & Mock Tests',
     note: 'Timed problem-solving blocks with synchronized start times.',
     occupied: 15,
@@ -578,7 +578,7 @@ export function LandingView({
                   Finite Deadlines
                 </h3>
                 <p className="text-sm text-[var(--rs-cream-soft)] leading-relaxed font-sans">
-                  Set a concrete target time for mock exams, essays, or timed assignments. The clock enforces a quiet, disciplined stopping point.
+                  Set a concrete target time for practice tests, essays, or timed assignments. The clock enforces a quiet, disciplined stopping point.
                 </p>
 
                 {/* Tactile Countdown Strip */}
@@ -600,7 +600,7 @@ export function LandingView({
 
               <div className="w-full pt-4 border-t border-[var(--rs-border)] space-y-3">
                 <div className="flex items-center justify-between text-xs font-sans text-[var(--rs-cream-dim)]">
-                  <span>Exam mock limits</span>
+                  <span>Timed test limits</span>
                   <span className="text-[var(--rs-rose)] font-medium">Timed test</span>
                 </div>
                 <button

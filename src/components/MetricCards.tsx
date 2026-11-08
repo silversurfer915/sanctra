@@ -37,8 +37,8 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
   const goalPercent = Math.min(100, Math.round((todaySeconds / (targetSeconds || 1)) * 100));
 
   const cardStyle = {
-    border: `1px solid ${theme.accent}26`,
-    boxShadow: `0 4px 20px rgba(0, 0, 0, 0.25), 0 0 16px ${theme.accent}0d`,
+    border: `1px solid ${theme.accent}2b`,
+    boxShadow: `0 4px 20px rgba(0, 0, 0, 0.25), 0 0 18px ${theme.accent}14`,
   };
 
   return (
@@ -55,8 +55,8 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
             {categoryLabel}
           </span>
           <Layers
-            className="w-3.5 h-3.5 text-[var(--rs-cream-soft)]/50 transition-all group-hover:scale-110"
-            style={{ color: undefined }}
+            className="w-3.5 h-3.5 transition-all group-hover:scale-110"
+            style={{ color: theme.accent }}
           />
         </div>
         <div
@@ -82,7 +82,8 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
             Today's Progress
           </span>
           <CheckCircle2
-            className="w-3.5 h-3.5 text-[var(--rs-cream-soft)]/50 transition-all group-hover:scale-110"
+            className="w-3.5 h-3.5 transition-all group-hover:scale-110"
+            style={{ color: theme.accent }}
           />
         </div>
         <div
@@ -120,7 +121,8 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
             Study Streak
           </span>
           <Flame
-            className="w-3.5 h-3.5 text-[var(--rs-cream-soft)]/50 transition-all group-hover:scale-110"
+            className="w-3.5 h-3.5 transition-all group-hover:scale-110"
+            style={{ color: theme.accent }}
           />
         </div>
         <div
@@ -143,7 +145,7 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
           <span className="text-[10px] font-sans font-medium uppercase tracking-[0.14em] text-[var(--rs-cream-soft)]/75">
             This Week
           </span>
-          <Calendar className="w-3.5 h-3.5 text-[var(--rs-cream-soft)]/50" />
+          <Calendar className="w-3.5 h-3.5" style={{ color: theme.accent }} />
         </div>
         <div
           className="text-2xl sm:text-3xl font-normal text-[var(--rs-cream)] tracking-tight tabular-nums my-1"

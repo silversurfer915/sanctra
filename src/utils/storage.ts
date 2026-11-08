@@ -14,9 +14,8 @@ export const DEFAULT_SUBJECTS: Subject[] = [
 export {THEME_PALETTES, PRESET_THEME_MAP, getThemeName} from './wallpaperTheme.ts';
 export type {ThemeName} from './wallpaperTheme.ts';
 export const WALLPAPER_PRESETS: WallpaperPreset[] = [
-  {id:'wp-sanctra-noir',name:'Botanical Obsidian Noir',category:'Sanctra · Botanical Noir',type:'scenic',url:'/backgrounds/botanical-noir.webp',thumbnail:'/backgrounds/botanical-noir.webp'},
   {id:'wp-video-lofi-meadow',name:'Sunlit Meadow',category:'Illustrated · Video',type:'motion',isPlusOnly:true,url:'/backgrounds/video/quality-v4/lofi-meadow-poster.jpg',thumbnail:'/backgrounds/video/quality-v4/lofi-meadow-poster.jpg',motionUrl:'/backgrounds/video/quality-v4/lofi-meadow.mp4'},
-  {id:'wp-art-rain',name:'Cloudside Study Desk',category:'Illustrated · Blue Mist',type:'scenic',url:'/backgrounds/illustrated-study-desk.v2.webp',thumbnail:'/backgrounds/illustrated-study-desk.thumb.v2.webp'},
+  {id:'wp-art-rain',name:'Cloudside Study Desk',category:'Illustrated · Blue Mist',type:'scenic',url:'/backgrounds/illustrated-study-desk.v2.webp',thumbnail:'/backgrounds/illustrated-study-desk.thumb.v2.webp',motionUrl:'/backgrounds/video/quality-v4/starlit-study.mp4'},
   {id:'wp-art-lavender-lake',name:'Lavender Lake',category:'Illustrated · Lavender',type:'scenic',url:'/backgrounds/illustrated-lavender-lake.v2.webp',thumbnail:'/backgrounds/illustrated-lavender-lake.thumb.v2.webp'},
   {id:'wp-art-sand-nook',name:'Golden Reading Nook',category:'Illustrated · Warm Sand',type:'scenic',url:'/backgrounds/illustrated-sand-nook.webp',thumbnail:'/backgrounds/illustrated-sand-nook.thumb.webp'},
   {id:'wp-art-rose-terrace',name:'Rose Garden Terrace',category:'Illustrated · Soft Rose',type:'scenic',url:'/backgrounds/illustrated-rose-terrace.webp',thumbnail:'/backgrounds/illustrated-rose-terrace.thumb.webp'},
@@ -103,6 +102,7 @@ export function resolveWallpaperId(id: string): string {
     'wp-sanctra-nordic':'wp-weather-mist', 'wp-sanctra-rain':'wp-art-rain',
     'wp-sanctra-library':'wp-art-rain', 'wp-sanctra-zen':'wp-weather-mist',
     'wp-sanctra-dawn':'wp-art-lavender-lake', 'wp-sanctra-solitude':'wp-art-lavender-lake',
+    'wp-sanctra-noir':'wp-video-starlit-study',
     'wp-plus-aurora-spire':'wp-motion-rain',
     'wp-plus-grand-archive':'wp-motion-nebula',
     'wp-video-rain':'wp-motion-rain',
@@ -129,7 +129,7 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   weeklyTargetHours: 30,
   subjectTrackingEnabled: true,
   activeSubjectId: 'sub-1',
-  activeWallpaperId: 'wp-sanctra-noir',
+  activeWallpaperId: 'wp-art-rain',
   activeThemeId: 'starlight-violet',
   wallpaperFitMode: 'fill',
   backgroundDimness: 25,

@@ -1,4 +1,4 @@
-const curatedScenes=new Set(['lofi-meadow','ocean-waves-loop-v2','ocean-waves','ocean-landing-hd','river-still','stream-still','lake-still','fire-still','waterfall-still','rain-still']);
+const curatedScenes=new Set(['starlit-study','lofi-meadow','ocean-waves-loop-v2','ocean-waves','ocean-landing-hd','river-still','stream-still','lake-still','fire-still','waterfall-still','rain-still']);
 /** Complete, compact clips avoid a progressive player stalling on a partial range response. */
 export async function loadScenicVideo(url:string,signal:AbortSignal,fetchVideo:typeof fetch=fetch):Promise<{src:string;release:()=>void}>{
  const scene=url.match(/^\/backgrounds\/video\/(?:(?:optimized-v3|quality-v4)\/)?([a-z0-9-]+)\.(?:mp4|webm)$/)?.[1];
