@@ -1,5 +1,6 @@
 import type {UserSettings} from '../types/index.ts';
 import {WALLPAPER_PRESETS,resolveWallpaperId} from '../utils/storage.ts';
+import {getThemePreset, resolveThemeId} from '../utils/themeRegistry.ts';
 import {VipMedia} from './VipMedia.tsx';
 import {SceneImage} from './SceneImage.tsx';
 import {WeatherOverlay} from './WeatherOverlay.tsx';
@@ -11,28 +12,28 @@ export function ScenicWallpaper({settings}:{settings:UserSettings}){
   const preset=WALLPAPER_PRESETS.find(p=>p.id===resolveWallpaperId(settings.activeWallpaperId))||WALLPAPER_PRESETS[0];
 
   if (preset.id === 'wp-sanctra-noir' && !settings.customWallpaperUrl) {
+    const activeTheme = getThemePreset(resolveThemeId(settings.activeThemeId));
     return (
-      <div className="scenic-wallpaper-container fixed inset-0 -z-10 overflow-hidden pointer-events-none select-none bg-[#07090e]" aria-hidden="true">
-        {/* Deep Multi-chromatic Ambient Caustics */}
-        <div className="absolute inset-0 bg-[radial-gradient(120%_90%_at_50%_25%,#0d1526_0%,#080b12_55%,#040609_100%)]" />
+      <div className="scenic-wallpaper-container fixed inset-0 -z-10 overflow-hidden pointer-events-none select-none bg-[#05070c]" aria-hidden="true">
+        {/* Deep Pristine Velvet Obsidian Base: No murky muddy stops */}
+        <div className="absolute inset-0 bg-[radial-gradient(130%_85%_at_50%_0%,#0c1220_0%,#070a12_50%,#040508_100%)]" />
         
-        {/* Amber Solar Core Glow centered behind the dial */}
-        <div className="absolute top-[22%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[52vw] h-[52vw] max-w-[680px] max-h-[680px] rounded-full bg-[radial-gradient(circle,rgba(245,158,11,0.18)_0%,rgba(229,184,105,0.06)_45%,transparent_70%)] blur-[100px]" />
+        {/* Theme-Adaptive Radiant Core Spotlight (centered behind the clock dial) */}
+        <div
+          className="absolute top-[28%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[52vw] h-[52vw] max-w-[640px] max-h-[640px] rounded-full blur-[90px] transition-all duration-700 pointer-events-none"
+          style={{
+            background: `radial-gradient(circle, ${activeTheme.accent}1f 0%, ${activeTheme.accent}06 45%, transparent 72%)`,
+          }}
+        />
         
-        {/* Top-left Prussian Blue / Cyan Caustic */}
-        <div className="absolute top-[-10%] left-[-5%] w-[45vw] h-[45vw] rounded-full bg-[radial-gradient(circle,rgba(14,165,233,0.16)_0%,rgba(30,58,138,0.10)_45%,transparent_70%)] blur-[95px]" />
-        
-        {/* Bottom-right Twilight Wisteria Violet Aura */}
-        <div className="absolute bottom-[-10%] right-[-5%] w-[46vw] h-[46vw] rounded-full bg-[radial-gradient(circle,rgba(168,85,247,0.14)_0%,rgba(99,102,241,0.07)_45%,transparent_70%)] blur-[100px]" />
-        
-        {/* Bottom-left Emerald Moss Caustic */}
-        <div className="absolute bottom-[-10%] left-[16%] w-[40vw] h-[40vw] rounded-full bg-[radial-gradient(circle,rgba(16,185,129,0.12)_0%,transparent_70%)] blur-[95px]" />
+        {/* Upper Zenith Celestial Wash (subtle soft sapphire breath, zero mud) */}
+        <div className="absolute top-[-10%] left-[50%] -translate-x-1/2 w-[70vw] h-[35vw] rounded-full bg-[radial-gradient(ellipse,rgba(56,189,248,0.05)_0%,transparent_70%)] blur-[100px] pointer-events-none" />
 
-        {/* Living Atmospheric Rain Canvas, Cozy Bokeh & Spores */}
+        {/* Living Atmospheric Rain Canvas & Crystalline Starlight Spores */}
         <LandingAtmosphereCanvas />
 
-        {/* Subtle Vignette Mask */}
-        <div className="absolute inset-0 bg-[radial-gradient(130%_95%_at_50%_40%,transparent_50%,rgba(6,8,12,0.80))]" />
+        {/* Clean, Non-Muddy Obsidian Vignette */}
+        <div className="absolute inset-0 bg-[radial-gradient(130%_95%_at_50%_40%,transparent_55%,rgba(4,5,8,0.72))]" />
       </div>
     );
   }

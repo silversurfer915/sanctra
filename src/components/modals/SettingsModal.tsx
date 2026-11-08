@@ -14,9 +14,11 @@ import {
   LogOut,
   Upload,
   Palette,
+  Check,
 } from 'lucide-react';
 import type { UserSettings, AuthUser, UserSubscription } from '../../types/index.ts';
 import { WALLPAPER_PRESETS, resolveWallpaperId } from '../../utils/storage.ts';
+import { CURATED_THEMES, getThemePreset } from '../../utils/themeRegistry.ts';
 import { checkVideoSource } from '../../utils/vipMedia.ts';
 import {checkWallpaperImageUrl,prepareWallpaperImage} from '../../utils/customWallpaper.ts';
 import { isEntitlementActive } from '../../utils/subscriptionPlans.ts';
@@ -27,6 +29,7 @@ interface SettingsModalProps {
   settings: UserSettings;
   subscription?: UserSubscription | null;
   initialTab?: 'wallpaper' | 'preferences' | 'danger';
+  initialAppearanceSection?: 'themes' | 'backgrounds' | 'display' | 'custom';
   onUpdateSettings: (updates: Partial<UserSettings>) => void | boolean;
   onResetStudyTimes: () => void;
   onOpenAuth: () => void;
@@ -43,6 +46,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   settings,
   subscription,
   initialTab,
+  initialAppearanceSection,
   onUpdateSettings,
   onResetStudyTimes,
   onOpenAuth,
@@ -58,7 +62,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [activeTab, setActiveTab] = useState<'wallpaper' | 'preferences' | 'danger'>(
     initialTab || 'wallpaper'
   );
-  const [appearanceSection,setAppearanceSection]=useState<'backgrounds'|'display'|'custom'>('backgrounds');
+  const [appearanceSection, setAppearanceSection] = useState<'themes' | 'backgrounds' | 'display' | 'custom'>(
+    initialAppearanceSection || 'themes'
+  );
   const [plusPrompt, setPlusPrompt] = useState<string | null>(null);
   const [motionUrl,setMotionUrl] = useState(settings.plusMotionWallpaperUrl || '');
   const [motionError,setMotionError] = useState('');
@@ -84,12 +90,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [isConfirmingReset, setIsConfirmingReset] = useState(false);
   const [confirmSignOut, setConfirmSignOut] = useState(false);
 
-  // Sync active tab when the modal opens with a specific initialTab
+  // Sync active tab and section when the modal opens with a specific initialTab/initialAppearanceSection
   useEffect(() => {
-    if (isOpen && initialTab) {
-      setActiveTab(initialTab);
+    if (isOpen) {
+      if (initialTab) setActiveTab(initialTab);
+      if (initialAppearanceSection) setAppearanceSection(initialAppearanceSection);
     }
-  }, [isOpen, initialTab]);
+  }, [isOpen, initialTab, initialAppearanceSection]);
 
   const [present, setPresent] = useState(isOpen);
   useEffect(() => {
@@ -202,7 +209,116 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           {/* TAB 1: WALLPAPER & APPEARANCE */}
           {activeTab === 'wallpaper' && (
             <div className="space-y-6">
-              <div className="appearance-navigation" aria-label="Appearance sections">{(['backgrounds','display','custom'] as const).map(section=><button key={section} type="button" aria-pressed={appearanceSection===section} onClick={()=>setAppearanceSection(section)}>{{backgrounds:'Backgrounds',display:'Display',custom:'Your own media'}[section]}</button>)}</div>
+              <div className="appearance-navigation" aria-label="Appearance sections">
+                {(['themes', 'backgrounds', 'display', 'custom'] as const).map(section => (
+                  <button
+                    key={section}
+                    type="button"
+                    aria-pressed={appearanceSection === section}
+                    onClick={() => setAppearanceSection(section)}
+                  >
+                    {{
+                      themes: 'Timer Themes',
+                      backgrounds: 'Scenes & Art',
+                      display: 'Glass & Display',
+                      custom: 'Your own media',
+                    }[section]}
+                  </button>
+                ))}
+              </div>
+
+              {appearanceSection === 'themes' && (
+                <div className="space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 pb-2 border-b border-white/10">
+                    <div>
+                      <h3 className="text-base font-semibold text-white flex items-center gap-2">
+                        <span>Timer Themes</span>
+                        <span className="text-[10px] font-sans font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/10 text-slate-300">
+                          Curated
+                        </span>
+                      </h3>
+                      <p className="text-xs text-slate-400">
+                        Atmospheric palettes, glowing dial chronometers & tailored typography
+                      </p>
+                    </div>
+                    <div className="text-xs text-slate-400">
+                      Active: <strong className="text-white">{getThemePreset(settings.activeThemeId).name}</strong>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    {CURATED_THEMES.map((theme) => {
+                      const isActive = (settings.activeThemeId || 'nocturne-gold') === theme.id;
+                      return (
+                        <button
+                          key={theme.id}
+                          type="button"
+                          onClick={() => onUpdateSettings({ activeThemeId: theme.id })}
+                          aria-pressed={isActive}
+                          className={`group relative p-4 rounded-2xl text-left transition-all duration-200 cursor-pointer overflow-hidden border flex flex-col justify-between min-h-[142px] ${
+                            isActive
+                              ? 'bg-white/[0.08] shadow-lg scale-[1.01]'
+                              : 'bg-white/[0.02] hover:bg-white/[0.05] border-white/10 hover:border-white/20'
+                          }`}
+                          style={{
+                            borderColor: isActive ? theme.accent : undefined,
+                            boxShadow: isActive ? `0 0 24px ${theme.accent}30, inset 0 0 16px ${theme.accent}10` : undefined,
+                          }}
+                        >
+                          <div className="flex items-start justify-between gap-2 z-10 w-full">
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span
+                                  className="w-2.5 h-2.5 rounded-full shrink-0 shadow-sm"
+                                  style={{ backgroundColor: theme.accent, boxShadow: `0 0 8px ${theme.accent}` }}
+                                />
+                                <span className="text-sm font-bold text-white tracking-tight">
+                                  {theme.name}
+                                </span>
+                              </div>
+                              <span className="text-[10px] font-sans font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/10 text-slate-300 mt-1.5 inline-block">
+                                {theme.category}
+                              </span>
+                            </div>
+
+                            {isActive && (
+                              <span
+                                className="flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full text-white shadow-sm"
+                                style={{ backgroundColor: theme.accent, color: theme.buttonText }}
+                              >
+                                <Check className="w-3 h-3" />
+                                <span>Active</span>
+                              </span>
+                            )}
+                          </div>
+
+                          <p className="text-xs text-slate-400 mt-2 z-10">
+                            {theme.tagline}
+                          </p>
+
+                          <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-white/10 z-10">
+                            <div className="flex items-center gap-1.5">
+                              <span className="w-4 h-4 rounded-full border border-white/20" style={{ backgroundColor: theme.accent }} title="Accent" />
+                              <span className="w-4 h-4 rounded-full border border-white/20" style={{ backgroundColor: theme.gradientStops[1] }} title="Ring color" />
+                              <span className="w-4 h-4 rounded-full border border-white/20" style={{ backgroundColor: theme.buttonBg }} title="Button background" />
+                              <span className="w-4 h-4 rounded-full border border-white/20" style={{ backgroundColor: theme.surface }} title="Surface" />
+                            </div>
+                            <span
+                              className="text-xs font-semibold px-2.5 py-0.5 rounded-md"
+                              style={{
+                                fontFamily: theme.fontDisplay,
+                                color: theme.accent,
+                              }}
+                            >
+                              25:00
+                            </span>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
               {appearanceSection==='backgrounds'&&<>
               <BackgroundChooser settings={settings} isPlus={isEntitlementActive(subscription||null)} onLocked={setPlusPrompt} onSelect={preset=>{setPlusPrompt(null);onUpdateSettings({activeWallpaperId:preset.id,customWallpaperUrl:undefined,plusMotionWallpaperUrl:'',plusMotionWallpaperEnabled:preset.type==='motion'});}}/>
               {plusPrompt&&<div className="background-upgrade" role="status"><p><strong>{plusPrompt}</strong> is included with Plus+.</p>{onOpenSupport&&<button type="button" className="workspace-primary" onClick={()=>{onClose();onOpenSupport();}}>Ask about Plus+</button>}<button type="button" className="analytics-button" onClick={()=>setPlusPrompt(null)}>Dismiss</button></div>}

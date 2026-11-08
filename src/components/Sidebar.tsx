@@ -284,14 +284,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
           ) : (
             <button onClick={()=>handleNavClick('admin')} className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium transition-all ${currentView==='admin'?'bg-white/10 text-white border border-white/15':'text-slate-400 hover:text-white hover:bg-white/5'}`}><Shield className="w-3.5 h-3.5 text-[#fde68a] opacity-80"/><span>Admin</span>{openTickets>0&&<span className="admin-ticket-count" role="status" aria-label={`${openTickets} open support tickets`}>{openTickets>99?'99+':openTickets}</span>}</button>
           ))}
-          {/* Settings Button (includes Background Image & Themes) */}
+          {/* Settings Button (includes Themes & Background Scenes) */}
           {compact ? (
             <button
               onClick={() => {
                 onOpenSettings('wallpaper');
                 onCloseMobile();
               }}
-              title="Settings & Background Image"
+              title="Settings & Themes"
               className="w-11 h-11 mx-auto flex items-center justify-center rounded-xl text-slate-400 hover:text-[#fde68a] hover:bg-white/5 transition-all cursor-pointer"
             >
               <Settings className="w-4 h-4 text-[#cbd5e1] opacity-75 group-hover:opacity-100" />
