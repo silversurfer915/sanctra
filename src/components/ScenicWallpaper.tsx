@@ -18,16 +18,29 @@ export function ScenicWallpaper({settings}:{settings:UserSettings}){
         {/* Deep Pristine Velvet Obsidian Base: No murky muddy stops */}
         <div className="absolute inset-0 bg-[radial-gradient(130%_85%_at_50%_0%,#0c1220_0%,#070a12_50%,#040508_100%)]" />
         
-        {/* Theme-Adaptive Radiant Core Spotlight (centered behind the clock dial) */}
+        {/* Dynamic Theme-Adaptive Radiant Core Spotlight (centered behind the clock dial) */}
         <div
-          className="absolute top-[28%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[52vw] h-[52vw] max-w-[640px] max-h-[640px] rounded-full blur-[90px] transition-all duration-700 pointer-events-none"
+          className="absolute top-[28%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[58vw] h-[58vw] max-w-[680px] max-h-[680px] rounded-full blur-[110px] transition-all duration-700 pointer-events-none"
           style={{
-            background: `radial-gradient(circle, ${activeTheme.accent}1f 0%, ${activeTheme.accent}06 45%, transparent 72%)`,
+            background: `radial-gradient(circle, ${activeTheme.accent}2e 0%, ${activeTheme.accent}0d 48%, transparent 74%)`,
           }}
         />
         
-        {/* Upper Zenith Celestial Wash (subtle soft sapphire breath, zero mud) */}
-        <div className="absolute top-[-10%] left-[50%] -translate-x-1/2 w-[70vw] h-[35vw] rounded-full bg-[radial-gradient(ellipse,rgba(56,189,248,0.05)_0%,transparent_70%)] blur-[100px] pointer-events-none" />
+        {/* Dynamic Upper Zenith Celestial Wash (harmonized with active pastel palette) */}
+        <div
+          className="absolute top-[-10%] left-[50%] -translate-x-1/2 w-[72vw] h-[36vw] rounded-full blur-[100px] transition-all duration-700 pointer-events-none"
+          style={{
+            background: `radial-gradient(ellipse, ${activeTheme.accentSoft}18 0%, transparent 70%)`,
+          }}
+        />
+
+        {/* Dynamic Lower Ambient Floor Reflection */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-[25vh] blur-[90px] transition-all duration-700 pointer-events-none"
+          style={{
+            background: `radial-gradient(ellipse at 50% 100%, ${activeTheme.accent}14 0%, transparent 65%)`,
+          }}
+        />
 
         {/* Living Atmospheric Rain Canvas & Crystalline Starlight Spores */}
         <LandingAtmosphereCanvas />

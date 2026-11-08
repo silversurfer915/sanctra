@@ -1960,16 +1960,16 @@ button:not(:disabled),a { cursor:pointer; }
 .sanctra-app .timer-metrics > * {
   background: var(--sanctra-glass-bg) !important;
   -webkit-backdrop-filter: var(--sanctra-glass-blur) !important; backdrop-filter: var(--sanctra-glass-blur) !important;
-  border: 1px solid var(--sanctra-glass-border) !important;
-  box-shadow: var(--sanctra-glass-shadow) !important;
+  border: 1px solid var(--theme-card-border, var(--sanctra-glass-border)) !important;
+  box-shadow: var(--sanctra-glass-shadow), 0 0 16px var(--theme-card-glow, transparent) !important;
   border-radius: 20px;
   transition: transform 240ms var(--motion-ease), border-color 240ms, background 240ms, box-shadow 240ms;
 }
 
 .sanctra-app .timer-metrics > *:hover {
   background: var(--sanctra-glass-bg-hover) !important;
-  border-color: var(--sanctra-glass-border-hover) !important;
-  box-shadow: var(--sanctra-glass-shadow-hover) !important;
+  border-color: var(--theme-card-border-hover, rgba(196, 181, 253, 0.45)) !important;
+  box-shadow: var(--sanctra-glass-shadow-hover), 0 0 24px var(--theme-card-glow, rgba(196, 181, 253, 0.2)) !important;
   transform: translateY(-2px);
 }
 
@@ -3325,20 +3325,20 @@ html,body {background:var(--sanctra-boot-ink,#131b28);min-height:100%;}
 .sanctra-app .focus-context .timer-metrics>* {display:flex!important;flex-direction:column!important;justify-content:space-between!important;align-items:stretch!important;text-align:left!important;min-height:104px!important;padding:14px 16px!important;border-radius:18px!important;backdrop-filter:blur(16px)!important;-webkit-backdrop-filter:blur(16px)!important;transition:transform 0.2s ease,border-color 0.2s ease,box-shadow 0.2s ease!important;}
 .sanctra-app .focus-context .timer-metrics>*:hover {transform:translateY(-2px)!important;}
 
-/* Unified sleek obsidian glass metric cards - cohesive dark minimalism */
+/* Unified sleek obsidian glass metric cards - cohesive dark minimalism with dynamic pastel accents */
 .sanctra-app .focus-context .timer-metrics>* {
-  background: rgba(14, 18, 24, 0.75) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+  background: rgba(14, 18, 24, 0.78) !important;
+  border: 1px solid var(--theme-card-border, rgba(255, 255, 255, 0.08)) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), 0 0 16px var(--theme-card-glow, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
 }
 .sanctra-app .focus-context .timer-metrics>*:hover {
-  background: rgba(20, 24, 32, 0.85) !important;
-  border-color: var(--theme-card-border-hover, rgba(229, 184, 105, 0.35)) !important;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  background: rgba(20, 24, 32, 0.88) !important;
+  border-color: var(--theme-card-border-hover, rgba(196, 181, 253, 0.45)) !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35), 0 0 24px var(--theme-card-glow, rgba(196, 181, 253, 0.2)), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
   transform: translateY(-2px) !important;
 }
 .sanctra-app .focus-context .timer-metrics button:hover svg {
-  color: var(--theme-accent, #e5b869) !important;
+  color: var(--theme-accent, #c4b5fd) !important;
 }
 
 .sanctra-app .focus-context .timer-metrics>*>div:first-child {display:flex!important;width:100%!important;height:auto!important;background:transparent!important;border:none!important;box-shadow:none!important;margin:0!important;padding:0!important;border-radius:0!important;align-items:center!important;justify-content:space-between!important;}

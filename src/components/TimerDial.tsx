@@ -97,20 +97,20 @@ export const TimerDial: React.FC<TimerDialProps> = ({
   const beadX = 160 + radius * Math.sin(angle);
   const beadY = 160 - radius * Math.cos(angle);
 
-  // Determine ring & glow colors based on timer state
+  // Determine ring & glow colors based on timer state - always dynamically express the theme
   const getRingColor = () => {
     if (status === 'break-running' || status === 'break-ready' || status === 'break-paused') {
       return {
-        stroke: '#34d399',
+        stroke: '#A7F3D0',
         gradientId: gradientPrefix + '-breakGradient',
-        glow: 'drop-shadow(0 0 16px rgba(52, 211, 153, 0.45))',
+        glow: 'drop-shadow(0 0 18px rgba(167, 243, 208, 0.55))',
       };
     }
     if (status === 'paused') {
       return {
         stroke: theme.accent,
         gradientId: gradientPrefix + '-pauseGradient',
-        glow: `drop-shadow(0 0 12px ${theme.accent}66)`,
+        glow: `drop-shadow(0 0 14px ${theme.accent}66)`,
       };
     }
     if (status === 'running') {
@@ -120,10 +120,11 @@ export const TimerDial: React.FC<TimerDialProps> = ({
         glow: theme.ringGlow,
       };
     }
+    // Idle state: showcase active theme's pastel gradient and luminous glow
     return {
-      stroke: 'rgba(255, 255, 255, 0.15)',
-      gradientId: gradientPrefix + '-idleGradient',
-      glow: 'none',
+      stroke: theme.accent,
+      gradientId: gradientPrefix + '-focusGradient',
+      glow: `drop-shadow(0 0 16px ${theme.accent}45)`,
     };
   };
 
@@ -170,13 +171,13 @@ export const TimerDial: React.FC<TimerDialProps> = ({
     <div data-running={isRunning} className="timer-dial flex flex-col items-center justify-center my-2 sm:my-4 select-none">
       {/* Circular Timer Ring */}
       <div className="timer-ring relative w-80 h-80 sm:w-96 sm:h-96 flex items-center justify-center">
-        {/* Living Ambient Warm Glow Background */}
+        {/* Living Dynamic Pastel Ambient Glow Background */}
         <div
           className="absolute inset-2 rounded-full transition-all duration-700 pointer-events-none"
           style={{
             background: isRunning
               ? theme.ambientCoreGlow
-              : 'radial-gradient(circle, rgba(255, 255, 255, 0.02) 0%, transparent 70%)',
+              : `radial-gradient(circle, ${theme.accent}1f 0%, ${theme.accent}05 50%, transparent 74%)`,
           }}
         />
 
@@ -196,9 +197,9 @@ export const TimerDial: React.FC<TimerDialProps> = ({
               <stop offset="100%" stopColor={theme.gradientStops[2]} />
             </linearGradient>
             <linearGradient id={gradientPrefix + '-breakGradient'} x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#a7f3d0" />
-              <stop offset="50%" stopColor="#34d399" />
-              <stop offset="100%" stopColor="#059669" />
+              <stop offset="0%" stopColor="#F0FDF4" />
+              <stop offset="50%" stopColor="#D1FAE5" />
+              <stop offset="100%" stopColor="#A7F3D0" />
             </linearGradient>
             <linearGradient id={gradientPrefix + '-pauseGradient'} x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor={theme.accentSoft} />
