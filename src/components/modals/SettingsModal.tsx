@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import type { UserSettings, AuthUser, UserSubscription } from '../../types/index.ts';
 import { WALLPAPER_PRESETS, resolveWallpaperId } from '../../utils/storage.ts';
-import { CURATED_THEMES, getThemePreset } from '../../utils/themeRegistry.ts';
+import { CURATED_THEMES, getThemePreset, resolveThemeId, applyThemeToDocument } from '../../utils/themeRegistry.ts';
 import { checkVideoSource } from '../../utils/vipMedia.ts';
 import {checkWallpaperImageUrl,prepareWallpaperImage} from '../../utils/customWallpaper.ts';
 import { isEntitlementActive } from '../../utils/subscriptionPlans.ts';
@@ -248,19 +248,23 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     {CURATED_THEMES.map((theme) => {
-                      const isActive = (settings.activeThemeId || 'nocturne-gold') === theme.id;
+                      const isActive = resolveThemeId(settings.activeThemeId) === theme.id;
                       return (
                         <button
                           key={theme.id}
                           type="button"
-                          onClick={() => onUpdateSettings({ activeThemeId: theme.id })}
+                          onClick={() => {
+                            onUpdateSettings({ activeThemeId: theme.id });
+                            applyThemeToDocument(theme);
+                          }}
                           aria-pressed={isActive}
                           className={`group relative p-4 rounded-2xl text-left transition-all duration-200 cursor-pointer overflow-hidden border flex flex-col justify-between min-h-[142px] ${
                             isActive
-                              ? 'bg-white/[0.08] shadow-lg scale-[1.01]'
+                              ? 'shadow-lg scale-[1.01]'
                               : 'bg-white/[0.02] hover:bg-white/[0.05] border-white/10 hover:border-white/20'
                           }`}
                           style={{
+                            backgroundColor: isActive ? `${theme.accent}12` : undefined,
                             borderColor: isActive ? theme.accent : undefined,
                             boxShadow: isActive ? `0 0 24px ${theme.accent}30, inset 0 0 16px ${theme.accent}10` : undefined,
                           }}

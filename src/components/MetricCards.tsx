@@ -36,16 +36,22 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
   const targetSeconds = dailyGoalHours * 3600;
   const goalPercent = Math.min(100, Math.round((todaySeconds / (targetSeconds || 1)) * 100));
 
+  const cardStyle = {
+    border: `1px solid ${theme.accent}26`,
+    boxShadow: `0 4px 20px rgba(0, 0, 0, 0.25), 0 0 16px ${theme.accent}0d`,
+  };
+
   return (
     <div className="timer-metrics w-full max-w-4xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 my-2 sm:my-4">
       {/* 1. Subjects Card */}
       <button
         onClick={onOpenSubjects}
-        className="p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between text-left cursor-pointer group relative overflow-hidden backdrop-blur-xl transition-all shadow-md"
+        style={cardStyle}
+        className="p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between text-left cursor-pointer group relative overflow-hidden backdrop-blur-xl transition-all shadow-md hover:scale-[1.01]"
         aria-label={`Manage ${categoryLabel.toLowerCase()}`}
       >
         <div className="flex items-center justify-between w-full">
-          <span className="text-[10px] font-sans font-medium uppercase tracking-[0.14em] text-[var(--rs-cream-soft)]/75 group-hover:text-[var(--rs-cream)] transition-colors">
+          <span className="text-[10px] font-sans font-medium uppercase tracking-[0.14em] text-[var(--rs-cream-soft)]/75 group-hover:text-white transition-colors">
             {categoryLabel}
           </span>
           <Layers
@@ -67,11 +73,12 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
       {/* 2. Today's Progress Card */}
       <button
         onClick={onOpenGoalModal}
-        className="p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between text-left cursor-pointer group relative overflow-hidden backdrop-blur-xl transition-all shadow-md"
+        style={cardStyle}
+        className="p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between text-left cursor-pointer group relative overflow-hidden backdrop-blur-xl transition-all shadow-md hover:scale-[1.01]"
         aria-label="Adjust daily focus goal"
       >
         <div className="flex items-center justify-between w-full">
-          <span className="text-[10px] font-sans font-medium uppercase tracking-[0.14em] text-[var(--rs-cream-soft)]/75 group-hover:text-[var(--rs-cream)] transition-colors">
+          <span className="text-[10px] font-sans font-medium uppercase tracking-[0.14em] text-[var(--rs-cream-soft)]/75 group-hover:text-white transition-colors">
             Today's Progress
           </span>
           <CheckCircle2
@@ -104,11 +111,12 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
       {/* 3. Current Streak Card */}
       <button
         onClick={onOpenStreakHelp}
-        className="p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between text-left cursor-pointer group relative overflow-hidden backdrop-blur-xl transition-all shadow-md"
+        style={cardStyle}
+        className="p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between text-left cursor-pointer group relative overflow-hidden backdrop-blur-xl transition-all shadow-md hover:scale-[1.01]"
         aria-label="View streak rules and progress"
       >
         <div className="flex items-center justify-between w-full">
-          <span className="text-[10px] font-sans font-medium uppercase tracking-[0.14em] text-[var(--rs-cream-soft)]/75 group-hover:text-[var(--rs-cream)] transition-colors">
+          <span className="text-[10px] font-sans font-medium uppercase tracking-[0.14em] text-[var(--rs-cream-soft)]/75 group-hover:text-white transition-colors">
             Study Streak
           </span>
           <Flame
@@ -127,7 +135,10 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
       </button>
 
       {/* 4. This Week Card */}
-      <div className="p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between text-left relative overflow-hidden backdrop-blur-xl shadow-md">
+      <div
+        style={cardStyle}
+        className="p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between text-left relative overflow-hidden backdrop-blur-xl shadow-md"
+      >
         <div className="flex items-center justify-between w-full">
           <span className="text-[10px] font-sans font-medium uppercase tracking-[0.14em] text-[var(--rs-cream-soft)]/75">
             This Week
