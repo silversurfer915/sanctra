@@ -360,88 +360,93 @@ export const TimerDial: React.FC<TimerDialProps> = ({
         </div>
       </div>
 
-      {/* Action Pill Bar (Buttons) */}
-      <div className="timer-actions flex flex-wrap items-center justify-center gap-2.5 sm:gap-3.5 mt-5 sm:mt-7 max-w-3xl px-4">
-        {/* 1. Start / Pause Button */}
-        <button
-          onClick={onToggleStart}
-          aria-label={isRunning ? 'Pause focus timer' : 'Start focus timer'}
-          className="btn-sheen flex items-center gap-2 px-7 sm:px-9 py-3 rounded-full font-sans font-bold text-sm sm:text-base tracking-wide transition-all duration-200 cursor-pointer"
-          style={{
-            backgroundColor: theme.buttonBg,
-            color: theme.buttonText,
-            boxShadow: theme.buttonGlow,
-            border: `1px solid ${theme.buttonRing}`,
-          }}
-        >
-          {isRunning ? (
-            <>
-              <Pause className="w-4 h-4 fill-current" />
-              <span>Pause</span>
-            </>
-          ) : (
-            <>
-              <Play className="w-4 h-4 fill-current ml-0.5" />
-              <span>{status === 'paused' || status === 'break-paused' ? 'Resume' : 'Start'}</span>
-            </>
-          )}
-          <span
-            className="hidden sm:inline-block text-[10px] font-sans uppercase font-bold px-1.5 py-0.5 rounded bg-black/20 ml-1"
-            style={{ color: theme.buttonText }}
-          >
-            Space
-          </span>
-        </button>
-
-        {/* 2. Reset Button */}
-        <button
-          onClick={onRequestReset}
-          disabled={seconds === 0 && status === 'idle'}
-          aria-label="Reset timer"
-          title={seconds === 0 && status === 'idle' ? 'Start a session first' : 'Reset timer'}
-          className="btn-sheen-subtle flex items-center gap-2 px-4 sm:px-5 py-3 rounded-full text-xs sm:text-sm font-sans font-semibold tracking-wide text-slate-200 bg-[#12151b]/80 hover:bg-[#1a1f29] border border-white/10 hover:border-white/20 shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-        >
-          <RotateCcw className="w-4 h-4 text-slate-300" />
-          <span>Reset</span>
-        </button>
-
-        {/* 3. Save Session Button */}
-        <button
-          onClick={onRequestSave}
-          disabled={!canSave}
-          aria-label="Save focus session"
-          title={!canSave ? 'Start a session to save focus time' : 'Save focus session'}
-          className="btn-sheen-subtle flex items-center gap-2 px-4 sm:px-5 py-3 rounded-full text-xs sm:text-sm font-sans font-semibold tracking-wide shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-          style={{
-            color: theme.accent,
-            backgroundColor: `${theme.accent}15`,
-            borderColor: `${theme.accent}40`,
-          }}
-        >
-          <BookmarkCheck className="w-4 h-4" style={{ color: theme.accent }} />
-          <span>Save session</span>
-        </button>
-
-        {/* 4. Fullscreen Button */}
-        {!minimal && (
+      {/* Action Pill Bar (Buttons) - 100% Mathematically Centered */}
+      <div className="timer-actions flex flex-col items-center justify-center gap-2.5 sm:gap-3 mt-5 sm:mt-6 w-full max-w-xl px-4 z-20">
+        {/* 1. Primary Hero: Start Focus / Pause Button (Dead-center under dial) */}
+        <div className="flex items-center justify-center w-full">
           <button
-            onClick={onToggleFullscreen}
-            aria-label={isFullscreen ? 'Exit full screen mode' : 'Enter full screen mode'}
-            className="btn-sheen-subtle flex items-center gap-2 px-4 sm:px-5 py-3 rounded-full text-xs sm:text-sm font-sans font-semibold tracking-wide text-slate-200 bg-[#12151b]/80 hover:bg-[#1a1f29] border border-white/10 hover:border-white/20 shadow-md transition-all cursor-pointer"
+            onClick={onToggleStart}
+            aria-label={isRunning ? 'Pause focus timer' : 'Start focus timer'}
+            className="btn-sheen flex items-center justify-center gap-2.5 px-8 sm:px-10 py-3 sm:py-3.5 rounded-full font-sans font-bold text-sm sm:text-base tracking-wide transition-all duration-200 cursor-pointer"
+            style={{
+              backgroundColor: theme.buttonBg,
+              color: theme.buttonText,
+              boxShadow: theme.buttonGlow,
+              border: `1px solid ${theme.buttonRing}`,
+            }}
           >
-            {isFullscreen ? (
+            {isRunning ? (
               <>
-                <Minimize2 className="w-4 h-4 text-slate-300" />
-                <span>Exit full screen</span>
+                <Pause className="w-4 h-4 fill-current" />
+                <span>Pause</span>
               </>
             ) : (
               <>
-                <Maximize2 className="w-4 h-4 text-slate-300" />
-                <span>Full screen</span>
+                <Play className="w-4 h-4 fill-current ml-0.5" />
+                <span>{status === 'paused' || status === 'break-paused' ? 'Resume' : 'Start Focus'}</span>
               </>
             )}
+            <span
+              className="hidden sm:inline-block text-[10px] font-sans uppercase font-bold px-1.5 py-0.5 rounded bg-black/20 ml-1"
+              style={{ color: theme.buttonText }}
+            >
+              Space
+            </span>
           </button>
-        )}
+        </div>
+
+        {/* 2. Secondary Actions Row (Centered Trio: Reset · Save session · Full screen) */}
+        <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
+          {/* 2. Reset Button */}
+          <button
+            onClick={onRequestReset}
+            disabled={seconds === 0 && status === 'idle'}
+            aria-label="Reset timer"
+            title={seconds === 0 && status === 'idle' ? 'Start a session first' : 'Reset timer'}
+            className="btn-sheen-subtle flex items-center gap-1.5 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-sans font-semibold tracking-wide text-slate-200 bg-[#12151b]/80 hover:bg-[#1a1f29] border border-white/10 hover:border-white/20 shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+          >
+            <RotateCcw className="w-3.5 h-3.5 text-slate-300" />
+            <span>Reset</span>
+          </button>
+
+          {/* 3. Save Session Button */}
+          <button
+            onClick={onRequestSave}
+            disabled={!canSave}
+            aria-label="Save focus session"
+            title={!canSave ? 'Start a session to save focus time' : 'Save focus session'}
+            className="btn-sheen-subtle flex items-center gap-1.5 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-sans font-semibold tracking-wide shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+            style={{
+              color: theme.accent,
+              backgroundColor: `${theme.accent}15`,
+              borderColor: `${theme.accent}40`,
+            }}
+          >
+            <BookmarkCheck className="w-3.5 h-3.5" style={{ color: theme.accent }} />
+            <span>Save session</span>
+          </button>
+
+          {/* 4. Fullscreen Button */}
+          {!minimal && (
+            <button
+              onClick={onToggleFullscreen}
+              aria-label={isFullscreen ? 'Exit full screen mode' : 'Enter full screen mode'}
+              className="btn-sheen-subtle flex items-center gap-1.5 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-sans font-semibold tracking-wide text-slate-200 bg-[#12151b]/80 hover:bg-[#1a1f29] border border-white/10 hover:border-white/20 shadow-md transition-all cursor-pointer"
+            >
+              {isFullscreen ? (
+                <>
+                  <Minimize2 className="w-3.5 h-3.5 text-slate-300" />
+                  <span>Exit full screen</span>
+                </>
+              ) : (
+                <>
+                  <Maximize2 className="w-3.5 h-3.5 text-slate-300" />
+                  <span>Full screen</span>
+                </>
+              )}
+            </button>
+          )}
+        </div>
       </div>
 
       {minimal && (

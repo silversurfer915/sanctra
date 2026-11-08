@@ -1117,33 +1117,45 @@ export function LandingView({
 
             {/* Animated Billing Toggle Switch */}
             <div className="flex items-center gap-3 pt-2">
-              <div className="relative flex p-1 rounded-full border border-white/10 bg-[#12151a]/70 font-sans text-xs backdrop-blur-md">
-                {/* Smooth sliding indicator pill */}
-                <div
-                  className="absolute top-1 bottom-1 rounded-full bg-[var(--rs-cream)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-md"
-                  style={{
-                    left: isYearly ? 'calc(50% - 2px)' : '4px',
-                    width: isYearly ? 'calc(50% - 2px)' : 'calc(50% - 4px)',
-                  }}
-                  aria-hidden="true"
-                />
+              <div
+                role="radiogroup"
+                aria-label="Billing frequency"
+                className="inline-flex items-center p-1 rounded-full border border-white/10 bg-[#12151a]/80 font-sans text-xs backdrop-blur-md gap-1"
+              >
                 <button
                   type="button"
+                  role="radio"
+                  aria-checked={!isYearly}
                   onClick={() => setIsYearly(false)}
-                  className={`relative z-10 px-4 py-2 rounded-full cursor-pointer transition-colors duration-200 ${
-                    !isYearly ? 'text-[#0b0c0e] font-semibold' : 'text-[var(--rs-cream-soft)] hover:text-[var(--rs-cream)]'
+                  className={`px-4 py-2 rounded-full cursor-pointer transition-all duration-200 font-sans ${
+                    !isYearly
+                      ? 'bg-[var(--rs-cream)] text-[#0b0c0e] font-bold shadow-md'
+                      : 'text-[var(--rs-cream-soft)] hover:text-[var(--rs-cream)] font-medium'
                   }`}
                 >
                   Monthly
                 </button>
                 <button
                   type="button"
+                  role="radio"
+                  aria-checked={isYearly}
                   onClick={() => setIsYearly(true)}
-                  className={`relative z-10 px-4 py-2 rounded-full cursor-pointer transition-colors duration-200 ${
-                    isYearly ? 'text-[#0b0c0e] font-semibold' : 'text-[var(--rs-cream-soft)] hover:text-[var(--rs-cream)]'
+                  className={`px-4 py-2 rounded-full cursor-pointer transition-all duration-200 flex items-center gap-2 font-sans ${
+                    isYearly
+                      ? 'bg-[var(--rs-cream)] text-[#0b0c0e] font-bold shadow-md'
+                      : 'text-[var(--rs-cream-soft)] hover:text-[var(--rs-cream)] font-medium'
                   }`}
                 >
-                  Yearly (Save 78%)
+                  <span>Yearly</span>
+                  <span
+                    className={`text-[10px] font-sans font-bold uppercase tracking-wide px-2 py-0.5 rounded-full transition-colors ${
+                      isYearly
+                        ? 'bg-black/10 text-[#0b0c0e]'
+                        : 'bg-[var(--rs-amber)]/20 text-[var(--rs-amber)] border border-[var(--rs-amber)]/30'
+                    }`}
+                  >
+                    Save 78%
+                  </span>
                 </button>
               </div>
             </div>

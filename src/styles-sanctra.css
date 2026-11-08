@@ -3319,8 +3319,8 @@ html,body {background:var(--sanctra-boot-ink,#131b28);min-height:100%;}
 .focus-task-context {grid-area:task;min-width:0;display:flex;flex-direction:column;gap:10px;}
 .sanctra-app .focus-workspace:not(.minimal)>.timer-dial {grid-area:clock;order:0;margin:0;padding:4px 0;min-width:0;gap:18px;}
 .sanctra-app .focus-workspace:not(.minimal) .timer-ring {width:min(80vw,44dvh,420px);height:auto;aspect-ratio:1;flex-shrink:0;}
-.sanctra-app .focus-workspace .timer-actions {display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:10px;width:100%;padding:0;}
-.sanctra-app .focus-workspace .timer-actions>button {min-height:44px;padding:10px 18px;font-size:13px;}
+.sanctra-app .focus-workspace .timer-actions {display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:10px!important;margin-top:12px!important;width:100%!important;max-width:560px!important;padding:0!important;}
+.sanctra-app .focus-workspace .timer-actions>div {display:flex!important;align-items:center!important;justify-content:center!important;}
 .sanctra-app .focus-context .timer-metrics {grid-area:metrics;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:0 auto;padding:0;max-width:960px;order:0;}
 .sanctra-app .focus-context .timer-metrics>* {display:flex!important;flex-direction:column!important;justify-content:space-between!important;align-items:stretch!important;text-align:left!important;min-height:104px!important;padding:14px 16px!important;border-radius:18px!important;backdrop-filter:blur(16px)!important;-webkit-backdrop-filter:blur(16px)!important;transition:transform 0.2s ease,border-color 0.2s ease,box-shadow 0.2s ease!important;}
 .sanctra-app .focus-context .timer-metrics>*:hover {transform:translateY(-2px)!important;}
@@ -3356,7 +3356,7 @@ html,body {background:var(--sanctra-boot-ink,#131b28);min-height:100%;}
 .sanctra-app .focus-context .timer-quote>div {padding:8px 12px 8px 16px;border-radius:18px;min-height:var(--focus-card-h);box-sizing:border-box;flex:1;width:100%;}
 .sanctra-app .focus-context .timer-quote p {font-size:14px;line-height:1.6;}
 .sanctra-app .focus-context .timer-quote svg {flex-shrink:0;}
-@media(max-width:760px){.focus-workspace{grid-template-columns:minmax(0,1fr);grid-template-areas:"task" "clock" "metrics" "quote";gap:20px;max-width:600px;}.sanctra-app .focus-context .timer-metrics{grid-template-columns:repeat(2,minmax(0,1fr));}.sanctra-app .focus-workspace:not(.minimal) .timer-ring{width:min(80vw,360px);}.sanctra-app .focus-workspace .timer-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));max-width:480px;}.sanctra-app .focus-context .current-task-bar>div:first-child{flex-basis:100%;}}
+@media(max-width:760px){.focus-workspace{grid-template-columns:minmax(0,1fr);grid-template-areas:"task" "clock" "metrics" "quote";gap:20px;max-width:600px;}.sanctra-app .focus-context .timer-metrics{grid-template-columns:repeat(2,minmax(0,1fr));}.sanctra-app .focus-workspace:not(.minimal) .timer-ring{width:min(80vw,360px);}.sanctra-app .focus-context .current-task-bar>div:first-child{flex-basis:100%;}}
 
 /* Discreet timer-only corner controls. */
 .sanctra-app .timer-only-exit {height:32px;min-height:32px;top:16px;right:18px;padding:0 10px;gap:7px;border-radius:12px;font-size:11px;box-shadow:none!important;background:color-mix(in srgb,var(--sanctra-ink) 28%,transparent)!important;border-color:color-mix(in srgb,var(--sanctra-paper) 14%,transparent)!important;}
