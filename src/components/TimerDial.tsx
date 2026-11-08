@@ -347,14 +347,14 @@ export const TimerDial: React.FC<TimerDialProps> = ({
       </div>
 
       {/* Action Pill Bar (Buttons) - 100% Mathematically Centered */}
-      <div className="timer-actions flex flex-col items-center justify-center gap-2.5 sm:gap-3 mt-5 sm:mt-6 w-full max-w-xl px-4 z-20">
+      <div className="timer-actions flex flex-col items-center justify-center gap-2 sm:gap-2.5 mt-3 sm:mt-4 w-full max-w-xl px-4 z-20">
         {/* 1. Primary Hero: Start Focus / Pause Button (Dead-center under dial) */}
         <div className="flex items-center justify-center w-full">
           <button
             onClick={onToggleStart}
             aria-label={isRunning ? 'Pause focus timer' : 'Start focus timer'}
             title={isRunning ? 'Pause focus timer (Space)' : 'Start focus timer (Space)'}
-            className="btn-sheen flex items-center justify-center gap-2.5 px-8 sm:px-10 py-3 sm:py-3.5 rounded-full font-sans font-bold text-sm sm:text-base tracking-wide transition-all duration-200 cursor-pointer"
+            className="btn-sheen flex items-center justify-center gap-2.5 px-8 sm:px-10 py-2.5 sm:py-3 rounded-full font-sans font-bold text-sm sm:text-base tracking-wide transition-all duration-200 cursor-pointer"
             style={{
               backgroundColor: theme.buttonBg,
               color: theme.buttonText,
@@ -377,56 +377,62 @@ export const TimerDial: React.FC<TimerDialProps> = ({
         </div>
 
         {/* 2. Secondary Actions Row (Centered Trio: Reset · Save session · Full screen) */}
-        <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
-          {/* 2. Reset Button */}
-          <button
-            onClick={onRequestReset}
-            disabled={seconds === 0 && status === 'idle'}
-            aria-label="Reset timer"
-            title={seconds === 0 && status === 'idle' ? 'Start a session first' : 'Reset timer'}
-            className="btn-sheen-subtle flex items-center gap-1.5 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-sans font-semibold tracking-wide text-slate-200 bg-[#12151b]/80 hover:bg-[#1a1f29] border border-white/10 hover:border-white/20 shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-          >
-            <RotateCcw className="w-3.5 h-3.5 text-slate-300" />
-            <span>Reset</span>
-          </button>
-
-          {/* 3. Save Session Button */}
-          <button
-            onClick={onRequestSave}
-            disabled={!canSave}
-            aria-label="Save focus session"
-            title={!canSave ? 'Start a session to save focus time' : 'Save focus session'}
-            className="btn-sheen-subtle flex items-center gap-1.5 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-sans font-semibold tracking-wide shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-            style={{
-              color: theme.accent,
-              backgroundColor: `${theme.accent}15`,
-              borderColor: `${theme.accent}40`,
-            }}
-          >
-            <BookmarkCheck className="w-3.5 h-3.5" style={{ color: theme.accent }} />
-            <span>Save session</span>
-          </button>
-
-          {/* 4. Fullscreen Button */}
-          {!minimal && (
+        <div className="timer-actions-row grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-2.5 w-full max-w-sm sm:max-w-md mx-auto">
+          {/* Left: Reset Button aligned to the right of column 1 */}
+          <div className="flex justify-end">
             <button
-              onClick={onToggleFullscreen}
-              aria-label={isFullscreen ? 'Exit full screen mode' : 'Enter full screen mode'}
-              className="btn-sheen-subtle flex items-center gap-1.5 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-sans font-semibold tracking-wide text-slate-200 bg-[#12151b]/80 hover:bg-[#1a1f29] border border-white/10 hover:border-white/20 shadow-md transition-all cursor-pointer"
+              onClick={onRequestReset}
+              disabled={seconds === 0 && status === 'idle'}
+              aria-label="Reset timer"
+              title={seconds === 0 && status === 'idle' ? 'Start a session first' : 'Reset timer'}
+              className="btn-sheen-subtle flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs font-sans font-semibold tracking-wide text-slate-200 bg-[#12151b]/80 hover:bg-[#1a1f29] border border-white/10 hover:border-white/20 shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer min-w-[84px]"
             >
-              {isFullscreen ? (
-                <>
-                  <Minimize2 className="w-3.5 h-3.5 text-slate-300" />
-                  <span>Exit full screen</span>
-                </>
-              ) : (
-                <>
-                  <Maximize2 className="w-3.5 h-3.5 text-slate-300" />
-                  <span>Full screen</span>
-                </>
-              )}
+              <RotateCcw className="w-3.5 h-3.5 text-slate-300" />
+              <span>Reset</span>
             </button>
-          )}
+          </div>
+
+          {/* Center: Save Session Button perfectly centered in column 2 */}
+          <div className="flex justify-center">
+            <button
+              onClick={onRequestSave}
+              disabled={!canSave}
+              aria-label="Save focus session"
+              title={!canSave ? 'Start a session to save focus time' : 'Save focus session'}
+              className="btn-sheen-subtle flex items-center justify-center gap-1.5 px-4 sm:px-4.5 py-1.5 sm:py-2 rounded-full text-xs font-sans font-semibold tracking-wide shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer whitespace-nowrap"
+              style={{
+                color: theme.accent,
+                backgroundColor: `${theme.accent}15`,
+                borderColor: `${theme.accent}40`,
+              }}
+            >
+              <BookmarkCheck className="w-3.5 h-3.5" style={{ color: theme.accent }} />
+              <span>Save session</span>
+            </button>
+          </div>
+
+          {/* Right: Fullscreen Button aligned to the left of column 3 */}
+          <div className="flex justify-start">
+            {!minimal && (
+              <button
+                onClick={onToggleFullscreen}
+                aria-label={isFullscreen ? 'Exit full screen mode' : 'Enter full screen mode'}
+                className="btn-sheen-subtle flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs font-sans font-semibold tracking-wide text-slate-200 bg-[#12151b]/80 hover:bg-[#1a1f29] border border-white/10 hover:border-white/20 shadow-md transition-all cursor-pointer min-w-[84px] whitespace-nowrap"
+              >
+                {isFullscreen ? (
+                  <>
+                    <Minimize2 className="w-3.5 h-3.5 text-slate-300" />
+                    <span>Exit</span>
+                  </>
+                ) : (
+                  <>
+                    <Maximize2 className="w-3.5 h-3.5 text-slate-300" />
+                    <span>Full screen</span>
+                  </>
+                )}
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
