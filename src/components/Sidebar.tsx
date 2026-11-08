@@ -282,7 +282,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {admin && (compact ? (
             <button onClick={()=>handleNavClick('admin')} title="Admin" className={`w-11 h-11 mx-auto flex items-center justify-center rounded-xl transition-all ${currentView==='admin'?'bg-white/10 text-white':'text-slate-400 hover:text-white hover:bg-white/5'}`}><Shield className="w-4 h-4 text-[#fde68a]"/></button>
           ) : (
-            <button onClick={()=>handleNavClick('admin')} className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium transition-all ${currentView==='admin'?'bg-white/10 text-white border border-white/15':'text-slate-400 hover:text-white hover:bg-white/5'}`}><Shield className="w-3.5 h-3.5 text-[#fde68a] opacity-80"/><span>Admin</span>{openTickets>0&&<span className="admin-ticket-count" role="status" aria-label={`${openTickets} open support tickets`}>{openTickets>99?'99+':openTickets}</span>}</button>
+            <button
+              onClick={() => handleNavClick('admin')}
+              className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium transition-all cursor-pointer group ${
+                currentView === 'admin'
+                  ? 'bg-white/10 text-white font-semibold border border-white/15'
+                  : 'text-slate-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <div className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-all bg-white/[0.02] group-hover:bg-white/5">
+                <Shield className="w-3.5 h-3.5 text-[#fde68a] opacity-80 group-hover:opacity-100 transition-colors" />
+              </div>
+              <span className="flex-1 text-left">Admin</span>
+              {openTickets > 0 && (
+                <span className="admin-ticket-count" role="status" aria-label={`${openTickets} open support tickets`}>
+                  {openTickets > 99 ? '99+' : openTickets}
+                </span>
+              )}
+            </button>
           ))}
           {/* Settings Button (includes Themes & Background Scenes) */}
           {compact ? (

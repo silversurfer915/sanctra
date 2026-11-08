@@ -3312,17 +3312,21 @@ html,body {background:var(--sanctra-boot-ink,#131b28);min-height:100%;}
 @media(max-width:600px){.sanctra-app .timer-only-exit{right:12px;top:12px;padding:0 12px;}.sanctra-app .centered-hidden-music-bar{left:12px;top:12px;max-width:calc(100vw - 190px);}.sanctra-app .timer-only-exit-kbd{display:none;}}
 
 /* A centred focus canvas, with supporting information above and below. */
-.sanctra-app:not(.timer-only) .timer-content {padding:16px clamp(16px,3vw,40px);overflow:visible;}
-.focus-workspace {--sanctra-glass-bg:rgba(18,21,27,0.75);--sanctra-glass-bg-hover:rgba(24,28,36,0.85);--sanctra-glass-blur:blur(20px);--sanctra-glass-shadow:0 8px 32px rgba(0,0,0,0.35);--sanctra-glass-border:rgba(255,255,255,0.08);width:100%;max-width:1100px;margin:auto;display:grid;grid-template-columns:1fr 1fr;grid-template-areas:"quote task" "clock clock" "metrics metrics";gap:16px 24px;align-items:center;}
+.sanctra-app:not(.timer-only) .timer-content {padding:clamp(6px, 1.2dvh, 14px) clamp(16px,3vw,40px);overflow:hidden;display:flex;flex-direction:column;justify-content:center;}
+.focus-workspace {--sanctra-glass-bg:rgba(18,21,27,0.75);--sanctra-glass-bg-hover:rgba(24,28,36,0.85);--sanctra-glass-blur:blur(20px);--sanctra-glass-shadow:0 8px 32px rgba(0,0,0,0.35);--sanctra-glass-border:rgba(255,255,255,0.08);width:100%;max-width:1100px;margin:auto;display:grid;grid-template-columns:1fr 1fr;grid-template-areas:"quote task" "clock clock" "metrics metrics";gap:clamp(8px, 1.2dvh, 16px) 24px;align-items:center;}
 .focus-workspace.minimal {display:block;max-width:none;}
 .focus-context {display:contents;}
-.focus-task-context {grid-area:task;min-width:0;display:flex;flex-direction:column;gap:10px;}
-.sanctra-app .focus-workspace:not(.minimal)>.timer-dial {grid-area:clock;order:0;margin:0;padding:4px 0;min-width:0;gap:18px;}
-.sanctra-app .focus-workspace:not(.minimal) .timer-ring {width:min(80vw,44dvh,420px);height:auto;aspect-ratio:1;flex-shrink:0;}
-.sanctra-app .focus-workspace .timer-actions {display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:10px!important;margin-top:12px!important;width:100%!important;max-width:560px!important;padding:0!important;}
-.sanctra-app .focus-workspace .timer-actions>div {display:flex!important;align-items:center!important;justify-content:center!important;}
-.sanctra-app .focus-context .timer-metrics {grid-area:metrics;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:0 auto;padding:0;max-width:960px;order:0;}
-.sanctra-app .focus-context .timer-metrics>* {display:flex!important;flex-direction:column!important;justify-content:space-between!important;align-items:stretch!important;text-align:left!important;min-height:104px!important;padding:14px 16px!important;border-radius:18px!important;backdrop-filter:blur(16px)!important;-webkit-backdrop-filter:blur(16px)!important;transition:transform 0.2s ease,border-color 0.2s ease,box-shadow 0.2s ease!important;}
+.focus-task-context {grid-area:task;min-width:0;display:flex;flex-direction:column;gap:8px;}
+.sanctra-app .focus-workspace:not(.minimal)>.timer-dial {grid-area:clock;order:0;margin:0;padding:2px 0;min-width:0;gap:clamp(6px, 1dvh, 10px);}
+.sanctra-app .focus-workspace:not(.minimal) .timer-ring {width:min(72vw,35dvh,320px);height:auto;aspect-ratio:1;flex-shrink:0;}
+.sanctra-app .focus-workspace .timer-actions {display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:clamp(6px, 0.8dvh, 8px)!important;margin-top:clamp(4px, 0.8dvh, 8px)!important;width:100%!important;max-width:560px!important;padding:0!important;}
+.sanctra-app .focus-workspace .timer-actions>div:not(.timer-actions-row) {display:flex!important;align-items:center!important;justify-content:center!important;}
+.sanctra-app .focus-workspace .timer-actions-row {display:grid!important;grid-template-columns:1fr auto 1fr!important;align-items:center!important;gap:clamp(6px,0.8dvh,10px)!important;width:100%!important;max-width:440px!important;margin-inline:auto!important;}
+.sanctra-app .focus-workspace .timer-actions-row>:nth-child(1) {display:flex!important;justify-content:flex-end!important;}
+.sanctra-app .focus-workspace .timer-actions-row>:nth-child(2) {display:flex!important;justify-content:center!important;}
+.sanctra-app .focus-workspace .timer-actions-row>:nth-child(3) {display:flex!important;justify-content:flex-start!important;}
+.sanctra-app .focus-context .timer-metrics {grid-area:metrics;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(8px, 1.2dvh, 14px);margin:0 auto;padding:0;max-width:960px;order:0;}
+.sanctra-app .focus-context .timer-metrics>* {display:flex!important;flex-direction:column!important;justify-content:space-between!important;align-items:stretch!important;text-align:left!important;min-height:clamp(70px, 8.5dvh, 88px)!important;padding:clamp(8px, 1.2dvh, 12px) 14px!important;border-radius:16px!important;backdrop-filter:blur(16px)!important;-webkit-backdrop-filter:blur(16px)!important;transition:transform 0.2s ease,border-color 0.2s ease,box-shadow 0.2s ease!important;}
 .sanctra-app .focus-context .timer-metrics>*:hover {transform:translateY(-2px)!important;}
 
 /* Unified sleek obsidian glass metric cards - cohesive dark minimalism with dynamic pastel accents */
@@ -3686,9 +3690,9 @@ html,body {background:var(--sanctra-boot-ink,#131b28);min-height:100%;}
  .sanctra-app .app-header-control{min-width:44px;min-height:44px;}
  .sanctra-app .audio-header-control .audio-header-btn{width:44px;height:44px;}
  .sanctra-app .audio-compact-controls.audio-header-control{height:44px;}
- .sanctra-app:not(.timer-only) .timer-content{overflow-y:auto!important;justify-content:flex-start;}
- .sanctra-app:not(.timer-only) .focus-workspace{margin-block:auto;flex-shrink:0;padding-block:12px 24px;gap:16px;}
- .sanctra-app .focus-context .timer-metrics>*{padding:12px;min-height:80px;}
+ .sanctra-app:not(.timer-only) .timer-content{overflow-y:hidden;justify-content:center;}
+ .sanctra-app:not(.timer-only) .focus-workspace{margin-block:auto;flex-shrink:0;padding-block:6px 12px;gap:clamp(8px, 1.2dvh, 14px);}
+ .sanctra-app .focus-context .timer-metrics>*{padding:10px 12px;min-height:clamp(68px, 8dvh, 80px);}
 }
 @media(max-width:900px){
  .sanctra-app .app-header:has(.timer-local-clock) .header-mobile-brand{display:none;}
