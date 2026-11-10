@@ -11,7 +11,6 @@ import {
   Play,
 } from 'lucide-react';
 import { Brand } from '../Brand.tsx';
-import { ObservatoryScene } from '../ObservatoryScene.tsx';
 import { LandingAtmosphereCanvas } from './LandingAtmosphereCanvas.tsx';
 import { LandingCyanotypeApparatus, LANDING_MODE_PALETTES } from './LandingCyanotypeApparatus.tsx';
 import { playAmbientSound, stopAmbientSound } from '../../utils/landingSoundPreview.ts';
@@ -334,10 +333,8 @@ export function LandingView({
       </div>
       <div className="rs-vignette" aria-hidden="true" />
       <div className="rs-grain" aria-hidden="true" />
-      {/* Cinematic Looping Ambient Background Video */}
-      <ObservatoryScene />
 
-      {/* Interactive Atmosphere Spores, Subtle Rain Streaks & Click Sparks */}
+      {/* Interactive celestial dust motes */}
       <LandingAtmosphereCanvas />
 
       {/* Fixed Architectural Scroll Depth Rail */}
