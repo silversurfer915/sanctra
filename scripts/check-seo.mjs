@@ -27,8 +27,8 @@ for(const [label,file,canonical] of pages){
  }
 }
 const home=await readFile('dist/index.html','utf8');
-if((home.match(/rel="preload" as="image"/g)||[]).length!==1)failures.push('Home: preload one original landing scene');
-if(!home.includes('observatory-scene'))failures.push('Home: first-paint animation fallback missing');
+if(!home.includes('class="rs-bg"'))failures.push('Home: crafted backdrop layer missing');
+if(/rel="preload" as="image"/.test(home))failures.push('Home: CSS backdrop needs no hero photo preload');
 const sitemap=await readFile('dist/sitemap.xml','utf8');
 for(const [, ,canonical] of pages)if(!sitemap.includes(`<loc>${canonical}</loc>`))failures.push(`Sitemap: missing ${canonical}`);
 if(failures.length){console.error(failures.join('\n'));process.exit(1);}

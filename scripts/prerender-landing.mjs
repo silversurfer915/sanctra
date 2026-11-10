@@ -40,9 +40,9 @@ try {
  const {LandingView}=await server.ssrLoadModule('/src/components/views/LandingView.tsx');
  const noop=()=>{};
  const markup=renderToString(React.createElement(LandingView,{onStartStudying:noop,onOpenGroups:noop,onOpenAuth:noop})).replace(/<link rel="preload" as="image"[^>]*\/>/g,'');
- let html=shell.replace('</head>',`${styleLinks}<link rel="preload" as="image" href="/backgrounds/landing-sanctra-sanctuary-poster-v2.jpg" type="image/jpeg" fetchpriority="high" /></head>`);
+ let html=shell.replace('</head>',`${styleLinks}</head>`);
  html=html.replace(/<div id="root"[^>]*><\/div>/,`<div id="root">${markup}</div>`);
- // React discovers every scenic image during SSR. Only the actual first-paint image belongs in the head.
+ // React SSR can emit scenic image preloads; the landing scene is CSS-only, so drop them.
  html=html.replace('</body>','<noscript><p style="padding:24px;text-align:center">Enable JavaScript to start a timer, sign in and use the interactive study desk. You can still read about Sanctra above.</p></noscript></body>');
  if(!html.includes('<h1')||!html.includes('A little calm.'))throw new Error('Landing prerender missing');
  await writeFile('dist/index.html',html);
