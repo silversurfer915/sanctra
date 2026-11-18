@@ -1785,8 +1785,12 @@ export const App: React.FC = () => {
           {currentView === 'timer' && (
             <>
               {timerOnly && <><CenteredHiddenMusicBar /><LocalClock /></>}
-              <div className={timerOnly ? 'focus-workspace minimal' : 'focus-workspace'}>
-              {!timerOnly && <aside className="focus-context" aria-label="Focus overview">
+              <div className={timerOnly ? 'focus-workspace minimal' : 'focus-workspace studio'}>
+              {!timerOnly && <aside className="studio-rail" aria-label="Focus overview">
+              <div className="studio-rail__head">
+                <span className="studio-kicker">Today</span>
+                <span className="studio-rail__date">{new Date().toLocaleDateString(undefined, {weekday: 'long', day: 'numeric', month: 'long'})}</span>
+              </div>
               <div className="focus-task-context">
                 <CurrentTaskBar
                   tasks={spaceTasks}
@@ -1820,6 +1824,7 @@ export const App: React.FC = () => {
               <QuoteBanner />
               </aside>}
               {/* Circular Focus Clock Dial */}
+              <div className="studio-stage">
               <TimerDial
                 activeThemeId={activeThemeId}
                 minimal={timerOnly}
@@ -1839,6 +1844,7 @@ export const App: React.FC = () => {
                 onToggleFullscreen={handleToggleFullscreen}
                 onOpenModeModal={() => setIsModeModalOpen(true)}
               />
+              </div>
               </div>
             </>
           )}

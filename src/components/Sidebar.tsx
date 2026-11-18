@@ -257,9 +257,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }
 
               return (
+                <React.Fragment key={item.id}>
+                {item.id === 'timer' && <div className="studio-nav-label">Workspace</div>}
+                {item.id === 'groups' && <div className="studio-nav-label">Community</div>}
                 <button
-                  key={item.id}
                   onClick={() => handleNavClick(item.id)}
+                  aria-current={isActive ? 'page' : undefined}
                   className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium transition-all cursor-pointer group ${
                     isActive
                       ? 'text-white font-semibold shadow-sm'
@@ -302,6 +305,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     />
                   )}
                 </button>
+                </React.Fragment>
               );
             })}
           </nav>
