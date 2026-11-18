@@ -1,0 +1,466 @@
+/* ==========================================================================
+   SANCTRA · DAYLIGHT (OVERWORLD, light)
+   Warm parchment, ink rules, hard offset shadows, one chunky display face.
+   Fun and gamified: pastel quest tiles, gold coins, a timer that reads like
+   a console on a desk. No glass, no gradients-as-depth, no photograph.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --l-bg: #f6ecd6;
+  --l-bg-2: #efe2c6;
+  --l-panel: #fffaf0;
+  --l-ink: #231a11;
+  --l-ink-dim: #6f5f48;
+  --l-ink-faint: #9a8a70;
+  --l-line: #2a2116;
+  --l-gold: #e9b44c;
+  --l-gold-soft: #f7d999;
+  --l-rust: #c2683a;
+  --l-moss: #5f8a5a;
+  --l-sky: #6aa6c9;
+  --l-rose: #d98b8b;
+  --l-shadow: 4px 4px 0 var(--l-line);
+  --l-shadow-sm: 3px 3px 0 var(--l-line);
+  --l-font: 'Pixelify Sans', 'Manrope Variable', system-ui, sans-serif;
+  --l-ui: 'Inter Variable', Inter, system-ui, sans-serif;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Ground                                                                      */
+/* -------------------------------------------------------------------------- */
+.sanctra-app {
+  --sanctra-ink: #efe2c6;
+  --sanctra-surface: #fffaf0;
+  --sanctra-paper: #231a11;
+  --sanctra-muted: #6f5f48;
+  --sanctra-sage: #c2683a;
+  --sanctra-glass-bg: #fffaf0;
+  --sanctra-glass-bg-hover: #fffdf6;
+  --sanctra-glass-border: #2a2116;
+  --sanctra-glass-border-hover: #2a2116;
+  --sanctra-glass-blur: none;
+  --sanctra-glass-shadow: 4px 4px 0 #2a2116;
+  --theme-accent: #c2683a !important;
+  --theme-accent-soft: #e08a52 !important;
+  --theme-accent-wash: rgba(194, 104, 58, 0.14) !important;
+  --theme-card-border: #2a2116 !important;
+  --theme-card-border-hover: #2a2116 !important;
+  --theme-card-glow: transparent !important;
+  --theme-button-bg: #e9b44c !important;
+  --theme-button-text: #231a11 !important;
+  --theme-button-glow: none !important;
+  --theme-button-ring: #2a2116 !important;
+  background: var(--l-bg) !important;
+  color: var(--l-ink);
+  font-family: var(--l-ui);
+}
+.sanctra-app .wallpaper-layer,
+.sanctra-app .scenic-wallpaper { display: none !important; }
+
+.sanctra-app::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-color: var(--l-bg);
+  background-image:
+    radial-gradient(circle at 18% 0%, rgba(233, 180, 76, 0.28), transparent 42%),
+    radial-gradient(circle at 92% 8%, rgba(106, 166, 201, 0.16), transparent 40%),
+    radial-gradient(circle, rgba(42, 33, 22, 0.16) 1px, transparent 1.2px);
+  background-size: auto, auto, 6px 6px;
+}
+
+/* Text colours: the app was written for a dark ground. */
+.sanctra-app :is(h1, h2, h3, h4, strong) { color: var(--l-ink) !important; }
+.sanctra-app .text-white,
+.sanctra-app .text-slate-100,
+.sanctra-app .text-slate-200,
+.sanctra-app .text-slate-300 { color: var(--l-ink) !important; }
+.sanctra-app .text-slate-400,
+.sanctra-app .text-slate-500,
+.sanctra-app .text-gray-400,
+.sanctra-app .text-gray-500 { color: var(--l-ink-dim) !important; }
+.sanctra-app p, .sanctra-app small, .sanctra-app span, .sanctra-app label, .sanctra-app li { color: inherit; }
+.sanctra-app :is(.workspace-heading p, .planner-view > header p, .analytics-view > header p) { color: var(--l-ink-dim) !important; }
+
+/* -------------------------------------------------------------------------- */
+/* Sidebar                                                                     */
+/* -------------------------------------------------------------------------- */
+.sanctra-app .app-sidebar {
+  width: 264px;
+  flex: 0 0 264px;
+  background: var(--l-bg-2) !important;
+  border-right: 3px solid var(--l-line) !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+.sanctra-app .app-sidebar > div { min-width: 264px; }
+.sanctra-app .app-sidebar nav { padding: 0 14px; gap: 3px; margin-top: 10px; }
+.sanctra-app .app-sidebar nav button {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 2px solid transparent !important;
+  border-radius: 0;
+  font-family: var(--l-ui);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--l-ink-dim);
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.sanctra-app .app-sidebar nav button:hover {
+  background: #fff8e8 !important;
+  border-color: var(--l-line) !important;
+  color: var(--l-ink);
+  transform: none !important;
+}
+.sanctra-app .app-sidebar nav button[aria-current='page'] {
+  background: var(--l-gold) !important;
+  border-color: var(--l-line) !important;
+  box-shadow: var(--l-shadow-sm) !important;
+  color: var(--l-ink) !important;
+}
+.sanctra-app .app-sidebar nav button[aria-current='page']::before { display: none; }
+.sanctra-app .app-sidebar nav button svg { color: var(--l-ink-dim) !important; }
+.sanctra-app .app-sidebar nav button[aria-current='page'] svg { color: var(--l-ink) !important; }
+.sanctra-app .app-sidebar nav button > div:first-child { background: transparent !important; }
+.sanctra-app .app-sidebar nav button[aria-current='page'] > span:last-child { display: none; }
+.studio-nav-label {
+  padding: 18px 12px 6px;
+  font-family: var(--l-font);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--l-ink-faint);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Header                                                                      */
+/* -------------------------------------------------------------------------- */
+.sanctra-app .app-header {
+  min-height: 64px;
+  padding: 0 28px;
+  background: var(--l-bg-2) !important;
+  border-bottom: 3px solid var(--l-line);
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+.sanctra-app .app-header-control {
+  width: 38px; height: 38px; min-width: 38px; min-height: 38px;
+  border: 2px solid var(--l-line);
+  border-radius: 0;
+  background: var(--l-panel);
+  color: var(--l-ink);
+  box-shadow: var(--l-shadow-sm);
+}
+.sanctra-app .app-header-control:hover { background: var(--l-gold); transform: none; }
+.sanctra-app .header-status { font-family: var(--l-font); font-size: 14px; color: var(--l-ink); }
+
+/* -------------------------------------------------------------------------- */
+/* Surfaces + controls                                                         */
+/* -------------------------------------------------------------------------- */
+.sanctra-app :is(.glass-card, .glass-panel, .analytics-card, .workspace-panel, .glass-specular) {
+  background: var(--l-panel) !important;
+  border: 2px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  box-shadow: var(--l-shadow) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+.sanctra-app :is(.glass-card, .analytics-card, .workspace-panel):hover {
+  background: #fffdf6 !important;
+  border-color: var(--l-line) !important;
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--l-line) !important;
+}
+.sanctra-app .app-sidebar.glass-panel { background: var(--l-bg-2) !important; box-shadow: none !important; }
+
+.sanctra-app :is(h1, h2, h3) { font-family: var(--l-font) !important; font-weight: 600; letter-spacing: 0; }
+.sanctra-app :is(.workspace-heading h1, .workspace-heading h2, .planner-view > header h1, .analytics-view > header h1) {
+  font-family: var(--l-font) !important;
+  font-size: clamp(30px, 2.6vw, 42px);
+  line-height: 1;
+}
+
+.sanctra-app :is(.workspace-primary, .analytics-button, .analytics-icon) {
+  min-height: 40px;
+  border: 2px solid var(--l-line) !important;
+  border-radius: 0;
+  background: var(--l-panel);
+  color: var(--l-ink);
+  font-family: var(--l-ui);
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: var(--l-shadow-sm);
+  padding-inline: 14px;
+}
+.sanctra-app :is(.workspace-primary, .analytics-button):hover { background: var(--l-gold); }
+.sanctra-app :is(.workspace-primary, .analytics-button):active { transform: translate(3px, 3px); box-shadow: none; }
+
+.sanctra-app :is(input:not([type='checkbox'], [type='range']), textarea, select) {
+  background: #fffdf7 !important;
+  border: 2px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  color: var(--l-ink) !important;
+  font-family: var(--l-ui);
+  font-size: 14px;
+  box-shadow: inset 2px 2px 0 rgba(42, 33, 22, 0.08);
+}
+.sanctra-app :is(input, textarea, select):focus {
+  border-color: var(--l-line) !important;
+  box-shadow: 3px 3px 0 var(--l-gold) !important;
+  outline: none;
+}
+.sanctra-app :is(button, a, input, select, textarea):focus-visible { outline: 3px solid var(--l-sky); outline-offset: 2px; }
+
+/* -------------------------------------------------------------------------- */
+/* Focus Room                                                                  */
+/* -------------------------------------------------------------------------- */
+.focus-workspace.studio {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 356px;
+  grid-template-areas: 'stage rail';
+  align-items: stretch;
+  max-width: none;
+  width: 100%;
+  gap: 24px;
+  padding: 4px 0 20px;
+}
+
+.studio-stage {
+  grid-area: stage;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+  padding: 28px;
+  background: var(--l-panel);
+  border: 3px solid var(--l-line);
+  box-shadow: 6px 6px 0 var(--l-line);
+  position: relative;
+}
+/* a little decorative skyline of tiles, bottom-left */
+.studio-stage::before {
+  content: '';
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  width: 46px;
+  height: 24px;
+  background:
+    linear-gradient(var(--l-gold), var(--l-gold)) 0 100% / 12px 24px no-repeat,
+    linear-gradient(var(--l-rust), var(--l-rust)) 16px 100% / 12px 16px no-repeat,
+    linear-gradient(var(--l-moss), var(--l-moss)) 32px 100% / 12px 10px no-repeat;
+  opacity: 0.55;
+}
+
+.studio-stage .timer-dial { width: 100%; gap: 0 !important; padding: 0 !important; margin: 0 !important; }
+.sanctra-app .focus-workspace .studio-stage .timer-ring {
+  width: min(58dvh, 500px, 88vw) !important;
+  margin-inline: auto;
+  border: 3px solid var(--l-line) !important;
+  border-radius: 50% !important;
+  background: #fffdf6 !important;
+  box-shadow: inset 0 0 0 10px #f3e6cc, 8px 8px 0 var(--l-line) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+.sanctra-app .focus-workspace .studio-stage .timer-ring svg circle:nth-of-type(1) { stroke: #e6d6b6; stroke-width: 9px; }
+.sanctra-app .focus-workspace .studio-stage .timer-ring svg circle:nth-of-type(2) { stroke-width: 9px; }
+.sanctra-app .focus-workspace .studio-stage .timer-ring svg line { display: none; }
+
+.sanctra-app .focus-workspace .studio-stage .timer-readout {
+  font-family: var(--l-font) !important;
+  font-size: clamp(88px, 9vw, 132px) !important;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.015em !important;
+  line-height: 1 !important;
+  color: var(--l-ink) !important;
+  text-shadow: 3px 3px 0 rgba(233, 180, 76, 0.55) !important;
+}
+.sanctra-app .studio-stage .timer-ring > .absolute { gap: 8px; padding: 0 !important; }
+.sanctra-app .studio-stage .timer-ring > .absolute > span:first-child {
+  order: -1;
+  font-family: var(--l-font);
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  color: var(--l-rust) !important;
+}
+.sanctra-app .studio-stage .timer-ring button {
+  background: #fffdf6 !important;
+  border: 2px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  color: var(--l-ink-dim) !important;
+  font-size: 11.5px !important;
+  font-weight: 600;
+  min-height: 28px !important;
+  padding: 0 8px !important;
+  box-shadow: 2px 2px 0 var(--l-line) !important;
+}
+.sanctra-app .studio-stage .timer-ring button:hover { background: var(--l-gold) !important; color: var(--l-ink) !important; }
+
+.sanctra-app .studio-stage .timer-actions { margin-top: 30px !important; gap: 10px !important; }
+.sanctra-app .studio-stage .timer-actions button {
+  min-height: 46px;
+  padding-inline: 18px;
+  border: 2px solid var(--l-line) !important;
+  border-radius: 0;
+  background: var(--l-panel);
+  color: var(--l-ink);
+  font-family: var(--l-ui);
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: var(--l-shadow-sm);
+}
+.sanctra-app .studio-stage .timer-actions > button:first-child {
+  min-width: 176px;
+  min-height: 54px !important;
+  padding-inline: 34px !important;
+  background: var(--l-gold) !important;
+  font-family: var(--l-font) !important;
+  font-size: 18px !important;
+  letter-spacing: 0.04em;
+}
+.sanctra-app .studio-stage .timer-actions > button:first-child:hover { background: var(--l-gold-soft) !important; }
+.sanctra-app .studio-stage .timer-actions button:active { transform: translate(3px, 3px); box-shadow: none; }
+
+/* -------------------------------------------------------------------------- */
+/* Rail: quest tiles                                                           */
+/* -------------------------------------------------------------------------- */
+.studio-rail {
+  grid-area: rail;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  padding: 22px;
+  background: var(--l-panel);
+  border: 3px solid var(--l-line);
+  box-shadow: 6px 6px 0 var(--l-line);
+}
+.studio-rail__head { display: flex; flex-direction: column; gap: 2px; }
+.studio-kicker { font-family: var(--l-font); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--l-rust); }
+.studio-rail__date { font-family: var(--l-font); font-size: 20px; color: var(--l-ink); }
+
+.studio-rail .timer-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0; padding: 0; }
+.studio-rail .timer-metrics > * {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  gap: 3px !important;
+  min-height: 0 !important;
+  padding: 12px !important;
+  border: 2px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  background: var(--l-panel) !important;
+  box-shadow: 3px 3px 0 var(--l-line) !important;
+  text-align: left;
+}
+.studio-rail .timer-metrics > *:nth-child(1) { background: #eaf3f8 !important; }
+.studio-rail .timer-metrics > *:nth-child(2) { background: #fbeed2 !important; }
+.studio-rail .timer-metrics > *:nth-child(3) { background: #f7e3e0 !important; }
+.studio-rail .timer-metrics > *:nth-child(4) { background: #e8f0e2 !important; }
+.studio-rail .timer-metrics > * > div:first-child { display: flex !important; align-items: center; justify-content: space-between; }
+.studio-rail .timer-metrics > * > div:first-child span { font-size: 9.5px; letter-spacing: 0.12em; color: var(--l-ink-dim); }
+.studio-rail .timer-metrics > * > div:first-child svg { width: 13px; height: 13px; color: var(--l-ink) !important; }
+.studio-rail .timer-metrics > * > div:nth-child(2) { font-family: var(--l-font); font-size: 26px !important; line-height: 1.05; color: var(--l-ink); }
+.studio-rail .timer-metrics > * > div:last-child { font-size: 11px !important; color: var(--l-ink-dim); }
+.studio-rail .timer-metrics > *:hover { transform: none !important; }
+
+.studio-rail .current-task-bar {
+  display: block;
+  padding: 14px !important;
+  border: 2px dashed var(--l-line) !important;
+  border-radius: 0 !important;
+  background: #fffdf6 !important;
+  box-shadow: none !important;
+  min-height: 0 !important;
+}
+.studio-rail .current-task-bar h2 { font-family: var(--l-font) !important; font-size: 16px; }
+.studio-rail .current-task-bar .analytics-button { min-height: 32px; font-size: 11.5px; box-shadow: 2px 2px 0 var(--l-line); }
+
+.studio-rail .timer-quote { margin: 0 !important; padding: 0 !important; max-width: none; }
+.studio-rail .timer-quote > div { background: none !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; min-height: 0; border-radius: 0; }
+.studio-rail .timer-quote p { font-family: var(--l-font); font-size: 16px; line-height: 1.45; color: var(--l-ink-dim) !important; white-space: normal; overflow: visible; }
+.studio-rail .timer-quote svg { display: none; }
+
+@media (max-width: 899px) {
+  .focus-workspace.studio { display: flex; flex-direction: column; gap: 16px; }
+  .studio-stage { order: 1; padding: 18px; }
+  .studio-rail { order: 2; padding: 16px; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .sanctra-app::after { background-image: none; }
+}
+
+/* The old scene layer sits behind everything; remove it whole. */
+.sanctra-app .scenic-wallpaper-container,
+.sanctra-app .vip-motion-wallpaper { display: none !important; }
+
+/* Text that was written in cream */
+.sanctra-app .studio-rail .current-task-bar :is(p, span, h2, small) { color: var(--l-ink-dim) !important; }
+.sanctra-app .studio-rail .current-task-bar h2 { color: var(--l-ink) !important; }
+.sanctra-app .studio-stage .timer-actions button,
+.sanctra-app .studio-stage .timer-actions button span,
+.sanctra-app .studio-stage .timer-actions button svg { color: var(--l-ink) !important; }
+.sanctra-app .studio-stage .timer-actions > button:not(:first-child),
+.sanctra-app .studio-stage .timer-actions > button:not(:first-child) span,
+.sanctra-app .studio-stage .timer-actions > button:not(:first-child) svg { color: var(--l-ink-dim) !important; }
+.sanctra-app .studio-stage .timer-actions > button:first-child,
+.sanctra-app .studio-stage .timer-actions > button:first-child * { color: var(--l-ink) !important; }
+
+/* Buttons must not keep the dark theme's inline fills. */
+.sanctra-app .studio-stage .timer-actions button,
+.sanctra-app .studio-stage .timer-actions button[style] {
+  background: var(--l-panel) !important;
+  border: 2px solid var(--l-line) !important;
+  color: var(--l-ink) !important;
+}
+.sanctra-app .studio-stage .timer-actions > button:first-child,
+.sanctra-app .studio-stage .timer-actions > button:first-child[style] {
+  background: var(--l-gold) !important;
+  border-color: var(--l-line) !important;
+  color: var(--l-ink) !important;
+  box-shadow: 5px 5px 0 var(--l-line) !important;
+}
+.sanctra-app .studio-stage .timer-actions > button:not(:first-child) { color: var(--l-ink-dim) !important; }
+
+/* The two chips inside the clock become stickers, not ghosts. */
+.sanctra-app .studio-stage .timer-ring button,
+.sanctra-app .studio-stage .timer-ring button[style] {
+  background: #fffdf6 !important;
+  color: var(--l-ink) !important;
+  border: 2px solid var(--l-line) !important;
+  box-shadow: 2px 2px 0 var(--l-line) !important;
+  font-weight: 700;
+}
+.sanctra-app .studio-stage .timer-ring button:hover { background: var(--l-gold) !important; }
+
+/* Readable microcopy over parchment */
+.sanctra-app .studio-rail .timer-metrics > * > div:first-child span { font-size: 10.5px !important; color: #4a3d2b !important; letter-spacing: 0.08em; }
+.sanctra-app .studio-rail .timer-metrics > * > div:last-child { font-size: 12px !important; color: #5a4b38 !important; }
+.sanctra-app .studio-rail .current-task-bar :is(p, span) { color: #5a4b38 !important; font-size: 12.5px; }
+.sanctra-app .studio-rail .timer-quote p { color: #5a4b38 !important; }
+.sanctra-app .studio-stage .timer-actions button span { font-size: 13px !important; }
+.sanctra-app .studio-stage .timer-actions > button:first-child span { font-size: 18px !important; }
+
+/* Contrast sweep across inherited views */
+.sanctra-app .task-overview-grid :is(small, strong, span) { color: var(--l-ink) !important; }
+.sanctra-app .task-overview-grid small { color: var(--l-ink-dim) !important; }
+.sanctra-app .planner-days button span,
+.sanctra-app .planner-days button[aria-pressed='true'] span { color: var(--l-ink) !important; }
+.sanctra-app :is(.workspace-tabs button, .workspace-tabs button span, .calendar-toolbar button) { color: var(--l-ink-dim) !important; }
+.sanctra-app :is(.workspace-tabs button.active, .workspace-tabs button[aria-pressed='true'], .workspace-tabs button[data-active='true']) { color: var(--l-ink) !important; background: var(--l-gold) !important; }
+.sanctra-app :is(.workspace-primary, .analytics-button, .analytics-icon) { color: var(--l-ink) !important; }
+.sanctra-app :is(.analytics-card, .workspace-panel) :is(p, small, span, li, td, th) { color: var(--l-ink-dim); }
+.sanctra-app :is(.analytics-card, .workspace-panel) :is(h1, h2, h3, h4, strong, .text-white) { color: var(--l-ink) !important; }
+.sanctra-app .task-overview-grid > article :is(small, strong, span) { color: var(--l-ink) !important; }
+.sanctra-app .task-overview-grid > article small { color: var(--l-ink-dim) !important; }
+.sanctra-app [class*='text-emerald-3'], .sanctra-app [class*='text-emerald-2'], .sanctra-app [class*='text-teal-3'] { color: var(--l-ink) !important; }
+.sanctra-app .planner-tabs button[class*='border-emerald'] { background: var(--l-gold) !important; border-color: var(--l-line) !important; color: var(--l-ink) !important; }

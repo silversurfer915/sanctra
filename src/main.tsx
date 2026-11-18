@@ -4,6 +4,7 @@ import './index.css';
 import './styles-sanctra.css';
 import './styles-studio.css';
 import './styles-overworld.css';
+import './styles-light.css';
 import App from './App.tsx';
 import {LegalView} from './components/views/LegalView.tsx';
 import { initFirebase } from './utils/firebase.ts';
