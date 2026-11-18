@@ -9,6 +9,9 @@
 # Deterministic on purpose: no LLM in the loop, no token burn while the user
 # sleeps. Morning summary is a separate cron job.
 set -uo pipefail
+# one supervisor at a time: deploys can outlast a 5-minute tick
+exec 9>/tmp/sanctra-overnight.lock
+flock -n 9 || exit 0
 cd "$HOME/workspace/sanctra" || exit 1
 LOG="$HOME/sanctra-overnight.log"
 QUEUE="docs/agy-queue.md"
@@ -26,9 +29,23 @@ if [ -n "$(git status --porcelain)" ]; then
     CURRENT=$(grep -m1 '^- \[~\]' "$QUEUE" | sed 's/^- \[~\] //')
     git add -A
     git commit -q -m "design(overnight): ${CURRENT:-agy pass}" || true
-    git push -q origin main && gh workflow run deploy.yml --ref main \
-      && say "green → committed + deploy triggered · ${CURRENT:-agy pass}" \
-      || say "green but push/deploy failed · ${CURRENT:-agy pass}"
+    if git push -q origin main; then
+      gh workflow run deploy.yml --ref main
+      RUN_ID=$(sleep 8; gh run list --workflow=deploy.yml --limit 1 --json databaseId -q '.[0].databaseId')
+      say "deploy triggered · run $RUN_ID · ${CURRENT:-agy pass}"
+      # wait for the workflow, max ~12 min
+      for _ in $(seq 48); do
+        CONC=$(gh run view "$RUN_ID" --json status,conclusion -q '.status+"/"+.conclusion')
+        case "$CONC" in
+          completed/*) break ;;
+        esac
+        sleep 15
+      done
+      CODE=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 https://sanctrastudy.live/ || echo 000)
+      say "deploy $(echo "$CONC" | sed 's|completed/||') · live $CODE · ${CURRENT:-agy pass}"
+    else
+      say "push failed · ${CURRENT:-agy pass}"
+    fi
     if [ -n "$CURRENT" ]; then
       python3 - "$QUEUE" "$CURRENT" <<'PY'
 import sys, pathlib

@@ -2,7 +2,9 @@
 
 You are pairing with another agent (Hermes) on the same repo. Hermes owns
 build/test/deploy and the app's wiring; **you own visual design and layout**.
-Work on a branch and leave the tree clean and building.
+Work on a branch and leave the tree clean and building. Hermes deploys every
+green pass to https://sanctrastudy.live automatically — never run git push,
+gh, or a deploy yourself.
 
 ## What Sanctra is
 

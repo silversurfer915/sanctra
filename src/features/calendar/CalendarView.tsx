@@ -96,6 +96,13 @@ export function CalendarView(p: CalendarViewProps) {
 
   const tasks = p.tasks.filter((t) => belongsToWorkspace(t, p.workspaceId, p.legacySpaceId));
 
+  // 7-day week strip dates based on selected date
+  const weekStripDates = useMemo(() => {
+    return Array.from({ length: 7 }, (_, i) =>
+      addDays(selected, -dateValue(selected).dayOfWeek + 1 + i)
+    );
+  }, [selected]);
+
   // Count candidates for Arrange Tasks badge
   const arrangeCount = tasks.filter((t) => !t.completed && (!t.dueDate || t.dueDate < today)).length;
 
@@ -452,6 +459,43 @@ export function CalendarView(p: CalendarViewProps) {
               }}
             />
           </label>
+        </div>
+
+        {/* 7-tile week strip of chunky paper date tiles */}
+        <div className="calendar-week-strip" role="region" aria-label="7-day week strip">
+          {weekStripDates.map((d) => {
+            const isToday = d === today;
+            const isSelected = d === selected;
+            const dayEntries = all.filter((e) => e.date === d);
+            const count = dayEntries.length;
+            return (
+              <button
+                type="button"
+                key={d}
+                className={`calendar-week-tile ${isToday ? 'is-today' : ''} ${isSelected ? 'is-selected' : ''}`}
+                aria-pressed={isSelected}
+                onClick={() => select(d)}
+              >
+                <span className="calendar-week-tile-day">
+                  {formatDate(d, { weekday: 'short' })}
+                </span>
+                <strong className="calendar-week-tile-num">
+                  {Number(d.slice(-2))}
+                </strong>
+                <div className="calendar-week-tile-footer">
+                  {isToday ? (
+                    <span className="calendar-today-stamp">TODAY</span>
+                  ) : count > 0 ? (
+                    <span className="calendar-tile-badge">
+                      {count} {count === 1 ? 'quest' : 'quests'}
+                    </span>
+                  ) : (
+                    <span className="calendar-tile-empty">—</span>
+                  )}
+                </div>
+              </button>
+            );
+          })}
         </div>
 
         {/* Notices & Alerts */}

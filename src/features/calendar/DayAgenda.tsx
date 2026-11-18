@@ -73,6 +73,12 @@ export function DayAgenda({
         {entries.map((e) => {
           const Icon = entryIcon[e.kind];
           const hasColor = Boolean(e.color);
+          const timeLabel = e.allDay
+            ? 'ALL DAY'
+            : e.start
+            ? instantTime(e.start, timezone)
+            : 'ANYTIME';
+          const endLabel = !e.allDay && e.end ? instantTime(e.end, timezone) : null;
 
           return (
             <article
@@ -81,57 +87,68 @@ export function DayAgenda({
               }`}
               key={e.id}
             >
-              <div
-                className="calendar-agenda-icon"
-                style={hasColor ? { color: e.color } : undefined}
-              >
-                <Icon size={16} />
+              <div className="calendar-agenda-gutter">
+                <span className="calendar-gutter-time">{timeLabel}</span>
+                {endLabel && <span className="calendar-gutter-end">{endLabel}</span>}
               </div>
 
-              <button
-                type="button"
-                className="calendar-agenda-info"
-                onClick={() => onOpen(e)}
-              >
-                <strong className={e.completed ? 'line-through opacity-50' : ''}>
-                  {e.title}
-                </strong>
-                <span>
-                  {e.allDay
-                    ? 'All day'
-                    : `${instantTime(e.start!, timezone)} – ${instantTime(e.end!, timezone)}`}
-                  {e.subjectName ? ` · ${e.subjectName}` : ''}
-                  {e.readonly ? ' · Read-only' : ''}
-                </span>
-              </button>
+              <div className="calendar-agenda-body">
+                <div
+                  className="calendar-agenda-icon"
+                  style={hasColor ? { color: e.color } : undefined}
+                >
+                  <Icon size={16} />
+                </div>
 
-              <div className="calendar-agenda-actions">
-                {e.kind === 'task' && (
-                  <>
-                    <button
-                      type="button"
-                      className={`calendar-check-btn ${e.completed ? 'is-checked' : ''}`}
-                      aria-label={`${e.completed ? 'Mark incomplete' : 'Complete'} ${e.title}`}
-                      title={e.completed ? 'Mark incomplete' : 'Complete task'}
-                      onClick={() => onToggle(e.sourceId)}
-                    >
-                      <Check size={14} />
-                    </button>
+                <button
+                  type="button"
+                  className="calendar-agenda-info"
+                  onClick={() => onOpen(e)}
+                >
+                  <strong className={e.completed ? 'line-through opacity-50' : ''}>
+                    {e.title}
+                  </strong>
+                  <div className="calendar-agenda-meta">
+                    {e.subjectName && (
+                      <span className="calendar-subject-tag">{e.subjectName}</span>
+                    )}
+                    {e.readonly && (
+                      <span className="calendar-readonly-tag">Read-only</span>
+                    )}
+                    {e.kind === 'event' && (
+                      <span className="calendar-event-tag">Event</span>
+                    )}
+                  </div>
+                </button>
 
-                    {!e.completed && (
+                <div className="calendar-agenda-actions">
+                  {e.kind === 'task' && (
+                    <>
                       <button
                         type="button"
-                        className="calendar-focus-btn"
-                        aria-label={`Start focus session for ${e.title}`}
-                        title="Focus on this task"
-                        onClick={() => onFocus(e.sourceId)}
+                        className={`calendar-check-btn ${e.completed ? 'is-checked' : ''}`}
+                        aria-label={`${e.completed ? 'Mark incomplete' : 'Complete'} ${e.title}`}
+                        title={e.completed ? 'Mark incomplete' : 'Complete task'}
+                        onClick={() => onToggle(e.sourceId)}
                       >
-                        <Play size={11} fill="currentColor" />
-                        <span>Focus</span>
+                        <Check size={14} />
                       </button>
-                    )}
-                  </>
-                )}
+
+                      {!e.completed && (
+                        <button
+                          type="button"
+                          className="calendar-focus-btn"
+                          aria-label={`Start focus session for ${e.title}`}
+                          title="Focus on this task"
+                          onClick={() => onFocus(e.sourceId)}
+                        >
+                          <Play size={11} fill="currentColor" />
+                          <span>Focus</span>
+                        </button>
+                      )}
+                    </>
+                  )}
+                </div>
               </div>
             </article>
           );
