@@ -7,7 +7,7 @@ import {validTaskSlot,isBacklogTask} from '../../utils/taskSchedule.ts';
 import React,{useMemo,useState} from 'react';
 import type {TaskItem,Subject} from '../../types/index.ts';
 import {getLocalDateString} from '../../utils/time.ts';
-import {CheckCircle2,Circle,Plus,Trash2,ChevronLeft,ChevronRight,Edit3,Sparkles} from 'lucide-react';
+import {CheckCircle2,Plus,Trash2,ChevronLeft,ChevronRight,Edit3,Sparkles} from 'lucide-react';
 
 interface PlannerViewProps {
   jeeSyllabus?:JeeSyllabus;
