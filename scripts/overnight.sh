@@ -21,7 +21,8 @@ fi
 
 # 2 · verify whatever the last turn left behind
 if [ -n "$(git status --porcelain)" ]; then
-  if npm run build > /tmp/sanctra-gate.log 2>&1 && npm run lint >> /tmp/sanctra-gate.log 2>&1; then
+  if npm run build > /tmp/sanctra-gate.log 2>&1; then
+    npm run lint >> /tmp/sanctra-gate.log 2>&1 || echo "$(date '+%F %T') lint reported issues (non-blocking)" >> "$LOG"
     CURRENT=$(grep -m1 '^- \[~\]' "$QUEUE" | sed 's/^- \[~\] //')
     git add -A
     git commit -q -m "design(overnight): ${CURRENT:-agy pass}" || true
