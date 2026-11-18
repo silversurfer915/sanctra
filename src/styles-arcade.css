@@ -146,7 +146,7 @@
 .sanctra-app main.timer-content { padding-top: 62px !important; }
 
 /* -------------------------------------------------------------------------- */
-/* 3 · Focus Room: world strip, console, quest row                             */
+/* 3 · Focus Room: world strip, square console HUD, inventory strip, quest card */
 /* -------------------------------------------------------------------------- */
 .focus-workspace.studio {
   display: flex !important;
@@ -166,7 +166,7 @@
   box-shadow: 6px 6px 0 var(--l-line);
   overflow: hidden;
 }
-/* pixel landscape: sun, three hills, ground line */
+/* pixel landscape: sun, layered hills, horizon ground line */
 .studio-stage::before {
   content: '';
   position: absolute;
@@ -185,18 +185,67 @@
 .studio-stage > * { position: relative; z-index: 1; }
 .studio-stage .timer-dial { background: transparent !important; }
 
-/* clock console sits on the ground */
+/* Square clock console sits firmly in the landscape */
 .sanctra-app .focus-workspace .studio-stage .timer-ring {
-  width: min(46dvh, 384px, 74vw) !important;
+  width: min(46dvh, 384px, 76vw) !important;
   border: 3px solid var(--l-line) !important;
   border-radius: 0 !important;
   background: #fffdf6 !important;
-  box-shadow: 10px 10px 0 rgba(42, 33, 22, 0.85) !important;
+  box-shadow: 8px 8px 0 var(--l-line) !important;
+  position: relative;
 }
 .sanctra-app .focus-workspace .studio-stage .timer-ring svg { display: none; }
-.sanctra-app .focus-workspace .studio-stage .timer-readout { font-size: clamp(64px, 7vw, 92px) !important; }
+.sanctra-app .focus-workspace .studio-stage .timer-readout {
+  font-family: var(--l-font) !important;
+  font-size: clamp(68px, 8vw, 96px) !important;
+  font-weight: 700 !important;
+  color: var(--l-ink) !important;
+  text-shadow: 3px 3px 0 rgba(233, 180, 76, 0.45) !important;
+}
 
-/* rail: quest row under the world */
+/* Console HUD buttons */
+.sanctra-app .studio-stage .timer-actions {
+  margin-top: 24px !important;
+  gap: 10px !important;
+}
+.sanctra-app .studio-stage .timer-actions > button:first-child {
+  min-width: 180px;
+  min-height: 52px !important;
+  padding-inline: 32px !important;
+  background: var(--l-gold) !important;
+  border: 3px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  box-shadow: 4px 4px 0 var(--l-line) !important;
+  font-family: var(--l-font) !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--l-ink) !important;
+}
+.sanctra-app .studio-stage .timer-actions > button:first-child:hover {
+  background: var(--l-gold-soft) !important;
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--l-line) !important;
+}
+.sanctra-app .studio-stage .timer-actions > button:not(:first-child) {
+  min-height: 44px;
+  padding-inline: 16px;
+  border: 2px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  background: #fffdf6 !important;
+  box-shadow: 2px 2px 0 var(--l-line) !important;
+  font-family: var(--l-font) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  color: var(--l-ink) !important;
+}
+.sanctra-app .studio-stage .timer-actions > button:not(:first-child):hover {
+  background: var(--l-gold) !important;
+}
+
+/* Rail: game HUD under the world strip */
 .studio-rail {
   order: 2;
   display: grid !important;
@@ -208,12 +257,34 @@
   box-shadow: none !important;
 }
 .studio-stage { order: 1; }
-.studio-rail__head { grid-column: 1 / -1; display: flex; align-items: baseline; gap: 10px; padding: 0 2px; }
+.studio-rail__head {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 0 2px;
+}
+.studio-rail__head .studio-kicker {
+  font-family: var(--l-font);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--l-rust);
+}
+.studio-rail__head .studio-rail__date {
+  font-family: var(--l-font);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--l-ink);
+}
+
+/* Four Stat Cards Read as an Inventory Strip */
 .studio-rail .timer-metrics {
   grid-column: 1 / -1;
   display: grid !important;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
+  gap: 12px;
   width: 100% !important;
   max-width: none !important;
   margin: 0 !important;
@@ -223,35 +294,129 @@
   min-height: 96px !important;
   padding: 12px 14px !important;
   border: 3px solid var(--l-line) !important;
+  border-radius: 0 !important;
   box-shadow: 4px 4px 0 var(--l-line) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  position: relative;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
-.studio-rail .timer-metrics > * > div:nth-child(2) { font-size: 30px !important; }
+.studio-rail .timer-metrics > *:hover {
+  transform: translate(-1px, -1px) !important;
+  box-shadow: 5px 5px 0 var(--l-line) !important;
+}
+/* Four distinct inventory slot colors */
+.studio-rail .timer-metrics > *:nth-child(1) { background: #e8f0e2 !important; } /* Moss */
+.studio-rail .timer-metrics > *:nth-child(2) { background: #fbeed2 !important; } /* Gold */
+.studio-rail .timer-metrics > *:nth-child(3) { background: #fae8e8 !important; } /* Rose */
+.studio-rail .timer-metrics > *:nth-child(4) { background: #eaf3f8 !important; } /* Sky */
 
+.studio-rail .timer-metrics > * > div:first-child span {
+  font-family: var(--l-font);
+  font-size: 11px !important;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--l-ink-dim) !important;
+}
+.studio-rail .timer-metrics > * > div:nth-child(2) {
+  font-family: var(--l-font) !important;
+  font-size: 30px !important;
+  font-weight: 700 !important;
+  line-height: 1.05;
+  color: var(--l-ink) !important;
+  margin: 4px 0;
+}
+.studio-rail .timer-metrics > * > div:last-child {
+  font-size: 11.5px !important;
+  color: var(--l-ink-dim) !important;
+}
+
+/* Active Quest Card with Gold Corner Flag */
 .studio-rail .current-task-bar {
   grid-column: 1;
   margin: 0;
-  min-height: 108px;
-  padding: 16px 18px !important;
-  border: 3px dashed var(--l-line) !important;
+  min-height: 112px;
+  padding: 16px 20px !important;
+  border: 3px solid var(--l-line) !important;
+  border-radius: 0 !important;
   background: #fffaf0 !important;
-  box-shadow: 4px 4px 0 rgba(42, 33, 22, 0.25) !important;
+  box-shadow: 4px 4px 0 var(--l-line) !important;
   width: 100% !important;
   max-width: none !important;
+  position: relative !important;
+  overflow: hidden !important;
 }
+/* Gold Corner Flag */
+.studio-rail .current-task-bar::after {
+  content: 'ACTIVE QUEST';
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: var(--l-gold);
+  color: var(--l-ink);
+  border-left: 2px solid var(--l-line);
+  border-bottom: 2px solid var(--l-line);
+  font-family: var(--l-font);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 3px 12px;
+  box-shadow: -1px 1px 0 rgba(42, 33, 22, 0.15);
+  z-index: 5;
+}
+.studio-rail .current-task-bar h2 {
+  font-family: var(--l-font) !important;
+  font-size: 19px !important;
+  font-weight: 700 !important;
+  color: var(--l-ink) !important;
+  line-height: 1.25;
+  padding-right: 90px; /* clear corner flag */
+}
+.studio-rail .current-task-bar p {
+  font-size: 12.5px !important;
+  color: var(--l-ink-dim) !important;
+  margin-top: 4px;
+}
+.studio-rail .current-task-bar .analytics-button {
+  min-height: 36px;
+  padding: 6px 14px;
+  border: 2px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  background: #fffdf6 !important;
+  font-family: var(--l-font);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  box-shadow: 2px 2px 0 var(--l-line);
+  color: var(--l-ink) !important;
+}
+.studio-rail .current-task-bar .analytics-button:hover {
+  background: var(--l-gold) !important;
+}
+
+/* Quote banner */
 .studio-rail .timer-quote {
   grid-column: 2;
-  padding: 16px 18px !important;
-  border: 3px solid var(--l-line);
-  background: #f7e6c4;
-  box-shadow: 4px 4px 0 var(--l-line);
-  min-height: 108px;
+  padding: 16px 20px !important;
+  border: 3px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  background: #fdf5df !important;
+  box-shadow: 4px 4px 0 var(--l-line) !important;
+  min-height: 112px;
   display: flex;
   align-items: center;
   width: 100% !important;
   max-width: none !important;
   margin: 0 !important;
 }
-.studio-rail .timer-quote p { font-size: 18px !important; color: var(--l-ink) !important; }
+.studio-rail .timer-quote p {
+  font-family: var(--l-font);
+  font-size: 17px !important;
+  color: var(--l-ink) !important;
+  line-height: 1.4;
+}
 
 @media (max-width: 1099px) {
   .studio-rail .timer-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
