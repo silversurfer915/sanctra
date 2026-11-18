@@ -329,7 +329,8 @@ export function LandingView({
         <span className="rs-blob rs-blob--a" />
         <span className="rs-blob rs-blob--b" />
         <span className="rs-blob rs-blob--c" />
-        <span className="rs-blob rs-blob--d" />
+        <span className="rs-contours" />
+        <span className="rs-orbit" />
       </div>
       <div className="rs-vignette" aria-hidden="true" />
       <div className="rs-grain" aria-hidden="true" />

@@ -112,6 +112,7 @@
   overflow: hidden;
   background-color: #05070c;
   background-image:
+    linear-gradient(90deg, rgba(4, 6, 10, 0.42) 0%, rgba(4, 6, 10, 0.12) 38%, transparent 62%),
     radial-gradient(34vw 32vw at 71% 52%, rgba(229, 184, 105, 0.2) 0%, rgba(229, 184, 105, 0.06) 48%, transparent 72%),
     radial-gradient(64vw 48vw at 74% 46%, rgba(229, 184, 105, 0.07) 0%, transparent 74%),
     radial-gradient(50vw 46vw at 8% 2%, rgba(56, 189, 248, 0.14) 0%, rgba(56, 189, 248, 0.03) 48%, transparent 72%),
@@ -148,10 +149,40 @@
   opacity: 0.85;
 }
 
+/* Engraved study-day dial: hairline instrument geometry, no bitmap. */
+.rs-orbit {
+  position: absolute;
+  left: 71%;
+  top: 52%;
+  width: clamp(560px, 76vw, 1060px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  background: url('/backgrounds/landing-instrument.svg') center / contain no-repeat;
+  -webkit-mask-image: radial-gradient(circle, #000 62%, rgba(0, 0, 0, 0.5) 82%, transparent 100%);
+  mask-image: radial-gradient(circle, #000 62%, rgba(0, 0, 0, 0.5) 82%, transparent 100%);
+  opacity: 0.78;
+  animation: rs-orbit 240s linear infinite;
+}
+
+@keyframes rs-orbit {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Contour strokes engraved into the lower-left of the page. */
+.rs-contours {
+  position: absolute;
+  inset: 0;
+  background: repeating-radial-gradient(ellipse 120% 78% at 4% 118%, transparent 0 31px, rgba(229, 184, 105, 0.075) 32px 33px, transparent 34px 62px);
+  -webkit-mask-image: linear-gradient(100deg, #000 0%, rgba(0, 0, 0, 0.45) 38%, transparent 62%);
+  mask-image: linear-gradient(100deg, #000 0%, rgba(0, 0, 0, 0.45) 38%, transparent 62%);
+}
+
 /* Narrow screens stack the hero, so drop the lamp pool below the nav. */
 @media (max-width: 700px) {
   .rs-bg {
     background-image:
+      linear-gradient(90deg, rgba(4, 6, 10, 0.4) 0%, rgba(4, 6, 10, 0.12) 55%, transparent 90%),
       radial-gradient(140vw 74vw at 62% 44%, rgba(229, 184, 105, 0.16) 0%, rgba(229, 184, 105, 0.04) 46%, transparent 72%),
       radial-gradient(110vw 90vw at 4% 0%, rgba(56, 189, 248, 0.13) 0%, transparent 72%),
       linear-gradient(180deg, #070a11 0%, #0a0d12 46%, #0a0908 100%);
@@ -195,10 +226,6 @@
   animation: rs-drift-c 30s ease-in-out infinite alternate;
 }
 
-.rs-blob--d {
-  display: none;
-}
-
 @keyframes rs-drift-a {
   to { transform: translate3d(6vw, 5vh, 0) scale(1.08); }
 }
@@ -239,7 +266,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .rs-blob,
-  .rs-grain {
+  .rs-grain,
+  .rs-orbit {
     animation: none;
   }
 }
