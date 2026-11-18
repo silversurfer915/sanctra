@@ -17,5 +17,6 @@ PROMPT="$(cat docs/AGY-BRIEF.md)
 
 $*"
 exec agy -p "$PROMPT" \
-  --dangerously-skip-permissions --mode accept-edits --effort high \
+  --model "${AGY_MODEL:-gemini-3.8-flash-high}" --effort high \
+  --dangerously-skip-permissions --mode accept-edits \
   --add-dir "$ROOT"
