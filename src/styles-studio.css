@@ -349,3 +349,220 @@
 
 /* Contrast pass on the chrome */
 .sanctra-app { --sanctra-muted: rgba(244, 241, 233, 0.62); }
+
+/* -------------------------------------------------------------------------- */
+/* Tasks                                                                       */
+/* -------------------------------------------------------------------------- */
+.sanctra-app .planner-view { max-width: 1080px; padding: 0; margin: 0 auto; }
+.sanctra-app .planner-view > header { padding: 8px 0 24px; align-items: flex-end; }
+.sanctra-app .planner-view > header h1 { font-family: var(--font-display); font-size: clamp(30px, 3vw, 42px); letter-spacing: -0.04em; line-height: 1.05; }
+.sanctra-app .planner-view > header p { font-size: 14.5px; color: var(--paper-dim); margin-top: 8px; }
+
+/* KPI strip: a ruled row, not three tiles */
+.sanctra-app .task-overview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0;
+  border-top: 1px solid var(--line) !important;
+  border-bottom: 1px solid var(--line) !important;
+  padding: 0;
+}
+.sanctra-app .task-overview-grid > article {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 20px 24px 20px 0 !important;
+  align-items: flex-start !important;
+  text-align: left !important;
+  gap: 6px !important;
+}
+.sanctra-app .task-overview-grid > article + article { border-left: 1px solid var(--line) !important; padding-left: 24px !important; }
+.sanctra-app .task-overview-grid small { font-size: 10.5px !important; letter-spacing: 0.16em; color: var(--paper-faint) !important; }
+.sanctra-app .task-overview-grid strong { font-family: var(--font-display); font-size: 38px !important; font-weight: 400 !important; letter-spacing: -0.04em; color: var(--paper) !important; line-height: 1; }
+.sanctra-app .task-overview-grid span { font-size: 12px !important; color: var(--paper-dim) !important; }
+
+/* Week strip: flat, amber selection */
+.sanctra-app .planner-date-toolbar { display: flex; align-items: center; gap: 16px; padding: 8px 0; }
+.sanctra-app .planner-date-toolbar > .planner-calendar { display: flex; align-items: center; gap: 8px; }
+.sanctra-app .planner-calendar {
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+.sanctra-app .planner-days { gap: 4px !important; }
+.sanctra-app .planner-days button {
+  min-width: 64px !important;
+  padding: 10px 8px !important;
+  border-radius: 10px !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  box-shadow: none !important;
+  color: var(--paper-dim) !important;
+  font-weight: 500 !important;
+  transform: none !important;
+}
+.sanctra-app .planner-days button:hover { background: rgba(255, 255, 255, 0.04) !important; color: var(--paper) !important; }
+.sanctra-app .planner-days button[aria-pressed='true'] {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: var(--line-2) !important;
+  color: var(--paper) !important;
+}
+.sanctra-app .planner-days button span:first-child { font-size: 10px !important; letter-spacing: 0.14em !important; opacity: 0.7; }
+.sanctra-app .planner-days button span:nth-child(2) { font-size: 17px !important; font-family: var(--font-display); }
+.sanctra-app .planner-days button[aria-pressed='true'] span:nth-child(2) { color: var(--amber); }
+
+/* Tabs: underlined, not pills */
+.sanctra-app .planner-tabs {
+  display: flex;
+  gap: 4px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--line) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.sanctra-app .planner-tabs button {
+  flex: 0 0 auto !important;
+  padding: 12px 14px !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--paper-dim) !important;
+  font-size: 13.5px !important;
+  font-weight: 500 !important;
+  border-bottom: 2px solid transparent !important;
+}
+.sanctra-app .planner-tabs button[aria-pressed='true'] { color: var(--paper) !important; border-bottom-color: var(--amber) !important; }
+.sanctra-app .planner-tabs button span:last-child { background: rgba(255, 255, 255, 0.08) !important; color: var(--paper-dim) !important; }
+
+/* Composer: one bar on a rule */
+.sanctra-app .planner-task-composer {
+  padding: 0 0 4px !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--line-2) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  gap: 12px !important;
+}
+.sanctra-app .planner-task-composer > input {
+  font-size: 15px !important;
+  padding: 14px 2px !important;
+  color: var(--paper) !important;
+}
+.sanctra-app .planner-task-composer > button[type='submit'] {
+  border-radius: 8px !important;
+  min-height: 38px !important;
+  padding-inline: 16px !important;
+  background: var(--amber) !important;
+  color: #14110a !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+.sanctra-app .planner-task-composer :is(.analytics-select, select, input[type='time']) { background: transparent !important; border: 0 !important; font-size: 12.5px !important; }
+
+/* Task rows: a list, not cards */
+.sanctra-app .planner-view > .space-y-2 { display: flex; flex-direction: column; gap: 0 !important; }
+.sanctra-app .planner-view > .space-y-2 > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 4px !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--line) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  opacity: 1 !important;
+}
+.sanctra-app .planner-view > .space-y-2 > div:hover { background: rgba(255, 255, 255, 0.025) !important; }
+.sanctra-app .planner-view > .space-y-2 > div :is(.analytics-button, .analytics-icon) { background: transparent !important; border-color: transparent !important; color: var(--paper-dim) !important; }
+.sanctra-app .planner-view > .space-y-2 > div :is(.analytics-button, .analytics-icon):hover { color: var(--paper) !important; background: rgba(255, 255, 255, 0.05) !important; }
+
+/* Empty state: calm, centred, no dashed box */
+.sanctra-app .planner-view > .space-y-2 > div[class*='border-dashed'] {
+  border: 0 !important;
+  background: transparent !important;
+  padding: 72px 16px !important;
+  display: block !important;
+  text-align: center;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Timer stage v3 — the number is the design                                   */
+/* -------------------------------------------------------------------------- */
+@media (min-width: 900px) {
+  .sanctra-app .focus-workspace .studio-stage .timer-ring {
+    width: min(60dvh, 560px) !important;
+    max-width: 100%;
+    position: relative;
+  }
+  /* Thin engraved ring instead of a dashboard gauge */
+  .sanctra-app .studio-stage .timer-ring svg { opacity: 0.55; }
+  .sanctra-app .studio-stage .timer-ring svg line { display: none; }
+  .sanctra-app .studio-stage .timer-ring svg circle:nth-of-type(1) { stroke: rgba(255, 255, 255, 0.07); stroke-width: 1px; }
+  .sanctra-app .studio-stage .timer-ring svg circle:nth-of-type(2) { stroke-width: 2px; }
+
+  .sanctra-app .studio-stage .timer-ring > .absolute {
+    gap: 10px;
+    padding: 0 !important;
+  }
+  .sanctra-app .studio-stage .timer-ring > .absolute > span:first-child {
+    font-size: 10.5px;
+    letter-spacing: 0.34em;
+    color: rgba(244, 241, 233, 0.5) !important;
+    order: -1;
+    margin: 0;
+  }
+  .sanctra-app .focus-workspace .studio-stage .timer-readout {
+    font-size: clamp(88px, 9.5vw, 136px) !important;
+    line-height: 0.82 !important;
+    letter-spacing: -0.045em !important;
+    color: var(--paper) !important;
+    padding: 6px 0 !important;
+  }
+
+  /* Mode + subject read as quiet metadata, not pills */
+  .sanctra-app .studio-stage .timer-ring .mt-3,
+  .sanctra-app .studio-stage .timer-ring .mt-2 { margin-top: 2px !important; }
+  .sanctra-app .studio-stage .timer-ring button {
+    background: transparent !important;
+    border: 0 !important;
+    color: rgba(244, 241, 233, 0.52) !important;
+    font-size: 11.5px !important;
+    letter-spacing: 0.02em;
+    min-height: 26px !important;
+    padding: 0 4px !important;
+    box-shadow: none !important;
+  }
+  .sanctra-app .studio-stage .timer-ring button:hover { color: var(--paper) !important; }
+  .sanctra-app .studio-stage .timer-ring .mt-2 + button,
+  .sanctra-app .studio-stage .timer-ring .mt-3 + button { margin-left: 14px; }
+
+  /* One wide primary action, the rest are quiet labels */
+  .sanctra-app .studio-stage .timer-actions {
+    margin-top: 34px !important;
+    gap: 4px !important;
+  }
+  .sanctra-app .studio-stage .timer-actions > button:first-child {
+    min-height: 56px !important;
+    min-width: 176px;
+    padding-inline: 38px !important;
+    border-radius: 999px !important;
+    font-size: 15px !important;
+    letter-spacing: 0.01em;
+  }
+  .sanctra-app .studio-stage .timer-actions > button:not(:first-child) {
+    min-height: 44px !important;
+    border: 0 !important;
+    padding-inline: 14px !important;
+    font-size: 12.5px !important;
+    color: rgba(244, 241, 233, 0.5) !important;
+  }
+  .sanctra-app .studio-stage .timer-actions > button:not(:first-child):hover { color: var(--paper) !important; background: rgba(255,255,255,.04) !important; }
+}
