@@ -15,11 +15,13 @@ import { LandingAtmosphereCanvas } from './LandingAtmosphereCanvas.tsx';
 import { LandingCyanotypeApparatus, LANDING_MODE_PALETTES } from './LandingCyanotypeApparatus.tsx';
 import { playAmbientSound, stopAmbientSound } from '../../utils/landingSoundPreview.ts';
 import { PLUS_PRICING_PLANS } from '../../utils/subscriptionPlans.ts';
+import { formatDurationHuman } from '../../utils/time.ts';
 import './landing-preview.css';
 import './landing.css';
 
 interface LandingViewProps {
   activeWallpaperId?: string;
+  todayFocusSeconds?: number;
   onStartStudying: (subject?: string, minutes?: number) => void;
   onAtmosphereChange?: (id: string) => void;
   onOpenGroups: () => void;
@@ -143,6 +145,7 @@ const FAQ_ITEMS = [
 ];
 
 export function LandingView({
+  todayFocusSeconds = 0,
   onStartStudying,
   onOpenGroups,
   onOpenAuth,
@@ -306,6 +309,8 @@ export function LandingView({
   const grainUrl = `url("data:image/svg+xml,${encodeURIComponent(grainSvg)}")`;
 
   const activeLandingPalette = LANDING_MODE_PALETTES[timerMode];
+  const hasTodayFocus = todayFocusSeconds >= 60;
+  const todayFocusLabel = formatDurationHuman(todayFocusSeconds);
 
   return (
     <div
@@ -501,8 +506,17 @@ export function LandingView({
                 {/* Refined Telemetry Pill beneath the apparatus */}
                 <div className="pt-4 flex items-center justify-center w-full px-2">
                   <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/10 bg-[#12151a]/70 backdrop-blur-md shadow-sm">
-                    <span className="font-serif text-base text-[var(--rs-cream)] tabular-nums font-normal">0425</span>
-                    <span className="text-[11px] font-sans text-[var(--rs-cream-dim)] font-medium">hours focused in Sanctra today</span>
+                    {hasTodayFocus ? (
+                      <>
+                        <span className="font-serif text-base text-[var(--rs-cream)] tabular-nums font-normal">{todayFocusLabel}</span>
+                        <span className="text-[11px] font-sans text-[var(--rs-cream-dim)] font-medium">focused in Sanctra today</span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="h-1.5 w-1.5 rounded-full bg-[var(--rs-amber)]" aria-hidden="true" />
+                        <span className="text-[11px] font-sans text-[var(--rs-cream-dim)] font-medium">Your focus today appears here after one session</span>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>

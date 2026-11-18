@@ -1646,6 +1646,7 @@ export const App: React.FC = () => {
         <React.Suspense fallback={<LoadingScreen wallpaperId={appearanceSettings.activeWallpaperId} />}>
           <LandingView
             activeWallpaperId={landingWallpaperId}
+            todayFocusSeconds={todaySeconds}
             onAtmosphereChange={setLandingWallpaperId}
             onOpenGroups={() => {
               handleSelectView('groups');
