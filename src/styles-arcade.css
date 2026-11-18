@@ -537,3 +537,213 @@
   background: var(--l-gold) !important;
 }
 
+/* -------------------------------------------------------------------------- */
+/* 6 · Groups: 2-up room cards, pixel occupancy meter, rhythm sticker, join brick */
+/* -------------------------------------------------------------------------- */
+.sanctra-app .live-groups {
+  max-width: 1200px;
+}
+
+.sanctra-app .group-room-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 22px;
+  background: var(--l-panel) !important;
+  border: 3px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  box-shadow: 4px 4px 0 var(--l-line) !important;
+  gap: 16px;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.sanctra-app .group-room-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--l-line) !important;
+}
+
+.sanctra-app .group-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.sanctra-app .group-badge-paper {
+  font-family: var(--l-font);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 2px 8px;
+  border: 2px solid var(--l-line);
+  background: #efe2c6;
+  color: var(--l-ink);
+}
+
+.sanctra-app .group-badge-owner {
+  font-family: var(--l-font);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border: 2px solid var(--l-line);
+  background: var(--l-rust);
+  color: #ffffff;
+}
+
+/* Rhythm sticker */
+.sanctra-app .group-rhythm-sticker {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border: 2px solid var(--l-line);
+  background: #fbeed2;
+  box-shadow: 2px 2px 0 var(--l-line);
+  transform: rotate(-1.5deg);
+  font-family: var(--l-font);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--l-ink);
+  transition: transform 0.15s ease;
+}
+.sanctra-app .group-room-card:hover .group-rhythm-sticker {
+  transform: rotate(0deg) scale(1.04);
+}
+
+.sanctra-app .group-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1 1 auto;
+}
+
+.sanctra-app .group-room-title {
+  font-family: var(--l-font) !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  color: var(--l-ink) !important;
+  line-height: 1.15;
+}
+
+.sanctra-app .group-room-desc {
+  font-size: 13.5px;
+  color: var(--l-ink-dim);
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sanctra-app .group-room-author {
+  font-size: 12px;
+  color: var(--l-ink-faint);
+  font-family: var(--l-ui);
+}
+.sanctra-app .group-room-author strong {
+  color: var(--l-ink);
+}
+
+/* Pixel Occupancy Meter (segmented blocks) */
+.sanctra-app .group-occupancy-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px 12px;
+  background: #efe2c6;
+  border: 2px solid var(--l-line);
+}
+
+.sanctra-app .group-occupancy-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--l-font);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--l-ink-dim);
+  letter-spacing: 0.06em;
+}
+
+.sanctra-app .group-occupancy-count {
+  color: var(--l-ink);
+}
+
+.sanctra-app .group-occupancy-blocks {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+.sanctra-app .group-occupancy-block {
+  height: 12px;
+  border: 2px solid var(--l-line);
+  background: #fffdf6;
+  transition: background 0.15s ease;
+}
+
+.sanctra-app .group-occupancy-block.is-filled {
+  background: var(--l-gold) !important;
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+/* Big JOIN / ENTER Brick */
+.sanctra-app .group-join-brick {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 18px;
+  border: 3px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  background: var(--l-gold) !important;
+  color: var(--l-ink) !important;
+  box-shadow: 4px 4px 0 var(--l-line) !important;
+  font-family: var(--l-font) !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+  user-select: none;
+}
+.sanctra-app .group-join-brick:hover:not(:disabled) {
+  background: var(--l-gold-soft) !important;
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--l-line) !important;
+}
+.sanctra-app .group-join-brick:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--l-line) !important;
+}
+
+/* Group primary button in header */
+.sanctra-app .group-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 8px 18px;
+  border: 2px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  background: var(--l-gold) !important;
+  color: var(--l-ink) !important;
+  box-shadow: 3px 3px 0 var(--l-line) !important;
+  font-family: var(--l-font) !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.sanctra-app .group-primary:hover:not(:disabled) {
+  background: var(--l-gold-soft) !important;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--l-line) !important;
+}
+.sanctra-app .group-input {
+  border: 2px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  background: #fffdf7 !important;
+  color: var(--l-ink) !important;
+  box-shadow: inset 1px 1px 0 rgba(42, 33, 22, 0.08) !important;
+}
+
+

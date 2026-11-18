@@ -38,7 +38,69 @@ export function LiveGroupsView({user,initialRoomId,subscription,settings,onOpenA
   {error&&<p role="alert" className="group-error">{error}</p>}
   <label className="conversation-search"><Search size={16}/><input aria-label="Search groups" placeholder="Find a group by name or topic…" value={groupSearch} onChange={e=>setGroupSearch(e.target.value)}/></label>
   <div className="flex gap-3"><button className="analytics-button" aria-pressed={tab==='mine'} onClick={()=>setTab('mine')}>Your groups · {joinedGroups.length}</button><button className="analytics-button" aria-pressed={tab==='discover'} onClick={()=>setTab('discover')}>Discover</button></div>
-  {!ready?<p role="status">Connecting to your groups…</p>:rooms.length===0?<section className="analytics-card p-10 text-center space-y-3"><Users size={32} className="mx-auto"/><h2>{groupSearch?'No groups match your search.':tab==='mine'?'Your focus circle starts here.':'No public groups yet.'}</h2><p className="group-muted">Create a group or join with an invitation.</p></section>:<div className="grid md:grid-cols-2 gap-4">{rooms.map(room=><article key={room.id} className="analytics-card p-6 space-y-4"><div className="flex justify-between"><span className="group-eyebrow">{room.isPublic?'Public group':'Invitation only'}</span>{room.createdById===user.uid&&<span className="group-badge">Owner</span>}</div><h2>{room.name}</h2><p className="group-muted whitespace-pre-wrap break-words">{room.description||'A shared space for focused time.'}</p><p className="text-sm group-muted">Created by {room.createdByName}</p><button disabled={busy} className="analytics-button" onClick={()=>void action(()=>enter(room))}>{joinedIds.includes(room.id)?'Open group':'Join group'}</button></article>)}</div>}
+  {!ready?<p role="status">Connecting to your groups…</p>:rooms.length===0?<section className="analytics-card p-10 text-center space-y-3"><Users size={32} className="mx-auto"/><h2>{groupSearch?'No groups match your search.':tab==='mine'?'Your focus circle starts here.':'No public groups yet.'}</h2><p className="group-muted">Create a group or join with an invitation.</p></section>:<div className="grid md:grid-cols-2 gap-5">{rooms.map(room=>{
+    const rhythmLabel = room.timerMode ? room.timerMode.replaceAll('-', ' ').toUpperCase() : 'DEEP FLOW';
+    const isOwner = room.createdById === user.uid;
+    const isJoined = joinedIds.includes(room.id);
+    const count = room.activeCount || 1;
+    const activeBlocks = Math.min(5, Math.max(1, Math.ceil(count / 2)));
+
+    return (
+      <article key={room.id} className="group-room-card">
+        {/* Card Header: Type badge + Rhythm sticker */}
+        <div className="group-card-header">
+          <div className="flex items-center gap-2">
+            <span className="group-badge-paper">
+              {room.isPublic ? 'PUBLIC' : 'PRIVATE'}
+            </span>
+            {isOwner && <span className="group-badge-owner">OWNER</span>}
+          </div>
+
+          {/* Rhythm as a sticker */}
+          <div className="group-rhythm-sticker" title="Group timer rhythm">
+            <span>{rhythmLabel}</span>
+          </div>
+        </div>
+
+        {/* Room Title & Description */}
+        <div className="group-card-body">
+          <h2 className="group-room-title">{room.name}</h2>
+          <p className="group-room-desc whitespace-pre-wrap break-words">
+            {room.description || 'A calm, shared desk for dedicated focus sessions.'}
+          </p>
+          <p className="group-room-author">
+            Founded by <strong>{room.createdByName}</strong>
+          </p>
+        </div>
+
+        {/* Pixel Occupancy Meter (segmented blocks) */}
+        <div className="group-occupancy-wrap" aria-label={`Occupancy meter: ${count} active scholars`}>
+          <div className="group-occupancy-head">
+            <span className="group-occupancy-lbl">OCCUPANCY</span>
+            <span className="group-occupancy-count">{count > 1 ? `${count} SCHOLARS` : 'QUIET DESK'}</span>
+          </div>
+          <div className="group-occupancy-blocks" role="meter" aria-valuenow={activeBlocks} aria-valuemin={0} aria-valuemax={5}>
+            {Array.from({ length: 5 }, (_, idx) => (
+              <span
+                key={idx}
+                className={`group-occupancy-block ${idx < activeBlocks ? 'is-filled' : ''}`}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Big JOIN / ENTER Brick */}
+        <button
+          type="button"
+          disabled={busy}
+          className="group-join-brick"
+          onClick={() => void action(() => enter(room))}
+        >
+          {isJoined ? 'ENTER ROOM' : 'JOIN GROUP'}
+        </button>
+      </article>
+    );
+  })}</div>}
   {creating&&<div className="group-modal" role="dialog" aria-modal="true" aria-label="Create group" onClick={e=>{if(e.target===e.currentTarget)setCreating(false);}}><form className="analytics-card glass-modal group-create-form p-6 space-y-4 w-full max-w-lg" onSubmit={e=>{e.preventDefault();void action(async()=>{const room=await createLiveGroup(user,name,description,isPublic,isEntitlementActive(subscription||null)?customCode:undefined,!!isEntitlementActive(subscription||null));setCreating(false);setSelected(room.id);setName('');setDescription('');setCustomCode('');});}}><h2>Create your focus circle</h2><label className="block">Name<input className="group-input mt-2" required maxLength={60} value={name} onChange={e=>setName(e.target.value)}/></label><label className="block">Description<textarea className="group-input mt-2" rows={3} maxLength={1000} value={description} onChange={e=>setDescription(e.target.value)}/></label>{isEntitlementActive(subscription||null)&&<label className="block"><span className="flex items-center gap-1.5 font-semibold text-[var(--sanctra-sage)]">Custom invitation code (Plus perk)</span><input className="group-input mt-2 font-mono uppercase" placeholder="e.g. SANCT-MATH" maxLength={20} value={customCode} onChange={e=>setCustomCode(e.target.value)}/></label>}<label className="flex gap-3 items-center"><input type="checkbox" checked={isPublic} onChange={e=>setPublic(e.target.checked)}/>Allow anyone to discover and join</label><p className="group-muted text-xs">Private groups are invitation-only. The platform owner can review members and messages for moderation in all groups.</p>{error&&<p role="alert" className="group-error">{error}</p>}<div className="flex gap-3 justify-end"><button type="button" className="analytics-button" disabled={busy} onClick={()=>setCreating(false)}>Cancel</button><button className="group-primary" disabled={busy}>{busy?'Creating…':'Create group'}</button></div></form></div>}
  </div>;
 }
