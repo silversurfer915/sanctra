@@ -292,3 +292,248 @@
 }
 .studio-stage { width: 100% !important; align-self: stretch; }
 .studio-rail .timer-metrics { justify-self: stretch; }
+
+/* -------------------------------------------------------------------------- */
+/* 5 · Analytics: stat bricks, chunky CSS bar chart, square swatch legend     */
+/* -------------------------------------------------------------------------- */
+.sanctra-app .analytics-view {
+  max-width: 1200px;
+}
+
+/* Stat bricks across the top */
+.sanctra-app .analytics-stat-brick {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 14px 16px;
+  border: 3px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  box-shadow: 4px 4px 0 var(--l-line) !important;
+  background: var(--l-panel);
+  transition: transform 0.1s ease;
+}
+.sanctra-app .analytics-stat-brick:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--l-line) !important;
+}
+.sanctra-app .analytics-stat-brick.brick-gold { background: #fbeed2 !important; }
+.sanctra-app .analytics-stat-brick.brick-sky { background: #eaf3f8 !important; }
+.sanctra-app .analytics-stat-brick.brick-moss { background: #e8f0e2 !important; }
+.sanctra-app .analytics-stat-brick.brick-rose { background: #fae8e8 !important; }
+
+.sanctra-app .analytics-brick-kicker {
+  font-family: var(--l-font);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--l-ink-dim);
+}
+.sanctra-app .analytics-brick-value {
+  font-family: var(--l-font);
+  font-size: clamp(26px, 2.5vw, 34px);
+  font-weight: 700;
+  color: var(--l-ink);
+  line-height: 1.1;
+  margin: 4px 0 2px;
+}
+.sanctra-app .analytics-brick-detail {
+  font-size: 11.5px;
+  color: var(--l-ink-dim);
+  line-height: 1.3;
+}
+
+/* Sub bricks in "What your record says" */
+.sanctra-app .analytics-sub-brick {
+  border: 2px solid var(--l-line);
+  background: #fffdf6;
+  padding: 10px 12px;
+  box-shadow: 2px 2px 0 var(--l-line);
+}
+
+/* Chunky CSS Bar Chart with 3px ink baseline */
+.sanctra-app .analytics-bar-chart-wrap {
+  width: 100%;
+  margin-top: 20px;
+}
+.sanctra-app .analytics-bar-chart-stage {
+  height: 200px;
+  width: 100%;
+  position: relative;
+  border-bottom: 3px solid var(--l-line) !important; /* Ink baseline */
+  display: flex;
+  align-items: flex-end;
+}
+.sanctra-app .analytics-bar-chart-bars {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  justify-content: space-around;
+  padding-inline: 4px;
+}
+.sanctra-app .analytics-bar-col {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 68px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+.sanctra-app .analytics-bar-track {
+  width: 100%;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: 0;
+}
+.sanctra-app .analytics-bar-block {
+  width: min(44px, 88%);
+  border: 3px solid var(--l-line) !important;
+  border-bottom: none !important;
+  border-radius: 0 !important;
+  background: var(--l-gold) !important;
+  box-shadow: 2px 0 0 var(--l-line);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 4px;
+  overflow: hidden;
+  transition: height 0.2s cubic-bezier(0.2, 1, 0.3, 1), background 0.15s ease;
+  cursor: pointer;
+}
+.sanctra-app .analytics-bar-block:hover {
+  background: var(--l-gold-soft) !important;
+  transform: translateY(-2px);
+}
+.sanctra-app .analytics-bar-val {
+  font-family: var(--l-font);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--l-ink);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+.sanctra-app .analytics-bar-empty {
+  width: 12px;
+  height: 3px;
+  background: var(--l-line);
+}
+.sanctra-app .analytics-bar-foot {
+  padding-top: 8px;
+  text-align: center;
+}
+.sanctra-app .analytics-bar-lbl {
+  font-family: var(--l-font);
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--l-ink);
+  display: block;
+}
+.sanctra-app .analytics-bar-subval {
+  font-family: var(--l-font);
+  font-size: 9.5px;
+  color: var(--l-ink-dim);
+  display: block;
+  white-space: nowrap;
+}
+
+/* Subject Legend with Square Swatches */
+.sanctra-app .analytics-subject-item {
+  display: flex;
+  flex-direction: column;
+}
+.sanctra-app .analytics-square-swatch {
+  width: 14px;
+  height: 14px;
+  min-width: 14px;
+  min-height: 14px;
+  border: 2px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  box-shadow: 1px 1px 0 var(--l-line) !important;
+  display: inline-block;
+}
+.sanctra-app .analytics-progress-track {
+  height: 13px;
+  width: 100%;
+  background: #efe2c6;
+  border: 2px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  overflow: hidden;
+}
+.sanctra-app .analytics-progress-fill {
+  height: 100%;
+  border-right: 2px solid var(--l-line);
+  border-radius: 0 !important;
+}
+
+/* Toolbar Paper Container */
+.sanctra-app .analytics-toolbar {
+  background: var(--l-panel) !important;
+  border: 2px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  box-shadow: 3px 3px 0 var(--l-line) !important;
+  padding: 10px 14px !important;
+}
+.sanctra-app .analytics-period-segment {
+  border: 2px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  background: #efe2c6 !important;
+  padding: 2px !important;
+  gap: 2px !important;
+}
+.sanctra-app .analytics-period-tab {
+  font-family: var(--l-font) !important;
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: 0 !important;
+  border: 2px solid transparent !important;
+  color: var(--l-ink-dim) !important;
+  background: transparent !important;
+}
+.sanctra-app .analytics-period-tab.active {
+  background: var(--l-gold) !important;
+  border-color: var(--l-line) !important;
+  box-shadow: 2px 2px 0 var(--l-line) !important;
+  color: var(--l-ink) !important;
+}
+.sanctra-app .analytics-date-capsule {
+  border: 2px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  background: #fffdf6 !important;
+  box-shadow: 2px 2px 0 var(--l-line) !important;
+}
+.sanctra-app .analytics-capsule-arrow {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  color: var(--l-ink) !important;
+}
+.sanctra-app .analytics-capsule-arrow:hover {
+  background: var(--l-gold) !important;
+}
+.sanctra-app .analytics-current-btn {
+  font-family: var(--l-font) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  border: 2px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  background: #fffdf6 !important;
+  color: var(--l-ink) !important;
+  box-shadow: 2px 2px 0 var(--l-line) !important;
+  padding: 6px 12px !important;
+}
+.sanctra-app .analytics-current-btn:hover {
+  background: var(--l-gold) !important;
+}
+
