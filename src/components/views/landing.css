@@ -113,10 +113,10 @@
   background-color: #05070c;
   background-image:
     linear-gradient(90deg, rgba(4, 6, 10, 0.42) 0%, rgba(4, 6, 10, 0.12) 38%, transparent 62%),
-    radial-gradient(34vw 32vw at 71% 52%, rgba(229, 184, 105, 0.2) 0%, rgba(229, 184, 105, 0.06) 48%, transparent 72%),
-    radial-gradient(64vw 48vw at 74% 46%, rgba(229, 184, 105, 0.07) 0%, transparent 74%),
-    radial-gradient(50vw 46vw at 8% 2%, rgba(56, 189, 248, 0.14) 0%, rgba(56, 189, 248, 0.03) 48%, transparent 72%),
-    radial-gradient(60vw 42vw at 22% 96%, rgba(104, 110, 196, 0.14) 0%, transparent 70%),
+    radial-gradient(34vw 32vw at 71% 52%, rgba(229, 184, 105, 0.26) 0%, rgba(229, 184, 105, 0.08) 48%, transparent 72%),
+    radial-gradient(64vw 48vw at 74% 46%, rgba(229, 184, 105, 0.11) 0%, transparent 74%),
+    radial-gradient(50vw 46vw at 8% 2%, rgba(56, 189, 248, 0.2) 0%, rgba(56, 189, 248, 0.05) 48%, transparent 72%),
+    radial-gradient(60vw 42vw at 22% 96%, rgba(104, 110, 196, 0.2) 0%, transparent 70%),
     linear-gradient(180deg, #070a11 0%, #0a0d12 44%, #0a0908 100%);
 }
 
@@ -160,13 +160,59 @@
   background: url('/backgrounds/landing-instrument.svg') center / contain no-repeat;
   -webkit-mask-image: radial-gradient(circle, #000 62%, rgba(0, 0, 0, 0.5) 82%, transparent 100%);
   mask-image: radial-gradient(circle, #000 62%, rgba(0, 0, 0, 0.5) 82%, transparent 100%);
-  opacity: 0.78;
+  opacity: 0.9;
   animation: rs-orbit 240s linear infinite;
 }
 
 @keyframes rs-orbit {
   from { transform: translate(-50%, -50%) rotate(0deg); }
   to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Star chart: hand-plotted clusters and constellations in the upper field. */
+.rs-skymap {
+  position: absolute;
+  left: -4%;
+  top: -8%;
+  width: min(1180px, 94vw);
+  aspect-ratio: 1200 / 700;
+  background: url('/backgrounds/landing-skymap.svg') center / contain no-repeat;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.7) 58%, transparent 96%);
+  mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.7) 58%, transparent 96%);
+  opacity: 0.9;
+}
+
+/* Botanical noir fronds in the two quiet corners. */
+.rs-botanicals {
+  position: absolute;
+  inset: 0;
+  background: url('/backgrounds/landing-botanicals.svg') center / cover no-repeat;
+  opacity: 1;
+  filter: brightness(1.35);
+}
+
+/* Low mist and a dawn line filling the lower field. */
+.rs-mist {
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  bottom: -22%;
+  height: 60%;
+  background:
+    radial-gradient(60% 55% at 18% 88%, rgba(56, 189, 248, 0.18), transparent 70%),
+    radial-gradient(66% 62% at 76% 78%, rgba(229, 184, 105, 0.18), transparent 72%),
+    radial-gradient(52% 48% at 52% 100%, rgba(129, 140, 248, 0.16), transparent 70%);
+  filter: blur(26px);
+}
+
+.rs-horizon {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(188, 216, 255, 0.12) 24%, rgba(229, 184, 105, 0.28) 62%, transparent);
+  box-shadow: 0 0 34px rgba(229, 184, 105, 0.22);
 }
 
 /* Contour strokes engraved into the lower-left of the page. */
@@ -204,7 +250,7 @@
   height: 55vmax;
   left: -15%;
   top: -10%;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.1) 0%, rgba(30, 58, 138, 0.04) 50%, transparent 70%);
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, rgba(30, 58, 138, 0.06) 50%, transparent 70%);
   animation: rs-drift-a 28s ease-in-out infinite alternate;
 }
 
@@ -213,7 +259,7 @@
   height: 60vmax;
   left: 32%;
   top: 8%;
-  background: radial-gradient(circle, rgba(229, 184, 105, 0.1) 0%, rgba(229, 184, 105, 0.025) 50%, transparent 70%);
+  background: radial-gradient(circle, rgba(229, 184, 105, 0.14) 0%, rgba(229, 184, 105, 0.04) 50%, transparent 70%);
   animation: rs-drift-b 34s ease-in-out infinite alternate;
 }
 
@@ -222,7 +268,7 @@
   height: 44vmax;
   right: -10%;
   bottom: -5%;
-  background: radial-gradient(circle, rgba(129, 140, 248, 0.07) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(129, 140, 248, 0.12) 0%, transparent 70%);
   animation: rs-drift-c 30s ease-in-out infinite alternate;
 }
 
