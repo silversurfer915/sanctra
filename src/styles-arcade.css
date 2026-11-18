@@ -267,29 +267,408 @@
 }
 
 /* -------------------------------------------------------------------------- */
-/* 4 · Tasks: two-column quest log                                             */
+/* 4 · Tasks: two-column quest log, stamps, paper tags, completed state        */
 /* -------------------------------------------------------------------------- */
-@media (min-width: 1000px) {
-  .sanctra-app .planner-view { max-width: 1160px; }
-  .sanctra-app .planner-view > .space-y-2 {
+.sanctra-app .planner-view {
+  max-width: 1200px;
+}
+
+/* Two-column quest list */
+@media (min-width: 768px) {
+  .sanctra-app .planner-quest-list {
     display: grid !important;
     grid-template-columns: 1fr 1fr;
-    gap: 12px !important;
+    gap: 14px !important;
   }
-  .sanctra-app .planner-view > .space-y-2 > div {
-    background: #fffaf0 !important;
-    border: 2px solid var(--l-line) !important;
-    box-shadow: 3px 3px 0 var(--l-line) !important;
-    padding: 14px 16px !important;
-    min-height: 74px;
-  }
-  .sanctra-app .planner-view > .space-y-2 > div[class*='border-dashed'] {
+  .sanctra-app .planner-empty-box {
     grid-column: 1 / -1;
-    background: transparent !important;
-    border: 0 !important;
-    box-shadow: none !important;
   }
 }
+@media (max-width: 767px) {
+  .sanctra-app .planner-quest-list {
+    display: flex !important;
+    flex-direction: column;
+    gap: 12px !important;
+  }
+}
+
+/* Quest Card */
+.sanctra-app .task-quest-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: #fffaf0 !important;
+  border: 3px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  box-shadow: 4px 4px 0 var(--l-line) !important;
+  gap: 10px;
+  min-height: 94px;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+.sanctra-app .task-quest-card:hover:not(.is-completed) {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--l-line) !important;
+}
+
+/* Clear Completed State */
+.sanctra-app .task-quest-card.is-completed {
+  background: #efe2c6 !important;
+  border: 2px dashed var(--l-line) !important;
+  box-shadow: 2px 2px 0 rgba(42, 33, 22, 0.4) !important;
+  opacity: 0.72;
+}
+
+/* Stamp in top-right corner */
+.sanctra-app .task-card-stamp-corner {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sanctra-app .task-stamp-time {
+  font-family: var(--l-font);
+  font-size: 10px;
+  font-weight: 700;
+  background: #efe2c6;
+  border: 1px solid var(--l-line);
+  padding: 1px 6px;
+  box-shadow: 1px 1px 0 var(--l-line);
+  color: var(--l-ink);
+  letter-spacing: 0.02em;
+}
+.sanctra-app .task-stamp-done {
+  font-family: var(--l-font);
+  font-size: 9.5px;
+  font-weight: 700;
+  background: var(--l-ink);
+  color: var(--l-gold);
+  border: 1px solid var(--l-line);
+  padding: 1px 6px;
+  letter-spacing: 0.1em;
+}
+
+/* Main card row */
+.sanctra-app .task-card-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+  padding-right: 56px; /* clears corner stamp */
+}
+
+/* Stamp-style checkbox */
+.sanctra-app .task-stamp-checkbox {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  border: 2px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  background: #fffdf6;
+  box-shadow: 2px 2px 0 var(--l-line) !important;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: transform 0.1s ease, background 0.15s ease;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.sanctra-app .task-stamp-checkbox:hover {
+  transform: translate(-1px, -1px);
+}
+.sanctra-app .task-stamp-checkbox.is-checked {
+  background: var(--l-gold) !important;
+  color: var(--l-ink) !important;
+}
+.sanctra-app .task-stamp-check {
+  font-family: var(--l-font);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Card content */
+.sanctra-app .task-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.sanctra-app .task-card-text {
+  font-family: var(--l-ui);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--l-ink);
+  line-height: 1.35;
+  word-break: break-word;
+}
+.sanctra-app .task-card-text.is-struck {
+  text-decoration: line-through;
+  color: var(--l-ink-dim);
+}
+
+/* Subject paper tag */
+.sanctra-app .task-subject-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 7px;
+  background: #fffdf6;
+  border: 1px solid var(--l-line);
+  border-left-width: 4px;
+  box-shadow: 1px 1px 0 var(--l-line);
+  font-family: var(--l-font);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--l-ink);
+  width: fit-content;
+}
+.sanctra-app .task-tag-dot {
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--l-line);
+  display: inline-block;
+}
+
+/* Actions */
+.sanctra-app .task-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  border-top: 1px solid rgba(42, 33, 22, 0.12);
+  padding-top: 8px;
+}
+.sanctra-app .task-focus-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  min-height: 28px;
+  border: 2px solid var(--l-line);
+  border-radius: 0;
+  background: var(--l-gold);
+  color: var(--l-ink);
+  font-family: var(--l-font);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  box-shadow: 2px 2px 0 var(--l-line);
+  cursor: pointer;
+}
+.sanctra-app .task-focus-btn:hover {
+  background: var(--l-gold-soft);
+}
+.sanctra-app .task-icon-btn {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
+  border: 2px solid var(--l-line);
+  border-radius: 0;
+  background: #fffdf6;
+  box-shadow: 1px 1px 0 var(--l-line);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: var(--l-ink-dim);
+}
+.sanctra-app .task-icon-btn:hover {
+  background: var(--l-gold);
+  color: var(--l-ink);
+}
+.sanctra-app .task-icon-btn.is-danger:hover {
+  background: var(--l-rust);
+  color: #ffffff;
+}
+
+/* Planner date toolbar */
+.sanctra-app .planner-calendar {
+  padding: 10px 14px !important;
+  border: 2px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  background: var(--l-panel) !important;
+  box-shadow: 3px 3px 0 var(--l-line) !important;
+}
+.sanctra-app .planner-nav-arrow {
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--l-line);
+  border-radius: 0;
+  background: #fffdf6;
+  box-shadow: 1px 1px 0 var(--l-line);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.sanctra-app .planner-nav-arrow:hover {
+  background: var(--l-gold);
+}
+.sanctra-app .planner-day-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  padding: 6px 4px;
+  border: 2px solid var(--l-line);
+  border-radius: 0;
+  background: #fffdf6;
+  box-shadow: 2px 2px 0 var(--l-line);
+  cursor: pointer;
+}
+.sanctra-app .planner-day-tile:hover {
+  background: #fff8e8;
+}
+.sanctra-app .planner-day-tile.is-today {
+  background: var(--l-gold) !important;
+  border-color: var(--l-line) !important;
+  box-shadow: 3px 3px 0 var(--l-line) !important;
+}
+.sanctra-app .planner-day-tile.is-selected {
+  outline: 2px dashed var(--l-line);
+  outline-offset: 2px;
+}
+.sanctra-app .planner-day-name {
+  font-family: var(--l-font);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--l-ink-dim);
+}
+.sanctra-app .planner-day-tile.is-today .planner-day-name {
+  color: var(--l-ink);
+}
+.sanctra-app .planner-day-num {
+  font-family: var(--l-font);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--l-ink);
+  line-height: 1;
+}
+.sanctra-app .planner-today-dot {
+  font-family: var(--l-font);
+  font-size: 8px;
+  font-weight: 700;
+  background: var(--l-ink);
+  color: var(--l-gold);
+  padding: 0 3px;
+  margin-top: 2px;
+}
+.sanctra-app .planner-today-btn {
+  font-family: var(--l-font);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border: 2px solid var(--l-line);
+  border-radius: 0;
+  background: #fffdf6;
+  box-shadow: 2px 2px 0 var(--l-line);
+  cursor: pointer;
+}
+.sanctra-app .planner-today-btn:hover {
+  background: var(--l-gold);
+}
+
+/* Planner tabs */
+.sanctra-app .planner-tabs {
+  background: #efe2c6 !important;
+  border: 2px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  padding: 3px !important;
+  gap: 3px !important;
+}
+.sanctra-app .planner-tab-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 2px solid transparent;
+  border-radius: 0;
+  font-family: var(--l-font);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--l-ink-dim);
+  cursor: pointer;
+  background: transparent;
+}
+.sanctra-app .planner-tab-btn.is-active {
+  background: var(--l-gold) !important;
+  border-color: var(--l-line) !important;
+  box-shadow: 2px 2px 0 var(--l-line) !important;
+  color: var(--l-ink) !important;
+}
+.sanctra-app .planner-tab-count {
+  font-family: var(--l-font);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  background: #fffdf6;
+  border: 1px solid var(--l-line);
+}
+.sanctra-app .planner-ai-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 2px solid var(--l-line);
+  border-radius: 0;
+  background: #fffdf6;
+  box-shadow: 2px 2px 0 var(--l-line);
+  font-family: var(--l-font);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--l-ink);
+  cursor: pointer;
+}
+.sanctra-app .planner-ai-btn:hover {
+  background: var(--l-gold);
+}
+
+/* Composer */
+.sanctra-app .planner-task-composer {
+  background: var(--l-panel) !important;
+  border: 2px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  box-shadow: 3px 3px 0 var(--l-line) !important;
+}
+.sanctra-app .planner-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 2px solid var(--l-line);
+  border-radius: 0;
+  background: var(--l-gold);
+  color: var(--l-ink);
+  font-family: var(--l-font);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  box-shadow: 2px 2px 0 var(--l-line);
+  cursor: pointer;
+}
+.sanctra-app .planner-add-btn:hover:not(:disabled) {
+  background: var(--l-gold-soft);
+}
+.sanctra-app .planner-empty-box {
+  background: #fffaf0 !important;
+  border: 2px dashed var(--l-line) !important;
+  border-radius: 0 !important;
+}
+
 .studio-stage { width: 100% !important; align-self: stretch; }
 .studio-rail .timer-metrics { justify-self: stretch; }
 
