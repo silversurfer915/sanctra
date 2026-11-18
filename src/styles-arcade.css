@@ -1,0 +1,294 @@
+/* ==========================================================================
+   SANCTRA · ARCADE SHELL
+   Layout, not decoration. The app stops being "sidebar + header + panel":
+     · dock spine of square nav tiles
+     · floating status HUD instead of a full-width bar
+     · Focus Room becomes a world strip + clock console + quest row
+     · Tasks becomes a two-column quest log
+   ========================================================================== */
+
+/* -------------------------------------------------------------------------- */
+/* 1 · Dock spine                                                              */
+/* -------------------------------------------------------------------------- */
+.sanctra-app .app-sidebar {
+  width: 100px !important;
+  flex: 0 0 100px !important;
+  padding: 0 !important;
+  background: #efe1c4 !important;
+  border-right: 3px solid var(--l-line) !important;
+  overflow: hidden;
+}
+.sanctra-app .app-sidebar > div { width: 100px; min-width: 100px !important; }
+.sanctra-app .app-sidebar > div:first-child { height: 100%; display: flex; flex-direction: column; }
+
+/* brand becomes a brick */
+.sanctra-app .app-sidebar > div > div:first-child {
+  height: 64px;
+  justify-content: center;
+  padding: 0 !important;
+  border-bottom: 2px solid var(--l-line);
+  background: var(--l-gold);
+}
+.sanctra-app .app-sidebar > div > div:first-child > div { gap: 0 !important; }
+.sanctra-app .app-sidebar .brand-wordmark,
+.sanctra-app .app-sidebar .brand-sub { display: none !important; }
+
+/* nav becomes tiles */
+.sanctra-app .app-sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px !important;
+  padding: 8px 7px !important;
+  margin: 0 !important;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.sanctra-app .app-sidebar nav::-webkit-scrollbar { display: none; }
+.sanctra-app .app-sidebar nav button {
+  flex: 0 0 auto;
+  flex-direction: column !important;
+  align-items: center;
+  justify-content: center;
+  gap: 3px !important;
+  width: 84px;
+  min-height: 60px !important;
+  padding: 6px 3px !important;
+  border: 2px solid transparent !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  color: var(--l-ink-dim) !important;
+  text-align: center;
+}
+.sanctra-app .app-sidebar nav button:hover {
+  background: #fffaf0 !important;
+  border-color: var(--l-line) !important;
+  box-shadow: 2px 2px 0 var(--l-line) !important;
+  color: var(--l-ink) !important;
+  transform: none !important;
+}
+.sanctra-app .app-sidebar nav button[aria-current='page'] {
+  background: var(--l-gold) !important;
+  border-color: var(--l-line) !important;
+  box-shadow: 3px 3px 0 var(--l-line) !important;
+  color: var(--l-ink) !important;
+}
+.sanctra-app .app-sidebar nav button > div:first-child {
+  width: 26px !important;
+  height: 26px !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+}
+.sanctra-app .app-sidebar nav button svg { width: 19px !important; height: 19px !important; }
+.sanctra-app .app-sidebar nav button > span.truncate {
+  flex: 0 0 auto !important;
+  width: 100% !important;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  font-size: 9.5px !important;
+}
+.sanctra-app .app-sidebar nav button > span:not(.truncate) { display: none !important; }
+.studio-nav-label {
+  padding: 10px 0 2px !important;
+  text-align: center;
+  font-size: 8px !important;
+  letter-spacing: 0.1em;
+  opacity: 0.65;
+}
+
+/* footer: avatar + sign out only */
+.sanctra-app .app-sidebar > div:last-child {
+  padding: 8px 7px 12px !important;
+  border-top: 2px solid var(--l-line) !important;
+  background: #e9d9ba;
+  gap: 6px !important;
+}
+.sanctra-app .app-sidebar > div:last-child .w-full.flex.items-center.gap-1\.5 { flex-direction: column; gap: 6px !important; }
+.sanctra-app .app-sidebar > div:last-child > div:last-child { display: none; }
+
+/* -------------------------------------------------------------------------- */
+/* 2 · Floating status HUD                                                     */
+/* -------------------------------------------------------------------------- */
+.sanctra-app .app-header {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  left: auto;
+  width: auto;
+  min-height: 0;
+  height: 48px;
+  padding: 0 10px 0 12px !important;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fffaf0 !important;
+  border: 2px solid var(--l-line) !important;
+  box-shadow: 4px 4px 0 var(--l-line);
+  z-index: 60;
+}
+.sanctra-app .app-header-control[aria-label*='menu'] { display: none; }
+.sanctra-app .app-header .header-mobile-brand { display: none !important; }
+.sanctra-app .app-header > div.mx-auto,
+.sanctra-app .app-header > div.hidden.items-center.gap-2 { display: none !important; }
+.sanctra-app .app-header .header-status { padding: 4px 8px; border: 2px solid var(--l-line); background: #f6ecd6; font-family: var(--l-font); }
+.sanctra-app .app-header-control { width: 32px; height: 32px; min-width: 32px; min-height: 32px; border-width: 2px !important; box-shadow: 2px 2px 0 var(--l-line) !important; }
+
+/* Content clears the HUD */
+.sanctra-app main { padding-top: 76px !important; }
+.sanctra-app main.timer-content { padding-top: 62px !important; }
+
+/* -------------------------------------------------------------------------- */
+/* 3 · Focus Room: world strip, console, quest row                             */
+/* -------------------------------------------------------------------------- */
+.focus-workspace.studio {
+  display: flex !important;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  max-width: none;
+  padding: 0 4px 24px;
+}
+
+.studio-stage {
+  position: relative;
+  min-height: 420px;
+  padding: 26px 26px 30px;
+  background: #fffaf0;
+  border: 3px solid var(--l-line);
+  box-shadow: 6px 6px 0 var(--l-line);
+  overflow: hidden;
+}
+/* pixel landscape: sun, three hills, ground line */
+.studio-stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 82% 22%, var(--l-gold) 0 34px, transparent 35px),
+    radial-gradient(circle at 79% 16%, #f7d999 0 10px, transparent 11px),
+    radial-gradient(circle at 85% 28%, #f7d999 0 8px, transparent 9px),
+    linear-gradient(#cfe3ee, #eaf2f6) 0 0 / 100% 62% no-repeat,
+    linear-gradient(160deg, transparent 0 55%, #a9c39a 55% 100%),
+    linear-gradient(200deg, transparent 0 62%, #8fae80 62% 100%),
+    linear-gradient(#d9c9a6, #d9c9a6) 0 100% / 100% 12% no-repeat,
+    var(--l-bg-2);
+}
+.studio-stage > * { position: relative; z-index: 1; }
+.studio-stage .timer-dial { background: transparent !important; }
+
+/* clock console sits on the ground */
+.sanctra-app .focus-workspace .studio-stage .timer-ring {
+  width: min(46dvh, 384px, 74vw) !important;
+  border: 3px solid var(--l-line) !important;
+  border-radius: 0 !important;
+  background: #fffdf6 !important;
+  box-shadow: 10px 10px 0 rgba(42, 33, 22, 0.85) !important;
+}
+.sanctra-app .focus-workspace .studio-stage .timer-ring svg { display: none; }
+.sanctra-app .focus-workspace .studio-stage .timer-readout { font-size: clamp(64px, 7vw, 92px) !important; }
+
+/* rail: quest row under the world */
+.studio-rail {
+  order: 2;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.studio-stage { order: 1; }
+.studio-rail__head { grid-column: 1 / -1; display: flex; align-items: baseline; gap: 10px; padding: 0 2px; }
+.studio-rail .timer-metrics {
+  grid-column: 1 / -1;
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
+.studio-rail .timer-metrics > * {
+  width: auto !important;
+  min-height: 96px !important;
+  padding: 12px 14px !important;
+  border: 3px solid var(--l-line) !important;
+  box-shadow: 4px 4px 0 var(--l-line) !important;
+}
+.studio-rail .timer-metrics > * > div:nth-child(2) { font-size: 30px !important; }
+
+.studio-rail .current-task-bar {
+  grid-column: 1;
+  margin: 0;
+  min-height: 108px;
+  padding: 16px 18px !important;
+  border: 3px dashed var(--l-line) !important;
+  background: #fffaf0 !important;
+  box-shadow: 4px 4px 0 rgba(42, 33, 22, 0.25) !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+.studio-rail .timer-quote {
+  grid-column: 2;
+  padding: 16px 18px !important;
+  border: 3px solid var(--l-line);
+  background: #f7e6c4;
+  box-shadow: 4px 4px 0 var(--l-line);
+  min-height: 108px;
+  display: flex;
+  align-items: center;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
+.studio-rail .timer-quote p { font-size: 18px !important; color: var(--l-ink) !important; }
+
+@media (max-width: 1099px) {
+  .studio-rail .timer-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .studio-stage::before { background-size: auto, auto, auto, 100% 62%, auto, auto, auto, auto; }
+}
+@media (max-width: 700px) {
+  .sanctra-app .app-sidebar { display: none !important; }
+  .studio-rail { grid-template-columns: 1fr; }
+  .studio-rail .current-task-bar { grid-column: 1; }
+  .studio-rail .timer-quote { grid-column: 1; }
+  .studio-rail .timer-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .studio-stage { min-height: 360px; }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4 · Tasks: two-column quest log                                             */
+/* -------------------------------------------------------------------------- */
+@media (min-width: 1000px) {
+  .sanctra-app .planner-view { max-width: 1160px; }
+  .sanctra-app .planner-view > .space-y-2 {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px !important;
+  }
+  .sanctra-app .planner-view > .space-y-2 > div {
+    background: #fffaf0 !important;
+    border: 2px solid var(--l-line) !important;
+    box-shadow: 3px 3px 0 var(--l-line) !important;
+    padding: 14px 16px !important;
+    min-height: 74px;
+  }
+  .sanctra-app .planner-view > .space-y-2 > div[class*='border-dashed'] {
+    grid-column: 1 / -1;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+}
+.studio-stage { width: 100% !important; align-self: stretch; }
+.studio-rail .timer-metrics { justify-self: stretch; }
