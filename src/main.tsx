@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import './styles-sanctra.css';
+import './styles/glass-ui.css';
 import App from './App.tsx';
 import {LegalView} from './components/views/LegalView.tsx';
 import { initFirebase } from './utils/firebase.ts';

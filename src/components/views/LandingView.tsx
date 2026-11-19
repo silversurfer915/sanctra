@@ -11,7 +11,6 @@ import {
   Play,
 } from 'lucide-react';
 import { Brand } from '../Brand.tsx';
-import { LandingAtmosphereCanvas } from './LandingAtmosphereCanvas.tsx';
 import { LandingCyanotypeApparatus, LANDING_MODE_PALETTES } from './LandingCyanotypeApparatus.tsx';
 import { playAmbientSound, stopAmbientSound } from '../../utils/landingSoundPreview.ts';
 import { PLUS_PRICING_PLANS } from '../../utils/subscriptionPlans.ts';
@@ -153,7 +152,6 @@ export function LandingView({
   const [quickSubject, setQuickSubject] = useState('');
   const [isYearly, setIsYearly] = useState(true);
   const [openFaqIndices, setOpenFaqIndices] = useState<number[]>([2]); // Initially show item 2 open
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSoundPreview, setActiveSoundPreview] = useState('rain');
 
   const toggleFaq = (idx: number) => {
@@ -234,45 +232,6 @@ export function LandingView({
     };
   }, []);
 
-  // Track scroll position for Florilegium time scrubber and section rail
-  const [activeSectionId, setActiveSectionId] = useState('hero');
-
-  const LANDING_SECTIONS = [
-    { id: 'hero', label: '01 Apparatus', href: '#landing-main' },
-    { id: 'modes', label: '02 Modes', href: '#modes' },
-    { id: 'rooms', label: '03 Spaces', href: '#rooms' },
-    { id: 'soundscapes', label: '04 Sounds', href: '#soundscapes' },
-    { id: 'stats', label: '05 Archive', href: '#stats' },
-    { id: 'start', label: '06 Start', href: '#start' },
-    { id: 'jee', label: '07 JEE Track', href: '#jee' },
-    { id: 'who', label: '08 For whom', href: '#who' },
-    { id: 'free', label: '09 Free', href: '#free' },
-    { id: 'pricing', label: '10 Access', href: '#pricing' },
-    { id: 'faq', label: '11 Questions', href: '#faq' },
-  ];
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = totalHeight > 0 ? Math.min(1, Math.max(0, window.scrollY / totalHeight)) : 0;
-      setScrollProgress(progress);
-
-      // Determine active section based on scroll position
-      const scrollMiddle = window.scrollY + window.innerHeight * 0.35;
-      for (let i = LANDING_SECTIONS.length - 1; i >= 0; i--) {
-        const sec = document.getElementById(LANDING_SECTIONS[i].id);
-        if (sec && sec.offsetTop <= scrollMiddle) {
-          setActiveSectionId(LANDING_SECTIONS[i].id);
-          break;
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   // IntersectionObserver to trigger smooth entry reveals on scroll
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -291,20 +250,6 @@ export function LandingView({
 
     return () => observer.disconnect();
   }, []);
-
-  // Compute time progression along study day: 06:00 -> 23:00 (17 hours)
-  const totalMinutes = Math.round(scrollProgress * 17 * 60);
-  const currentHour = Math.floor(6 + totalMinutes / 60);
-  const currentMin = totalMinutes % 60;
-  const scrubTime = `${String(currentHour).padStart(2, '0')}:${String(currentMin).padStart(2, '0')}`;
-  const scrubPhase =
-    currentHour < 10
-      ? 'Morning Clarity'
-      : currentHour < 14
-      ? 'Midday Discipline'
-      : currentHour < 18
-      ? 'Afternoon Flow'
-      : 'Evening Contemplation';
 
   // Procedural SVG grain URI
   const grainSvg =
@@ -347,29 +292,6 @@ export function LandingView({
       <div className="rs-vignette" aria-hidden="true" />
       <div className="rs-grain" aria-hidden="true" />
 
-      {/* Interactive celestial dust motes */}
-      <LandingAtmosphereCanvas />
-
-      {/* Fixed Architectural Scroll Depth Rail */}
-      <nav aria-label="Page section progress" className="rs-scroll-rail">
-        {LANDING_SECTIONS.map((sec) => (
-          <a
-            key={sec.id}
-            href={sec.href}
-            onClick={(e) => {
-              e.preventDefault();
-              const target = document.querySelector(sec.href);
-              target?.scrollIntoView({ behavior: 'smooth' });
-            }}
-            className={`rs-scroll-rail__dot ${activeSectionId === sec.id ? 'is-active' : ''}`}
-            aria-label={`Jump to ${sec.label}`}
-          >
-            <span className="rs-scroll-rail__tooltip">{sec.label}</span>
-          </a>
-        ))}
-      </nav>
-
-      {/* Floating Capsule Header */}
       <header className="sticky top-4 z-40 mx-auto w-full max-w-6xl px-4 sm:px-6">
         <div className="rs-nav-pill">
           <a href="#landing-main" aria-label="Sanctra home" className="flex items-center gap-2">
@@ -388,6 +310,9 @@ export function LandingView({
             </a>
             <a href="#stats" className="rs-nav-link">
               Stats
+            </a>
+            <a href="#product" className="rs-nav-link">
+              Product
             </a>
             <a href="#start" className="rs-nav-link">
               How it works
@@ -414,22 +339,6 @@ export function LandingView({
         </div>
       </header>
 
-      {/* FLORILEGIUM-STYLE STICKY TIME SCRUBBER (SCROLL PROGRESS) */}
-      <aside
-        className="fixed bottom-6 right-6 z-30 hidden lg:flex items-center gap-3 px-4 py-2 rounded-full border border-white/10 bg-[#12151a]/80 backdrop-blur-xl shadow-2xl font-sans text-xs text-[var(--rs-cream-soft)] select-none pointer-events-auto"
-        aria-label="Study day scroll progression"
-      >
-        <span className="text-[11px] text-[var(--rs-cream-dim)] font-medium">06:00 Dawn</span>
-        <div className="relative w-24 h-1 bg-white/15 rounded-full overflow-hidden">
-          <div
-            className="absolute left-0 top-0 bottom-0 bg-[var(--rs-amber)] rounded-full transition-all duration-75"
-            style={{ width: `${Math.round(scrollProgress * 100)}%` }}
-          />
-        </div>
-        <span className="font-serif text-base text-[var(--rs-cream)] tabular-nums">{scrubTime}</span>
-        <span className="text-[11px] text-[var(--rs-amber)] font-medium">{scrubPhase}</span>
-      </aside>
-
       {/* MAIN HERO STAGE */}
       <main id="landing-main" className="relative z-10 mx-auto w-full max-w-6xl px-4 sm:px-6 pt-8 pb-20 space-y-24">
         {/* HERO SECTION */}
@@ -439,7 +348,7 @@ export function LandingView({
             <p className="rs-kicker">
               <span>Sanctra</span>
               <span className="rs-kicker__sep" />
-              <span>Calm workspace for deep study</span>
+              <span>Study timer · streaks · study rooms</span>
             </p>
           </div>
 
@@ -448,17 +357,15 @@ export function LandingView({
             <div className="lg:col-span-6 flex flex-col items-start gap-8 z-10">
               <h1 id="hero-title" className="rs-head">
                 <span className="ln">
-                  <span className="li">A little calm.</span>
+                  <span className="li">Study time,</span>
                 </span>
                 <span className="ln">
-                  <span className="li">
-                    For <em>deep study.</em>
-                  </span>
+                  <span className="li">honestly tracked.</span>
                 </span>
               </h1>
 
               <p className="text-base sm:text-lg text-[var(--rs-cream-soft)] max-w-md leading-relaxed font-sans">
-                Pomodoro intervals, calming soundscapes, and clean study tracking. Free forever, no sign-up required.
+                Pomodoro, countdown and open sessions with subject tags, streaks, study rooms and exam tracking. Free forever, no sign-up.
               </p>
 
               {/* Direct Subject Entry Form */}
@@ -488,7 +395,7 @@ export function LandingView({
                   onClick={() => onStartStudying(quickSubject || undefined)}
                   className="text-[var(--rs-amber)] hover:underline underline-offset-4 cursor-pointer font-medium inline-flex items-center gap-1"
                 >
-                  <span>Enter full desk directly</span>
+                  <span>Open the timer</span>
                   <span aria-hidden="true">→</span>
                 </button>
               </div>
@@ -566,6 +473,42 @@ export function LandingView({
               </li>
             ))}
           </ol>
+        </section>
+
+        {/* PRODUCT SCREENSHOTS */}
+        <section id="product" aria-labelledby="product-title" className="space-y-10 scroll-mt-20 reveal-on-scroll">
+          <div className="flex flex-col items-start gap-2">
+            <h2 id="product-title" className="font-serif text-3xl sm:text-5xl text-[var(--rs-cream)] font-normal leading-tight">
+              See it in action.
+            </h2>
+            <p className="text-[var(--rs-cream-soft)] max-w-xl text-base font-sans">
+              The real screens, not a mockup. Timer, analytics and exam tracking share one account and one history.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            {[
+              { src: '/images/product-timer.webp', alt: 'Sanctra focus room with the timer running', title: 'Focus room', body: 'One clock, three modes, subject tags and a save that never loses a session.' },
+              { src: '/images/product-analytics.webp', alt: 'Sanctra analytics with weekly totals and a subject breakdown', title: 'Analytics', body: 'Daily and weekly totals, subject split and the hours you actually kept.' },
+              { src: '/images/product-jee.webp', alt: 'Sanctra JEE track dashboard with mocks and syllabus progress', title: 'JEE Track', body: 'Mocks, syllabus coverage and backlogs beside the timetable you already keep.' },
+            ].map((shot) => (
+              <figure key={shot.src} className="rs-plate-card overflow-hidden p-0 m-0">
+                <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/10 bg-white/[0.03]">
+                  <span className="flex gap-1.5" aria-hidden="true">
+                    <i className="w-2 h-2 rounded-full bg-white/25" />
+                    <i className="w-2 h-2 rounded-full bg-white/15" />
+                    <i className="w-2 h-2 rounded-full bg-white/10" />
+                  </span>
+                  <span className="text-[11px] font-sans text-[var(--rs-cream-dim)] truncate">sanctrastudy.live</span>
+                </div>
+                <img src={shot.src} alt={shot.alt} loading="lazy" decoding="async" width={1400} height={875} className="w-full h-auto block" />
+                <figcaption className="p-5 space-y-1">
+                  <h3 className="font-serif text-lg text-[var(--rs-cream)]">{shot.title}</h3>
+                  <p className="text-sm font-sans text-[var(--rs-cream-soft)] leading-relaxed">{shot.body}</p>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
         </section>
 
         {/* FOCUS MODES */}

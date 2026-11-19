@@ -1,0 +1,135 @@
+/* Glass UI layer — rounded, frosted, theme-accent driven.
+   Every colour here comes from the active theme tokens (--sanctra-sage,
+   --theme-button-*), so the curated themes keep working; nothing is hard-coded
+   to a single accent. Loaded last so it only reshapes, never fights layout. */
+
+:root {
+  --g-r-card: 24px;
+  --g-r-tile: 20px;
+  --g-r-field: 16px;
+  --g-r-pill: 999px;
+  --g-glass: linear-gradient(158deg, rgba(255,255,255,.11), rgba(255,255,255,.028) 44%, rgba(255,255,255,.06));
+  --g-glass-line: rgba(255,255,255,.14);
+  --g-glass-shadow: 0 28px 64px -40px rgba(2,4,9,.92), inset 0 1px 0 rgba(255,255,255,.18);
+  --g-blur: blur(26px) saturate(150%);
+}
+
+/* ---------- cards ---------- */
+:where(.glass-panel, .glass-card, .glass-modal, .jee-panel, .analytics-card,
+       .current-task-bar, .workspace-panel, .group-chat, .group-switcher-menu) {
+  border-radius: var(--g-r-card);
+  background: var(--g-glass);
+  border: 1px solid color-mix(in srgb, var(--sanctra-sage) 22%, var(--g-glass-line));
+  box-shadow: var(--g-glass-shadow);
+  backdrop-filter: var(--g-blur);
+  -webkit-backdrop-filter: var(--g-blur);
+}
+
+:where(.glass-panel, .glass-card, .jee-panel, .analytics-card, .current-task-bar) {
+  transition: transform .18s ease, box-shadow .22s ease, border-color .22s ease;
+}
+
+:where(.glass-card, .jee-panel, .analytics-card):hover {
+  border-color: color-mix(in srgb, var(--sanctra-sage) 40%, var(--g-glass-line));
+}
+
+/* ---------- timer ring ---------- */
+.timer-ring {
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(96,116,150,.42), rgba(14,19,28,.82) 60%, rgba(9,12,18,.9)),
+    linear-gradient(180deg, color-mix(in srgb, var(--sanctra-sage) 12%, transparent), transparent 52%);
+  border: 1px solid rgba(255,255,255,.16);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.22),
+   0 40px 90px -44px rgba(0,0,0,.95),
+    0 0 90px -34px color-mix(in srgb, var(--sanctra-sage) 60%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+/* ---------- buttons ---------- */
+:where(.workspace-primary, .jee-primary, .btn-sheen, .rowbtns button.done) {
+  border-radius: var(--g-r-pill);
+  border: 0;
+  color: var(--theme-button-text, #1b1305);
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--theme-button-bg, var(--sanctra-sage)) 100%, #fff) ,
+    color-mix(in srgb, var(--theme-button-bg, var(--sanctra-sage)) 82%, #000));
+  box-shadow:
+    0 16px 36px -20px var(--theme-button-glow, color-mix(in srgb, var(--sanctra-sage) 70%, transparent)),
+    inset 0 1px 0 rgba(255,255,255,.55),
+    inset 0 -2px 6px rgba(0,0,0,.18);
+  transition: transform .15s ease, box-shadow .2s ease, filter .2s ease;
+}
+:where(.workspace-primary, .jee-primary, .btn-sheen, .rowbtns button.done):hover {
+  transform: translateY(-1px);
+  filter: saturate(108%);
+}
+:where(.workspace-primary, .jee-primary, .btn-sheen):active {
+  transform: translateY(1px) scale(.99);
+}
+
+:where(.analytics-button, .timer-actions button, .btn-sheen-subtle, .jee-tabs button,
+       .rowbtns button, .presets button, .glass-pill) {
+  border-radius: var(--g-r-pill);
+  transition: transform .15s ease, background .2s ease, border-color .2s ease;
+}
+:where(.timer-actions button, .btn-sheen-subtle, .analytics-button, .rowbtns button):hover {
+  transform: translateY(-1px);
+}
+
+/* ---------- tiles & chips ---------- */
+:where(.timer-metrics > *, .jee-tabs, .analytics-card .kpi, .kpi) {
+  border-radius: var(--g-r-tile);
+}
+
+/* ---------- fields ---------- */
+:where(.inbox-input, input[type="text"], input[type="email"], input[type="password"],
+       input[type="number"], input[type="url"], input[type="date"], select, textarea) {
+  border-radius: var(--g-r-field);
+  background: rgba(255,255,255,.055);
+  border: 1px solid var(--g-glass-line);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+:where(.inbox-input, input[type="text"], input[type="email"], input[type="password"],
+       input[type="number"], input[type="url"], input[type="date"], select, textarea):focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--sanctra-sage) 55%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--sanctra-sage) 18%, transparent);
+}
+
+/* ---------- sidebar shell ---------- */
+.app-sidebar {
+  border-radius: 26px;
+  border: 1px solid var(--g-glass-line);
+  background: linear-gradient(180deg, rgba(12,16,24,.62), rgba(8,11,17,.52));
+  backdrop-filter: blur(28px) saturate(150%);
+  -webkit-backdrop-filter: blur(28px) saturate(150%);
+}
+.app-sidebar nav button,
+.app-sidebar nav a {
+  border-radius: 16px;
+  transition: transform .16s ease, background .2s ease, color .2s ease;
+}
+.app-sidebar nav button:hover,
+.app-sidebar nav a:hover {
+  transform: translateX(2px);
+}
+
+/* ---------- focus workspace ---------- */
+.focus-workspace .focus-context > * {
+  border-radius: var(--g-r-card);
+}
+
+/* Motion stays subtle and is fully off for reduced-motion users. */
+@media (prefers-reduced-motion: reduce) {
+  :where(.glass-panel, .glass-card, .jee-panel, .analytics-card, .current-task-bar,
+         .workspace-primary, .jee-primary, .timer-actions button, .rowbtns button,
+         .timer-metrics > *) {
+    transition: none;
+  }
+  :where(.workspace-primary, .jee-primary, .timer-actions button, .rowbtns button):hover {
+    transform: none;
+  }
+}
