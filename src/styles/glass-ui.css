@@ -280,3 +280,21 @@
 .planner-task-composer input::placeholder{color:rgba(255,255,255,.38)}
 .planner-view .space-y-2 > div{border-radius:16px !important;padding:11px 13px !important}
 .planner-view .space-y-2 > div:hover{border-color:rgba(255,255,255,.18) !important}
+
+/* ---------- shared page frame: one header rhythm, one density ---------- */
+.analytics-view,.inbox-view{max-width:1080px !important;margin-inline:auto !important;padding:18px 20px !important;gap:14px !important}
+.analytics-view h1,.inbox-view h1{font-size:31px !important;line-height:1.1;letter-spacing:-.02em}
+.analytics-view > header p,.inbox-view > header p{font-size:12.5px !important;color:rgba(255,255,255,.45) !important}
+.analytics-view .analytics-card,.inbox-view .glass-card{border-radius:18px !important}
+
+/* ---------- contrast + composer hierarchy ---------- */
+.planner-view .task-stat-strip .tss > small{color:rgba(255,255,255,.56) !important;font-size:10px !important}
+.planner-view .task-stat-strip .tss > b{font-size:21px !important;color:#fffdf7 !important}
+.planner-view .task-stat-strip .tss > span{color:rgba(255,255,255,.42) !important;font-size:10.5px !important}
+.planner-task-composer{background:rgba(255,255,255,.075) !important;border-color:rgba(255,255,255,.13) !important}
+.planner-task-composer input[type="text"]{font-size:13.5px !important;color:#fdf9f0 !important}
+.planner-task-composer button{background:transparent !important;border-color:transparent !important;color:rgba(255,255,255,.62) !important;box-shadow:none !important}
+.planner-task-composer button:hover{background:rgba(255,255,255,.08) !important;color:#fff !important}
+.planner-task-composer button[type="submit"]{background:linear-gradient(180deg,#f2ecff,#cec2ef) !important;color:#191423 !important;border:0 !important}
+.planner-view .space-y-2 > div{background:rgba(255,255,255,.055) !important;border-color:rgba(255,255,255,.10) !important}
+.planner-view .space-y-2 > div p, .planner-view .space-y-2 > div span{color:rgba(255,255,255,.86)}
