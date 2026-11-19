@@ -105,7 +105,7 @@ import { MetricCards } from './components/MetricCards.tsx';
 import { TimerDial } from './components/TimerDial.tsx';
 import { LocalClock } from './components/LocalClock.tsx';
 import { SoundscapeProvider, CenteredHiddenMusicBar } from './components/SoundscapeContext.tsx';
-import { FocusAudioCard, FocusRoomCard } from './components/FocusRail.tsx';
+import { FocusAudioBar } from './components/FocusRail.tsx';
 
 import { TimerModeModal } from './components/modals/TimerModeModal.tsx';
 import { applyThemeToDocument, getThemePreset, resolveThemeId } from './utils/themeRegistry.ts';
@@ -1801,6 +1801,21 @@ export const App: React.FC = () => {
               {timerOnly && <><CenteredHiddenMusicBar /><LocalClock /></>}
               <div className={timerOnly ? 'focus-workspace minimal' : 'focus-workspace'}>
               {!timerOnly && <div className="focus-stage">
+              <div className="focus-task-context">
+                <CurrentTaskBar
+                  tasks={spaceTasks}
+                  subjects={spaceSubjects}
+                  focusedTask={focusedTask && !focusedTask.completed ? focusedTask : null}
+                  onFocus={handleFocusTask}
+                  onStopFocus={() => setFocusedTaskId(null)}
+                  onComplete={(id) => {
+                    handleToggleTask(id);
+                    if (focusedTaskId === id) {
+                      setFocusedTaskId(null);
+                    }
+                  }}
+                />
+              </div>
               <QuoteBanner />
               {/* Circular Focus Clock Dial */}
               <TimerDial
@@ -1822,6 +1837,7 @@ export const App: React.FC = () => {
                 onToggleFullscreen={handleToggleFullscreen}
                 onOpenModeModal={() => setIsModeModalOpen(true)}
               />
+              <FocusAudioBar />
               <MetricCards
                 activeThemeId={activeThemeId}
                 subjects={spaceSubjects}
@@ -1836,25 +1852,7 @@ export const App: React.FC = () => {
                 onOpenStreakHelp={() => setIsStreakHelpOpen(true)}
               />
               </div>}
-              {!timerOnly && <aside className="focus-context" aria-label="Focus overview">
-                <div className="focus-task-context">
-                  <CurrentTaskBar
-                    tasks={spaceTasks}
-                    subjects={spaceSubjects}
-                    focusedTask={focusedTask && !focusedTask.completed ? focusedTask : null}
-                    onFocus={handleFocusTask}
-                    onStopFocus={() => setFocusedTaskId(null)}
-                    onComplete={(id) => {
-                      handleToggleTask(id);
-                      if (focusedTaskId === id) {
-                        setFocusedTaskId(null);
-                      }
-                    }}
-                  />
-                </div>
-                <FocusAudioCard />
-                <FocusRoomCard onOpenRooms={() => handleSelectView('groups')} />
-              </aside>}
+
               </div>
             </>
           )}

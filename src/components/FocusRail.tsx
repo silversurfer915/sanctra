@@ -1,73 +1,68 @@
-import type { CSSProperties } from 'react';
-import { Headphones, Play, Square, Users, ArrowUpRight } from 'lucide-react';
+import { Headphones, Play, Square, SkipBack, SkipForward, Volume2, ListMusic } from 'lucide-react';
 import { useSoundscape } from './SoundscapeContext.tsx';
 import type { SoundscapeId } from '../utils/soundscapes.ts';
 
-const QUICK_SOUNDS: { id: SoundscapeId; label: string }[] = [
-  { id: 'rain', label: 'Rain' },
-  { id: 'forest', label: 'Forest' },
-  { id: 'brown', label: 'Brown noise' },
-];
+/**
+ * Horizontal focus-audio bar: track, prev/next, play, volume, library.
+ * Prev/next walk the saved library, wrapping at both ends.
+ */
+export function FocusAudioBar() {
+  const { isActive, selectedName, playing, play, stop, setOpen, busy, preferences, updatePreferences, library } =
+    useSoundscape();
 
-/** Focus audio as a rail card: current track, one-tap presets, library entry. */
-export function FocusAudioCard() {
-  const { isActive, selectedName, playing, play, stop, setOpen, busy, preferences } = useSoundscape();
-  const next = (playing.currentId ?? preferences.activeSoundscape ?? 'rain') as SoundscapeId;
+  const ids = library.map((s) => s.id).filter(Boolean) as SoundscapeId[];
+  const current = (playing.currentId as SoundscapeId | null) ?? null;
+  const index = current ? ids.indexOf(current) : -1;
+  const step = (delta: number) => {
+    if (!ids.length || busy) return;
+    const nextIndex = index < 0 ? 0 : (index + delta + ids.length) % ids.length;
+    void play(ids[nextIndex]);
+  };
 
   return (
-    <section className="rail-card" style={{ '--rail-hue': 'var(--sanctra-sage)' } as CSSProperties}>
-      <header className="rail-head">
-        <span className="rail-chip"><Headphones size={14} aria-hidden="true" /></span>
-        <h3>Focus audio</h3>
-      </header>
-      <p className="rail-line">{isActive ? selectedName || 'Playing' : 'Nothing playing'}</p>
-      <p className="rail-sub">Soundscapes loop with the timer</p>
-
-      <div className="rail-player">
-        <button
-          type="button"
-          className="rail-play"
-          onClick={() => (isActive ? stop() : void play(next))}
-          disabled={busy}
-          aria-label={isActive ? 'Stop focus audio' : 'Play focus audio'}
-        >
-          {isActive ? <Square size={11} aria-hidden="true" /> : <Play size={12} aria-hidden="true" />}
-        </button>
-        <div className="rail-chips">
-          {QUICK_SOUNDS.map((s) => (
-            <button
-              key={s.id}
-              type="button"
-              className={`rail-chip-btn${playing.currentId === s.id && isActive ? ' is-on' : ''}`}
-              onClick={() => void play(s.id)}
-              disabled={busy}
-            >
-              {s.label}
-            </button>
-          ))}
-        </div>
+    <div className="audio-bar">
+      <div className="audio-lead">
+        <span className="audio-art"><Headphones size={15} aria-hidden="true" /></span>
+        <span className="audio-meta">
+          <b>{isActive ? selectedName || 'Playing' : 'Focus audio'}</b>
+          <small>{isActive ? 'Soundscape' : 'Pick a soundscape'}</small>
+        </span>
       </div>
 
-      <button type="button" className="rail-link" onClick={() => setOpen((v) => !v)}>
-        Open sound library
-      </button>
-    </section>
-  );
-}
+      <div className="audio-controls">
+        <button type="button" onClick={() => step(-1)} disabled={!ids.length || busy} aria-label="Previous sound">
+          <SkipBack size={14} aria-hidden="true" />
+        </button>
+        <button
+          type="button"
+          className="audio-play"
+          onClick={() => (isActive ? stop() : void play(current ?? ids[0] ?? 'rain'))}
+          disabled={busy}
+          aria-label={isActive ? 'Stop audio' : 'Play audio'}
+        >
+          {isActive ? <Square size={11} aria-hidden="true" /> : <Play size={13} aria-hidden="true" />}
+        </button>
+        <button type="button" onClick={() => step(1)} disabled={!ids.length || busy} aria-label="Next sound">
+          <SkipForward size={14} aria-hidden="true" />
+        </button>
+      </div>
 
-/** Study rooms entry point for the rail. */
-export function FocusRoomCard({ onOpenRooms }: { onOpenRooms: () => void }) {
-  return (
-    <section className="rail-card" style={{ '--rail-hue': 'var(--sanctra-sage)' } as CSSProperties}>
-      <header className="rail-head">
-        <span className="rail-chip"><Users size={14} aria-hidden="true" /></span>
-        <h3>Study room</h3>
-      </header>
-      <p className="rail-line">Study beside other people</p>
-      <p className="rail-sub">A shared clock, a member list, your own history</p>
-      <button type="button" className="rail-link" onClick={onOpenRooms}>
-        Open study rooms <ArrowUpRight size={13} aria-hidden="true" />
+      <label className="audio-vol">
+        <Volume2 size={14} aria-hidden="true" />
+        <input
+          type="range"
+          min={0}
+          max={1}
+          step={0.01}
+          value={preferences.volume}
+          aria-label="Focus audio volume"
+          onChange={(e) => updatePreferences({ volume: Number(e.target.value) })}
+        />
+      </label>
+
+      <button type="button" className="audio-open" onClick={() => setOpen((v) => !v)} aria-label="Open sound library">
+        <ListMusic size={14} aria-hidden="true" />
       </button>
-    </section>
+    </div>
   );
 }
