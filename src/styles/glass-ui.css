@@ -298,3 +298,22 @@
 .planner-task-composer button[type="submit"]{background:linear-gradient(180deg,#f2ecff,#cec2ef) !important;color:#191423 !important;border:0 !important}
 .planner-view .space-y-2 > div{background:rgba(255,255,255,.055) !important;border-color:rgba(255,255,255,.10) !important}
 .planner-view .space-y-2 > div p, .planner-view .space-y-2 > div span{color:rgba(255,255,255,.86)}
+
+/* ---------- analytics: KPI strip ---------- */
+.analytics-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;overflow:hidden;
+  border-radius:16px;border:1px solid rgba(255,255,255,.09);
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.018));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10)}
+.analytics-strip > div{padding:11px 15px !important;border-radius:0 !important;background:none !important;
+  border:0 !important;box-shadow:none !important;min-width:0}
+.analytics-strip > div + div{border-left:1px solid rgba(255,255,255,.07) !important}
+.analytics-strip > div > p:first-child{font-size:9.5px !important;letter-spacing:.14em !important;color:rgba(255,255,255,.48) !important}
+.analytics-strip > div > p:nth-child(2){font-size:19px !important;margin-top:6px !important;color:#fffdf7}
+.analytics-strip > div > p:last-child{font-size:10.5px !important;margin-top:4px !important;color:rgba(255,255,255,.40) !important}
+@media (max-width:760px){.analytics-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .analytics-strip > div:nth-child(3){border-left:0 !important;border-top:1px solid rgba(255,255,255,.07) !important}
+ .analytics-strip > div:nth-child(4){border-top:1px solid rgba(255,255,255,.07) !important}}
+
+/* one heading scale everywhere */
+.sanctra-app main h1{font-size:31px !important;line-height:1.12;letter-spacing:-.02em}
+@media (max-width:640px){.sanctra-app main h1{font-size:26px !important}}

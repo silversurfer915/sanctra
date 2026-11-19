@@ -131,7 +131,7 @@ export function AnalyticsView({ jeeSyllabus,jeeTests=[],onOpenJeeHours, sessions
     {jeeSyllabus&&<div className="analytics-card p-4 flex flex-wrap gap-3"><SelectControl label="JEE chapter" value={chapterFilter} onChange={setChapterFilter} options={[{value:'all',label:'All chapters'},...Object.entries(jeeSyllabus).flatMap(([subject,chapters])=>chapters.map((c:JeeChapter)=>({value:`${subject}:${c.id}`,label:c.name})))]}/><SelectControl label="JEE activity" value={activityFilter} onChange={setActivityFilter} options={[{value:'all',label:'All activities'},{value:'lecture',label:'Lecture'},{value:'practice',label:'Practice'},{value:'revision',label:'Revision'},{value:'mockAnalysis',label:'Mock analysis'}]}/></div>}
     {jeeSyllabus&&<JeeAnalyticsSummary tests={jeeTests} start={stats.start} end={stats.end}/>}
     <div><h2 className="text-xl font-display">{label}</h2><p className="text-xs text-slate-300 mt-1">Local time · {subjectFilter==='all'?'All saved subjects':'Filtered subject'} · {stats.daysElapsed} elapsed {stats.daysElapsed===1?'day':'days'}</p></div>
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">{[
+    <div className="analytics-strip">{[
       ['Focused time',duration(stats.totalSeconds),change===null?'No focus recorded in previous period':`${change>=0?'+':''}${change}% vs previous ${kind}`],
       ['Sessions',String(stats.sessionCount),`${duration(stats.averageSession)} average session`],
       ['Active days',String(stats.activeDays),`Days with saved focus out of ${stats.daysElapsed} elapsed days`],

@@ -141,7 +141,7 @@ export const GroupsView: React.FC<GroupsViewProps> = ({
 
   const yourRooms=sortCommunityRooms(rooms.filter(r=>joinedIds.includes(r.id)),community.primaryId);
   // Switching chats does not leave any membership.
-  if(activeRoom && joinedIds.includes(activeRoom.id))return <div className="w-full max-w-6xl mx-auto">
+  if(activeRoom && joinedIds.includes(activeRoom.id))return <div className="groups-view w-full max-w-6xl mx-auto">
     <div className="group-switcher-bar flex flex-wrap items-center gap-2 mb-4 relative">
       <button className="analytics-button" aria-expanded={switcherOpen} onClick={()=>setSwitcherOpen(!switcherOpen)}><Users size={16}/>{activeRoom.name}<span aria-hidden="true">⌄</span></button>
       <button className="analytics-button" onClick={()=>{setActiveRoomId(null);setActiveTab('my-rooms');}}>Browse groups</button>
