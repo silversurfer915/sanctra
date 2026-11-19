@@ -96,6 +96,16 @@ export function JeeTrackView(p: JeeTrackViewProps) {
   const [modal, setModal] = useState<ModalState>(null);
   const [error, setError] = useState('');
   useEffect(()=>{if(p.initialTab)setTab(p.initialTab);},[p.initialTab]);
+  // Sections live in the URL so refresh, back and a shared link keep the reader in place.
+  const selectTab = (id: JeeTrackSubTab) => {
+    setTab(id);
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set('view', 'jeetrack');
+      url.searchParams.set('tab', id);
+      window.history.replaceState({}, '', url);
+    } catch { /* URL sync is cosmetic; navigation still works without it. */ }
+  };
 
   const data = store.state;
   const sourceHours = deriveJeeSessionHours(p.sessions);
@@ -221,7 +231,7 @@ export function JeeTrackView(p: JeeTrackViewProps) {
           <button
             key={t.id}
             aria-current={tab === t.id ? 'page' : undefined}
-            onClick={() => setTab(t.id)}
+            onClick={() => selectTab(t.id)}
           >
             {t.icon}
             {t.label}
@@ -240,7 +250,7 @@ export function JeeTrackView(p: JeeTrackViewProps) {
           {tab === 'overview' && (
             <JeeOverviewHome
               state={state}
-              onNavigateTab={setTab}
+              onNavigateTab={selectTab}
               onOpenLogTest={() => setModal({ kind: 'test' })}
               onOpenScheduleTest={() => setModal({ kind: 'schedule' })}
               onOpenLogPractice={() => setModal({ kind: 'practice' })}

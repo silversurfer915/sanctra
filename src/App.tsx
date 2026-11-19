@@ -191,7 +191,7 @@ export const App: React.FC = () => {
         return 'groups';
       }
       const v = params.get('view') as ViewMode | null;
-      if (v && ['timer','planner','calendar','analytics','groups','rankings','profile','inbox','support','admin'].includes(v)) {
+      if (v && ['timer','planner','calendar','analytics','groups','rankings','profile','inbox','support','admin','jeetrack'].includes(v)) {
         return v;
       }
     } catch (e) {
@@ -217,6 +217,11 @@ export const App: React.FC = () => {
     setCurrentView(target);
     try {
       localStorage.setItem('sanctra_active_view', target);
+      // Keep the URL honest so refresh, back and shared links land on the same screen.
+      const url = new URL(window.location.href);
+      url.searchParams.set('view', target);
+      if (target !== 'jeetrack') url.searchParams.delete('tab');
+      window.history.replaceState({}, '', url);
     } catch (e) {
       // ignore
     }
@@ -1553,7 +1558,15 @@ export const App: React.FC = () => {
   useEffect(()=>{setPlatformAdmin(false);return currentUser&&!currentUser.isAnonymous?subscribeAdmin(currentUser.uid,setPlatformAdmin):undefined;},[currentUser?.uid]);
   const maintenanceInfo = resolveFeaturePause(platformConfig,currentView);
   const jeeStore=useJeeTrackStore(settings.jeeTrackOptIn!==false&&platformConfig.jeeTrackEnabled&&activeUser?activeUser.uid:null);
-  const [jeeInitialTab,setJeeInitialTab]=useState<JeeTrackSubTab>('overview');
+  const [jeeInitialTab,setJeeInitialTab]=useState<JeeTrackSubTab>(() => {
+    // A shared or refreshed ?view=jeetrack&tab=syllabus link opens that exact section.
+    try {
+      const t = new URLSearchParams(window.location.search).get('tab');
+      const valid: JeeTrackSubTab[] = ['overview','tests','syllabus','practice','backlog','insights','hours','tasks'];
+      if (t && valid.includes(t as JeeTrackSubTab)) return t as JeeTrackSubTab;
+    } catch { /* fall through to the default section */ }
+    return 'overview';
+  });
   const handleUpdateSharedTasks=(next:TaskItem[])=>{
     let nextSubjects=subjects;
     const normalized=next.map(task=>{
@@ -1866,7 +1879,7 @@ export const App: React.FC = () => {
               {currentView === 'analytics' && (
                 <AnalyticsView
                   sessions={[...sessions,...(settings.jeeTrackOptIn?jeeManualSessions(jeeStore.state,subjects):[])]}
-                  jeeSyllabus={settings.jeeTrackOptIn?jeeStore.state.syllabus:undefined} jeeTests={settings.jeeTrackOptIn?jeeStore.state.tests:undefined} onOpenJeeHours={()=>{setJeeInitialTab('hours');handleSelectView('jeetrack');}}
+                  jeeSyllabus={settings.jeeTrackOptIn!==false?jeeStore.state.syllabus:undefined} jeeTests={settings.jeeTrackOptIn!==false?jeeStore.state.tests:undefined} onOpenJeeHours={()=>{setJeeInitialTab('hours');handleSelectView('jeetrack');}}
                   subjects={subjects}
                   settings={appearanceSettings}
                   onOpenGoalModal={() => setIsGoalModalOpen(true)}

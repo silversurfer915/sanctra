@@ -280,7 +280,9 @@ export function resetSubjects(): void {
 }
 
 export function getSettingsStorageKey(userId?: string | null): string {
-  if (userId) return `sanctra_settings_${userId}_v1`;
+  // A guest id is minted fresh on every load, so keying by it throws away the
+  // guest's own choices on reload. Guests share the device-level settings key.
+  if (userId && !userId.startsWith('guest-')) return `sanctra_settings_${userId}_v1`;
   return STORAGE_KEYS.SETTINGS;
 }
 

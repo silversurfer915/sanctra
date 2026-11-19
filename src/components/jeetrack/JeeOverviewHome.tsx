@@ -44,6 +44,8 @@ export function JeeOverviewHome(p: Props) {
   const allChapters = Object.values(s.syllabus).flat();
   const allComplete = allChapters.filter((c) => c.theory && c.practice).length;
   const overallSyllabusPct = allChapters.length ? Math.round((allComplete / allChapters.length) * 100) : 0;
+  const isEmpty = !s.tests.length && !s.upcoming.length && !s.hours.length && !s.practiceLogs.length
+    && !s.backlogs.length && allComplete === 0;
 
   // Upcoming mock tests
   const upcoming = s.upcoming.filter((t) => t.date >= todayDate).sort((a, b) => a.date.localeCompare(b.date));
@@ -69,17 +71,46 @@ export function JeeOverviewHome(p: Props) {
           </p>
         </div>
         <div className="jee-actions">
-          <button className="jee-primary" onClick={p.onOpenLogTest}>
+          {/* The Start-here card already carries these actions, with the reason for each. */}
+          {!isEmpty && <button className="jee-primary" onClick={p.onOpenLogTest}>
             <Plus size={16} /> Log mock
-          </button>
-          <button onClick={p.onOpenLogPractice}>
+          </button>}
+          {!isEmpty && <button onClick={p.onOpenLogPractice}>
             <Target size={16} /> Log practice
-          </button>
-          <button onClick={p.onOpenAddBacklog}>
+          </button>}
+          {!isEmpty && <button onClick={p.onOpenAddBacklog}>
             <ListTodo size={16} /> Add backlog
-          </button>
+          </button>}
         </div>
       </div>
+
+      {isEmpty && (
+        <Panel title="Start here" subtitle="Three short steps and this dashboard fills itself">
+          <ul className="jee-list">
+            <li>
+              <div>
+                <b>1 · Mark what you have already covered</b>
+                <small>Tick theory or practice per chapter. This powers syllabus progress and revision suggestions.</small>
+              </div>
+              <button onClick={() => p.onNavigateTab('syllabus')}>Open syllabus</button>
+            </li>
+            <li>
+              <div>
+                <b>2 · Log one mock test</b>
+                <small>Scores become your progression line, subject strengths and paper-wise averages.</small>
+              </div>
+              <button onClick={p.onOpenLogTest}>Log mock</button>
+            </li>
+            <li>
+              <div>
+                <b>3 · Log today’s study hours</b>
+                <small>Split lecture, practice and revision. Hours also arrive automatically from focus sessions.</small>
+              </div>
+              <button onClick={() => p.onNavigateTab('hours')}>Log hours</button>
+            </li>
+          </ul>
+        </Panel>
+      )}
 
       {/* 4-Stat Metric Grid */}
       <div className="ov-stat-grid">
@@ -124,7 +155,7 @@ export function JeeOverviewHome(p: Props) {
               <span className="sbadge high">Best: {s.backlogBestStreak}d</span>
             ) : undefined
           }
-          subtitle={s.backlogStreak > 0 ? 'Consecutive clear days' : 'Clear a backlog today!'}
+          subtitle={s.backlogStreak > 0 ? 'Consecutive clear days' : s.backlogs.some((b) => !b.done) ? 'Clear a backlog today!' : 'No backlogs yet'}
           icon={<Flame size={18} />}
           color="var(--jee-danger)"
         />

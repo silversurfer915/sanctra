@@ -60,7 +60,11 @@ export function JeeMockTestsView(p: Props) {
           <p>Analyze performance, subject strengths, and score trajectories across Mains and Advanced.</p>
         </div>
         <div className="jee-actions">
-          <button onClick={p.onPrint}>
+          <button
+            onClick={p.onPrint}
+            disabled={p.tests.length === 0}
+            title={p.tests.length === 0 ? 'Log one mock test to build a report' : undefined}
+          >
             <FileText size={16} /> Print report / Save PDF
           </button>
           <button className="jee-primary" onClick={p.onOpenLogTest}>
