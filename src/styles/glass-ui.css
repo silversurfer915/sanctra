@@ -437,3 +437,29 @@
 .focus-workspace .timer-metrics{gap:10px !important}
 .focus-workspace .timer-metrics > *{min-height:108px;justify-content:space-between}
 .focus-workspace .audio-bar{max-width:100% !important}
+
+/* ---------- neutral hover: the theme accent is for selection, not for pointing ---------- */
+.sanctra-app .glass-card:hover,
+.sanctra-app .glass-panel:hover,
+.sanctra-app .workspace-panel:hover,
+.sanctra-app .analytics-card:hover{
+  background:rgba(255,255,255,.055) !important;
+  border-color:rgba(255,255,255,.16) !important;
+}
+.calendar-day:hover{background:rgba(255,255,255,.045) !important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.10) !important}
+.calendar-filter-chip:hover,.calendar-arrange-btn:hover,.calendar-icon-button:hover,
+.calendar-add-plan-btn:hover,.calendar-agenda-card:hover,.calendar-mini:hover,
+.calendar-more:hover,.calendar-check-btn:hover,.calendar-focus-btn:hover{
+  background:rgba(255,255,255,.07) !important;
+  border-color:rgba(255,255,255,.18) !important;
+  color:#fff !important;
+}
+.calendar-view-tabs button:hover:not([aria-pressed="true"]){
+  background:rgba(255,255,255,.06) !important;color:rgba(255,255,255,.9) !important;
+}
+
+/* the pale-blue theme accent read cheap on hover: warm neutral accent, app-wide */
+.sanctra-app{
+  --sanctra-sage:#d8d0c2 !important;
+  --theme-accent:#d8d0c2;
+}
