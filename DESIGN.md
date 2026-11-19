@@ -41,7 +41,7 @@ Use neutral smoked glass with sky, blush and soft gold for purposeful distinctio
 
 ## Typography
 
-Manrope Variable headlines and timer numerals; Inter Variable interface text, with Manrope and Inter fallbacks. Use readable weights, modest tracking and tabular timer/metric numerals. Long copy wraps naturally; labels and names must not collide with controls.
+Instrument Serif for display headlines and the timer numerals; Manrope Variable for interface headings and UI labels; Inter Variable for body and controls, with Manrope, Inter and Georgia as fallbacks; Sfmono-Regular for monospaced chat and code. Use readable weights, modest tracking and tabular timer/metric numerals. Long copy wraps naturally; labels and names must not collide with controls.
 
 ## Surfaces
 
