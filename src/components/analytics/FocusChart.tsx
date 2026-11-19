@@ -7,6 +7,7 @@ export function FocusChart({values,labels,title}:{values:number[];labels:string[
   const x=(i:number)=>left+i*(width-left-right)/Math.max(1,values.length-1);
   const y=(value:number)=>height-bottom-value/max*(height-top-bottom);
   const points=values.map((v,i)=>`${x(i)},${y(v)}`).join(' ');
+  if(!values.some(Boolean)) return <div className="mt-5"><p className="text-xs text-slate-300 text-center">No saved focus in this range yet.</p></div>;
   return <div className="mt-5"><svg viewBox={`0 0 ${width} ${height}`} className="w-full overflow-visible" role="img" aria-label={title}>
     <defs><linearGradient id={id} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="var(--sanctra-sage)" stopOpacity=".3"/><stop offset="100%" stopColor="var(--sanctra-sage)" stopOpacity=".02"/></linearGradient></defs>
     {[0,.25,.5,.75,1].map(f=><g key={f}><line x1={left} x2={width-right} y1={y(max*f)} y2={y(max*f)} stroke="currentColor" opacity=".1"/><text x={left-8} y={y(max*f)+4} textAnchor="end" fill="currentColor" fontSize="10" opacity=".8">{Math.round(max*f/60)}m</text></g>)}

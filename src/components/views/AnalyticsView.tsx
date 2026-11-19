@@ -6,7 +6,7 @@ import { FocusChart, GoalRing } from '../analytics/FocusChart.tsx';
 import { useMemo, useState, useEffect } from 'react';
 import { ArrowLeft, ArrowRight, Plus, Pencil, Trash2 } from 'lucide-react';
 import type { StudySession, Subject, UserSettings } from '../../types/index.ts';
-import { buildPeriodAnalytics, shiftPeriod, type AnalyticsPeriod } from '../../utils/analytics.ts';
+import { buildPeriodAnalytics, periodBounds, shiftPeriod, type AnalyticsPeriod } from '../../utils/analytics.ts';
 import { formatDurationHuman, getLocalDateString } from '../../utils/time.ts';
 import { SessionDetails } from '../analytics/SessionDetails.tsx';
 interface AnalyticsViewProps {
@@ -96,6 +96,7 @@ export function AnalyticsView({ jeeSyllabus,jeeTests=[],onOpenJeeHours, sessions
               type="button"
               className="analytics-capsule-arrow"
               aria-label={`Next ${kind}`}
+              disabled={shiftPeriod(anchor, kind, 1) > new Date()}
               onClick={() => navigate(shiftPeriod(anchor, kind, 1))}
             >
               <ArrowRight size={15} />
@@ -104,6 +105,7 @@ export function AnalyticsView({ jeeSyllabus,jeeTests=[],onOpenJeeHours, sessions
           <button
             type="button"
             className="analytics-current-btn"
+            disabled={periodBounds(anchor, kind).start <= new Date() && new Date() <= periodBounds(anchor, kind).end}
             onClick={() => navigate(new Date())}
           >
             Current {kind.charAt(0).toUpperCase() + kind.slice(1)}
