@@ -243,9 +243,12 @@ export function LandingView({
     { id: 'rooms', label: '03 Spaces', href: '#rooms' },
     { id: 'soundscapes', label: '04 Sounds', href: '#soundscapes' },
     { id: 'stats', label: '05 Archive', href: '#stats' },
-    { id: 'jee', label: '06 JEE Track', href: '#jee' },
-    { id: 'pricing', label: '07 Access', href: '#pricing' },
-    { id: 'faq', label: '08 Questions', href: '#faq' },
+    { id: 'start', label: '06 Start', href: '#start' },
+    { id: 'jee', label: '07 JEE Track', href: '#jee' },
+    { id: 'who', label: '08 For whom', href: '#who' },
+    { id: 'free', label: '09 Free', href: '#free' },
+    { id: 'pricing', label: '10 Access', href: '#pricing' },
+    { id: 'faq', label: '11 Questions', href: '#faq' },
   ];
 
   useEffect(() => {
@@ -386,6 +389,9 @@ export function LandingView({
             <a href="#stats" className="rs-nav-link">
               Stats
             </a>
+            <a href="#start" className="rs-nav-link">
+              How it works
+            </a>
             <a href="#pricing" className="rs-nav-link">
               Pricing
             </a>
@@ -522,6 +528,44 @@ export function LandingView({
               </div>
             </div>
           </div>
+        </section>
+
+        {/* HOW IT WORKS */}
+        <section id="start" aria-labelledby="start-title" className="space-y-10 scroll-mt-20 reveal-on-scroll">
+          <div className="flex flex-col items-start gap-2">
+            <h2 id="start-title" className="font-serif text-3xl sm:text-5xl text-[var(--rs-cream)] font-normal leading-tight">
+              Three steps to <em>your first session.</em>
+            </h2>
+            <p className="text-[var(--rs-cream-soft)] max-w-xl text-base font-sans">
+              No install, no tour, no credit card. The desk is open the moment the page loads.
+            </p>
+          </div>
+
+          <ol className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch list-none p-0">
+            {[
+              {
+                n: '01',
+                title: 'Open the desk',
+                body: 'The clock runs in the browser and keeps counting while you switch tabs or lock your phone.',
+              },
+              {
+                n: '02',
+                title: 'Pick a mode',
+                body: '25 or 50 minute intervals, a fixed countdown for a mock paper, or an open clock that runs until you stop.',
+              },
+              {
+                n: '03',
+                title: 'Keep what you earned',
+                body: 'Sign in when the session ends and it joins your streak, heatmap and study rooms. Skip it and nothing is lost.',
+              },
+            ].map((step) => (
+              <li key={step.n} className="rs-plate-card p-7 flex flex-col gap-3">
+                <span className="rs-kicker text-[var(--rs-amber)]">{step.n}</span>
+                <h3 className="font-serif text-xl text-[var(--rs-cream)]">{step.title}</h3>
+                <p className="text-sm font-sans text-[var(--rs-cream-soft)] leading-relaxed">{step.body}</p>
+              </li>
+            ))}
+          </ol>
         </section>
 
         {/* FOCUS MODES */}
@@ -1127,6 +1171,90 @@ export function LandingView({
                 </span>
                 <span className="text-[var(--rs-amber)] font-semibold tabular-nums">99.2 %ile</span>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* WHO IT IS FOR */}
+        <section id="who" aria-labelledby="who-title" className="space-y-10 scroll-mt-20 reveal-on-scroll">
+          <div className="flex flex-col items-start gap-2">
+            <h2 id="who-title" className="font-serif text-3xl sm:text-5xl text-[var(--rs-cream)] font-normal leading-tight">
+              Built for <em>long preparations.</em>
+            </h2>
+            <p className="text-[var(--rs-cream-soft)] max-w-xl text-base font-sans">
+              The same desk serves a two-year entrance run and a two-week exam sprint.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { tag: 'Entrance exams', title: 'JEE & NEET', body: 'Chapter-level practice, mock logs and backlog streaks sit beside the timer.' },
+              { tag: 'School', title: 'Class 11 & 12', body: 'Subject-wise hours and a syllabus checklist that matches your board.' },
+              { tag: 'University', title: 'College & PG', body: 'Semester blocks, assignment sprints and honest weekly totals.' },
+              { tag: 'Self-taught', title: 'Skills & languages', body: 'Open-ended flow sessions for work that has no fixed syllabus.' },
+            ].map((row) => (
+              <div key={row.title} className="rs-plate-card p-6 flex flex-col gap-2">
+                <span className="rs-kicker text-[var(--rs-cream-dim)]">{row.tag}</span>
+                <h3 className="font-serif text-lg text-[var(--rs-cream)]">{row.title}</h3>
+                <p className="text-sm font-sans text-[var(--rs-cream-soft)] leading-relaxed">{row.body}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* FREE COMPARISON */}
+        <section id="free" aria-labelledby="free-title" className="space-y-8 scroll-mt-20 reveal-on-scroll">
+          <div className="flex flex-col items-start gap-2">
+            <h2 id="free-title" className="font-serif text-3xl sm:text-5xl text-[var(--rs-cream)] font-normal leading-tight">
+              Everything free. <em>No asterisks.</em>
+            </h2>
+            <p className="text-[var(--rs-cream-soft)] max-w-xl text-base font-sans">
+              Most study timers give you a clock and charge for the rest. Here the clock, the history and the rooms are the same product.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+            <div className="rs-plate-card p-7 border-[var(--rs-amber)]/40">
+              <div className="flex items-baseline justify-between gap-3">
+                <h3 className="font-serif text-2xl text-[var(--rs-cream)]">Sanctra</h3>
+                <span className="font-serif text-3xl text-[var(--rs-amber)]">₹0</span>
+              </div>
+              <p className="text-xs font-sans text-[var(--rs-cream-dim)] mt-1">Free forever · no card · no expiry</p>
+              <ul className="mt-5 space-y-2.5 text-sm font-sans text-[var(--rs-cream-soft)] list-none p-0">
+                {[
+                  'Timer, intervals and open flow',
+                  'Subject tagging and session history',
+                  'Streaks, heatmap and weekly totals',
+                  'Study rooms with live members',
+                  'JEE Track: mocks, syllabus, backlogs',
+                ].map((row) => (
+                  <li key={row} className="flex items-start gap-2.5">
+                    <span className="text-[var(--rs-amber)]" aria-hidden="true">✓</span>
+                    <span>{row}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="rs-plate-card p-7">
+              <div className="flex items-baseline justify-between gap-3">
+                <h3 className="font-serif text-2xl text-[var(--rs-cream)]">Typical paid timer</h3>
+                <span className="font-serif text-2xl text-[var(--rs-cream-dim)]">₹400+ /mo</span>
+              </div>
+              <p className="text-xs font-sans text-[var(--rs-cream-dim)] mt-1">Most of it sits behind a subscription</p>
+              <ul className="mt-5 space-y-2.5 text-sm font-sans text-[var(--rs-cream-soft)] list-none p-0">
+                {[
+                  'Timer, intervals and open flow',
+                  'Subject tagging and history — premium',
+                  'Streaks and heatmap — premium',
+                  'Study rooms — paid add-on or not offered',
+                  'Exam tracking — not offered',
+                ].map((row) => (
+                  <li key={row} className="flex items-start gap-2.5">
+                    <span className="text-[var(--rs-cream-dim)]" aria-hidden="true">·</span>
+                    <span className="text-[var(--rs-cream-soft)]">{row}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </section>
