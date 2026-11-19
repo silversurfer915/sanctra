@@ -1,4 +1,3 @@
-import {PersonalIntegration} from './PersonalIntegration.tsx';
 import {AccountPassword} from '../AccountPassword.tsx';
 import {hasGoogleSignIn} from '../../utils/firebase.ts';
 import {BackgroundChooser} from '../BackgroundChooser.tsx';
@@ -409,7 +408,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           {/* TAB 3: PREFERENCES */}
           {activeTab === 'preferences' && (
             <div className="space-y-4">
-              {currentUser && !currentUser.isAnonymous && <PersonalIntegration uid={currentUser.uid}/>}
 
               {/* Daily Goal Hours */}
               <div className="p-4 rounded-2xl glass-card border border-white/10 flex items-center justify-between">
