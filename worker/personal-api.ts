@@ -17,6 +17,8 @@ export function createPersonalApi(store:PersonalStore) {
   const headers:Record<string,string>={'content-type':'application/json','cache-control':'no-store','vary':'Origin','access-control-allow-origin':env.ALLOWED_ORIGIN};
   const reply=(status:number,value:unknown)=>new Response(JSON.stringify(value),{status,headers});
   if(origin&&origin!==env.ALLOWED_ORIGIN)return reply(403,{message:'Unavailable.'});
+  // Bluey integration retired: no personal tokens are issued or accepted.
+  return reply(410,{message:'The personal integration has been removed.'});
   if(request.method==='OPTIONS')return new Response(null,{status:204,headers:{...headers,'access-control-allow-methods':'GET,POST,PATCH,DELETE,OPTIONS','access-control-allow-headers':'Authorization,Content-Type,If-None-Match'}});
   const owner=env.PERSONAL_OWNER_UID;
   if(!owner||!/^[A-Za-z0-9_-]{1,128}$/.test(owner))return reply(503,{message:'Personal integration is not configured.'});
