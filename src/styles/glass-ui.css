@@ -418,3 +418,22 @@
   backdrop-filter:blur(24px) saturate(140%) !important;
   border-color:rgba(255,255,255,.13) !important;
 }
+
+/* ---------- one box: same width, radius, surface, everywhere in the stage ---------- */
+.focus-workspace .timer-quote,
+.focus-workspace .timer-metrics{max-width:100% !important;width:100% !important;margin:0 !important;padding:0 !important}
+.focus-workspace .timer-quote > div,
+.focus-workspace .current-task-bar,
+.focus-workspace .audio-bar,
+.focus-workspace .timer-metrics > *{
+  border-radius:18px !important;
+  border:1px solid var(--g-line) !important;
+  background:var(--g-surface) !important;
+  box-shadow:var(--g-shadow) !important;
+  backdrop-filter:blur(24px) saturate(140%) !important;
+  -webkit-backdrop-filter:blur(24px) saturate(140%) !important;
+  box-sizing:border-box;max-width:100%;
+}
+.focus-workspace .timer-metrics{gap:10px !important}
+.focus-workspace .timer-metrics > *{min-height:108px;justify-content:space-between}
+.focus-workspace .audio-bar{max-width:100% !important}
