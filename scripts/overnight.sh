@@ -29,7 +29,7 @@ if [ -n "$(git status --porcelain)" ]; then
     CURRENT=$(grep -m1 '^- \[~\]' "$QUEUE" | sed 's/^- \[~\] //')
     git add -A
     git commit -q -m "design(overnight): ${CURRENT:-agy pass}" || true
-    if git push -q origin main; then
+    if git push -q origin HEAD:main; then
       gh workflow run deploy.yml --ref main
       RUN_ID=$(sleep 8; gh run list --workflow=deploy.yml --limit 1 --json databaseId -q '.[0].databaseId')
       say "deploy triggered · run $RUN_ID · ${CURRENT:-agy pass}"
