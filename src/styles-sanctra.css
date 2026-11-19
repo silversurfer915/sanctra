@@ -171,6 +171,7 @@ button:not(:disabled),a { cursor:pointer; }
 .sanctra-app .glass-modal { background:linear-gradient(145deg,#ffffff08,#ffffff02),rgba(23,24,29,.94); border-color:color-mix(in srgb,var(--sanctra-sage) 17%,transparent); }
 .sanctra-app .timer-ring { border-radius:50%; background:radial-gradient(ellipse at 35% 20%,color-mix(in srgb,var(--sanctra-sage) 4%,transparent),color-mix(in srgb,var(--sanctra-ink) 27%,transparent)); box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--sanctra-sage) 4%,transparent),0 24px 70px #0002; }
 .sanctra-app .timer-ring svg circle { stroke-width:4px; }
+
 .sanctra-app .timer-actions>button:not(:first-child) { color:var(--sanctra-muted); background:color-mix(in srgb,var(--sanctra-sage) 4%,transparent); border-color:color-mix(in srgb,var(--sanctra-sage) 16%,transparent); box-shadow:none; }
 .sanctra-app .timer-actions>button:not(:first-child)>svg { color:var(--sanctra-muted); }
 .sanctra-app .timer-actions>button:first-child { background:var(--sanctra-sage); color:var(--sanctra-ink); box-shadow:0 8px 28px #0002; --tw-ring-color:transparent; }
@@ -3318,7 +3319,7 @@ html,body {background:var(--sanctra-boot-ink,#131b28);min-height:100%;}
 .focus-context {display:contents;}
 .focus-task-context {grid-area:task;min-width:0;display:flex;flex-direction:column;gap:8px;}
 .sanctra-app .focus-workspace:not(.minimal)>.timer-dial {grid-area:clock;order:0;margin:0;padding:2px 0;min-width:0;gap:clamp(6px, 1dvh, 10px);}
-.sanctra-app .focus-workspace:not(.minimal) .timer-ring {width:min(72vw,35dvh,320px);height:auto;aspect-ratio:1;flex-shrink:0;}
+.sanctra-app .focus-workspace:not(.minimal) .timer-ring {width:min(72vw,46dvh,470px);height:auto;aspect-ratio:1;flex-shrink:0;}
 .sanctra-app .focus-workspace .timer-actions {display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:center!important;gap:clamp(8px, 1.2vw, 12px)!important;margin-top:clamp(6px, 1dvh, 12px)!important;width:auto!important;max-width:100%!important;padding:0!important;}
 @media (max-width: 640px) {
   .sanctra-app .focus-workspace .timer-actions {flex-wrap:wrap!important;gap:8px!important;}
