@@ -488,3 +488,10 @@
 /* the action row may shrink without clipping */
 .sanctra-app .focus-workspace .timer-actions{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) !important}
 .sanctra-app .planner-view,.sanctra-app .analytics-view,.sanctra-app .inbox-view,.sanctra-app .groups-view{max-width:1080px !important;margin-inline:auto !important}
+
+/* phones: two-up stats, and the focus column may scroll instead of clipping */
+@media (max-width:640px){
+  .focus-workspace:not(.minimal) .timer-metrics{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+  .focus-workspace:not(.minimal){overflow-y:auto;padding-bottom:16px}
+  .focus-workspace .timer-metrics > *{min-height:84px}
+}
