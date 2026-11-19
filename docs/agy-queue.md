@@ -8,6 +8,6 @@ States: `[ ]` todo · `[~]` running · `[x]` done · `[!]` failed (reverted).
 - [x] Groups view: 2-up room cards with a segmented pixel occupancy meter, rhythm as a sticker, big JOIN brick.
 - [x] Tasks view: stamp-style checkboxes, subject paper tags, due-time stamp, clear crossed/faded completed state.
 - [x] Focus Room: inventory strip of four stat cards, task slip as an active quest card with a gold corner flag.
-- [ ] Landing page: carry the daylight pixel language into the hero and section rules without losing copy.
+- [x] Landing page: rebuilt from scratch by Hermes in the daylight pixel language (new LandingView.tsx + landing.css, new hero copy). Do not re-do.
 - [ ] Profile and Settings: chips, tiles and toggles in the same paper/ink language.
 - [ ] Sweep: empty, loading and error states across all views; keyboard focus rings.
