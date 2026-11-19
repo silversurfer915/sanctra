@@ -7,7 +7,7 @@ import {isEntitlementActive} from '../../utils/subscriptionPlans.ts';
 import {identityAvatarClass} from '../RankingIdentity.tsx';
 import {publicStyle, type PublicStyle} from '../../utils/publicIdentity.ts';
 import {useEffect,useRef,useState} from 'react';
-import {Users,Plus,ArrowLeft,Settings,Share2,LogOut,Trash2,Search,UserX} from 'lucide-react';
+import {Users,Plus,ArrowLeft,Settings,Share2,LogOut,Trash2,Search,UserX,Radio,Clock,ShieldCheck} from 'lucide-react';
 import type {AuthUser, UserSubscription, UserSettings} from '../../types/index.ts';
 import type {GroupChatMessage} from '../../types/groups.ts';
 import {createLiveGroup,watchPublicGroups,watchMemberships,watchGroup,joinLiveGroup,leaveLiveGroup,deleteLiveGroup,setGroupAdmin,editLiveGroup,resolveLiveGroup,watchLiveMembers,watchLiveChat,forgetDeletedGroup,kickLiveGroupMember,type LiveGroup} from '../../utils/liveGroups.ts';
@@ -29,7 +29,16 @@ export function LiveGroupsView({user,initialRoomId,subscription,settings,onOpenA
  const enter=async(room:LiveGroup)=>{await joinLiveGroup(user,room);setSelected(room.id);};
  const inviteAttempt=useRef('');
  useEffect(()=>{if(initialRoomId&&ready&&inviteAttempt.current!==initialRoomId){inviteAttempt.current=initialRoomId;void action(async()=>enter(await resolveLiveGroup(initialRoomId)));}},[initialRoomId,ready]);
- if(!connected)return <section className="analytics-card p-8 max-w-lg space-y-4"><h1>Focus together.</h1><p>Connect to Sanctra’s live Groups to create a group, join friends, and share focus.</p><button className="analytics-button" onClick={onOpenAuth}>Connect to Groups</button></section>;
+ if(!connected)return (
+    <section className="groups-gate">
+      <span className="groups-gate-icon"><Users size={22} strokeWidth={1.8}/></span>
+      <h1>Focus together.</h1>
+      <p>You’re not in a group yet. Sign in to join a live study room, see who’s focusing, and keep each other honest.</p>
+      <div className="groups-gate-chips"><span><Radio size={13}/> Live rooms</span><span><Clock size={13}/> Shared timer</span><span><ShieldCheck size={13}/> Private sessions</span></div>
+      <button className="groups-gate-cta" onClick={onOpenAuth}>Connect to groups</button>
+      <span className="groups-gate-note">Free. Your study sessions stay private.</span>
+    </section>
+  );
  if(selected)return <LiveRoom key={selected} id={selected} user={user} subscription={subscription} settings={settings} onBack={()=>setSelected(null)} onFocus={onFocus} onLeft={()=>setSelected(null)}/>;
  const rooms=(tab==='mine'?joinedGroups:publicGroups).filter(room=>`${room.name} ${room.description}`.toLowerCase().includes(groupSearch.trim().toLowerCase())).sort((a,b)=>b.createdAt-a.createdAt);
  return <div className="live-groups w-full max-w-6xl space-y-6">

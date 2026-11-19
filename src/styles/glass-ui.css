@@ -495,3 +495,15 @@
   .focus-workspace:not(.minimal){overflow-y:auto;padding-bottom:16px}
   .focus-workspace .timer-metrics > *{min-height:84px}
 }
+
+/* Groups gate: a real empty state, centred, on the same glass as the cards */
+.groups-gate{max-width:470px;margin:clamp(24px,13vh,132px) auto 0;padding:34px 32px 30px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;border-radius:24px;background:linear-gradient(180deg,rgba(16,18,24,.62),rgba(16,18,24,.5));border:1px solid rgba(255,255,255,.13);box-shadow:var(--g-shadow);backdrop-filter:blur(var(--sanctra-panel-blur,20px)) saturate(140%);-webkit-backdrop-filter:blur(var(--sanctra-panel-blur,20px)) saturate(140%)}
+.groups-gate-icon{display:grid;place-items:center;width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:var(--sanctra-sage)}
+.groups-gate h1{margin:4px 0 0;font-size:27px;letter-spacing:-.02em;color:#fffdf7}
+.groups-gate p{margin:0;max-width:36ch;font-size:14px;line-height:1.62;color:rgba(255,255,255,.74)}
+.groups-gate-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin:4px 0 6px}
+.groups-gate-chips span{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.06);font-size:11.5px;color:rgba(255,255,255,.82)}
+.groups-gate-cta{padding:11px 22px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:var(--theme-accent,#d8d0c2);color:#1a1712;font-size:13.5px;font-weight:650;letter-spacing:.01em;cursor:pointer;transition:transform 180ms ease,filter 180ms ease}
+.groups-gate-cta:hover{transform:translateY(-1px);filter:brightness(1.06)}
+.groups-gate-note{font-size:11.5px;color:rgba(255,255,255,.55)}
+@media(max-width:640px){.groups-gate{margin-top:22px;padding:26px 20px 24px}.groups-gate h1{font-size:23px}}
