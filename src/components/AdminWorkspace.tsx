@@ -217,7 +217,7 @@ export function AdminWorkspace({
             <span>Plus+ Members</span>
             <Crown size={14} className="text-purple-400" />
           </div>
-          <div className="text-2xl font-bold font-mono text-purple-300 mt-1">{plusUsers.length}</div>
+          <div className="text-2xl font-bold font-mono text-[var(--sanctra-sage)] mt-1">{plusUsers.length}</div>
           <div className="text-[11px] text-[var(--sanctra-muted)]">Active subscriptions</div>
         </div>
 
