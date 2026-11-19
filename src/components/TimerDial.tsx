@@ -400,6 +400,7 @@ export const TimerDial: React.FC<TimerDialProps> = ({
           <span>Reset</span>
         </button>
 
+        <div className="ta-right">
         {/* 3. Save Session Button */}
         <button
           onClick={onRequestSave}
@@ -437,6 +438,7 @@ export const TimerDial: React.FC<TimerDialProps> = ({
             )}
           </button>
         )}
+        </div>
       </div>
 
       {minimal && (

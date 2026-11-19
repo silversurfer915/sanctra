@@ -133,3 +133,117 @@
     transform: none;
   }
 }
+
+/* ---------- focus workspace: stage + rail ---------- */
+.focus-workspace:not(.minimal) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 296px;
+  gap: 16px;
+  align-items: stretch;
+}
+.focus-workspace:not(.minimal) > .focus-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-width: 0;
+}
+.focus-workspace:not(.minimal) > .focus-context {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  align-self: stretch;
+}
+
+/* the four metrics become one compact strip under the clock */
+.focus-workspace:not(.minimal) .timer-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+  max-width: none;
+  margin: 2px 0 0;
+  padding: 0;
+}
+.focus-workspace:not(.minimal) .timer-metrics > * {
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.018));
+  border: 1px solid rgba(255,255,255,.09);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.10);
+  min-height: 0;
+}
+.focus-workspace:not(.minimal) .timer-metrics > * > div:first-child {
+  font-size: 9.5px;
+  letter-spacing: .14em;
+}
+.focus-workspace:not(.minimal) .timer-metrics > * > span,
+.focus-workspace:not(.minimal) .timer-metrics > * > div:last-child {
+  font-size: 10.5px;
+}
+
+/* ---------- rail cards ---------- */
+.rail-card {
+  position: relative;
+  border-radius: 18px;
+  padding: 13px 14px;
+  background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.018));
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 20px 40px -38px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.12);
+  backdrop-filter: blur(20px) saturate(130%);
+  -webkit-backdrop-filter: blur(20px) saturate(130%);
+}
+.rail-card + .rail-card { margin-top: 0; }
+.rail-head { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
+.rail-chip {
+  width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center;
+  background: rgba(255,255,255,.06);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.09);
+  color: rgba(255,255,255,.72);
+}
+.rail-head h3 {
+  margin: 0; font-size: 10px; letter-spacing: .17em; text-transform: uppercase;
+  color: rgba(255,255,255,.45); font-weight: 500;
+}
+.rail-line { margin: 0; font-size: 13.5px; color: var(--sanctra-paper, #f5f0e6); }
+.rail-sub { margin: 3px 0 0; font-size: 11.5px; color: rgba(255,255,255,.42); line-height: 1.5; }
+.rail-player { display: flex; align-items: center; gap: 9px; margin-top: 11px; }
+.rail-play {
+  width: 30px; height: 30px; border-radius: 999px; border: 0; cursor: pointer; flex: 0 0 auto;
+  display: grid; place-items: center; color: #17111f;
+  background: linear-gradient(180deg, #f0eaff, #cec2ef);
+  box-shadow: 0 10px 20px -12px rgba(201,189,242,.9), inset 0 1px 0 rgba(255,255,255,.8);
+}
+.rail-play:disabled { opacity: .6; cursor: default; }
+.rail-chips { display: flex; gap: 6px; flex-wrap: wrap; min-width: 0; }
+.rail-chip-btn {
+  font: inherit; font-size: 11px; padding: 5px 9px; border-radius: 999px; cursor: pointer;
+  border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.05);
+  color: rgba(255,255,255,.72);
+}
+.rail-chip-btn.is-on { background: rgba(255,255,255,.13); color: #fff; border-color: rgba(255,255,255,.24); }
+.rail-link {
+  margin-top: 11px; width: 100%; font: inherit; font-size: 11.5px; padding: 8px;
+  border-radius: 999px; cursor: pointer; display: inline-flex; align-items: center;
+  justify-content: center; gap: 6px;
+  border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.05);
+  color: rgba(255,255,255,.78);
+  transition: transform .15s ease, background .2s ease;
+}
+.rail-link:hover { transform: translateY(-1px); background: rgba(255,255,255,.09); }
+
+@media (max-width: 1200px) {
+  .focus-workspace:not(.minimal) { grid-template-columns: minmax(0, 1fr); }
+  .focus-workspace:not(.minimal) > .focus-context {
+    flex-direction: row; flex-wrap: wrap; align-items: stretch;
+  }
+  .focus-workspace:not(.minimal) > .focus-context > * { flex: 1 1 260px; }
+}
+
+/* Start sits dead centre: reset on the left, save/fullscreen on the right. */
+.sanctra-app .focus-workspace .timer-actions { display: grid !important; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; }
+.sanctra-app .focus-workspace .timer-actions > .btn-sheen { grid-column: 2; justify-self: center; }
+.sanctra-app .focus-workspace .timer-actions > .btn-sheen-subtle { grid-column: 1; justify-self: end; }
+.sanctra-app .focus-workspace .timer-actions > .ta-right { grid-column: 3; justify-self: start; display: flex; gap: 8px; }
