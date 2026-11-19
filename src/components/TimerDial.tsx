@@ -428,12 +428,12 @@ export const TimerDial: React.FC<TimerDialProps> = ({
             {isFullscreen ? (
               <>
                 <Minimize2 className="w-3.5 h-3.5 text-slate-300" />
-                <span>Exit</span>
+                <span className="sr-only">Exit full screen</span>
               </>
             ) : (
               <>
                 <Maximize2 className="w-3.5 h-3.5 text-slate-300" />
-                <span>Full screen</span>
+                <span className="sr-only">Full screen</span>
               </>
             )}
           </button>

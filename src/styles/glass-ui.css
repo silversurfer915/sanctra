@@ -541,3 +541,21 @@
   .sanctra-app .focus-workspace:not(.minimal){height:100%;min-height:0;overflow-y:auto;justify-content:flex-start}
   .sanctra-app .focus-stage{height:auto}
 }
+
+/* action row reads balanced: matched side widths, icon-only fullscreen */
+.sanctra-app .focus-workspace .timer-actions > .btn-sheen-subtle{min-width:112px}
+@media (max-width:640px){
+  .planner-days button{min-width:42px !important;padding:7px 4px !important}
+  .planner-days button span:first-child{font-size:9px !important;letter-spacing:0 !important}
+}
+
+/* symmetric action row so Start sits dead centre */
+@media (min-width:641px){
+  .sanctra-app .focus-workspace .timer-actions{grid-template-columns:184px auto 184px !important}
+  .sanctra-app .focus-workspace .timer-actions > .btn-sheen-subtle{min-width:112px}
+}
+@media (max-width:640px){
+  .sanctra-app .focus-workspace .timer-actions > .ta-right > .btn-sheen-subtle:last-child{display:none}
+  .planner-date-toolbar{grid-template-columns:1fr !important}
+  .planner-date-control{justify-self:end}
+}
