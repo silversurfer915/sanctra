@@ -559,3 +559,9 @@
   .planner-date-toolbar{grid-template-columns:1fr !important}
   .planner-date-control{justify-self:end}
 }
+
+/* phone dial: optically centre the readout and give the stats a peek */
+@media (max-width:640px){
+  .sanctra-app .timer-ring{width:min(64vw,33dvh,300px) !important;height:min(64vw,33dvh,300px) !important}
+  .sanctra-app .timer-ring > .absolute{transform:translateY(4px)}
+}
