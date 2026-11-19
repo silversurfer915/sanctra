@@ -377,3 +377,44 @@
 .focus-workspace:not(.minimal){gap:10px !important;padding-top:4px !important}
 .sanctra-app .focus-workspace .timer-actions{max-width:560px !important;margin-top:0 !important}
 .focus-workspace .timer-metrics{margin-top:0 !important}
+
+/* ---------- legibility: lift muted text off the wallpaper ---------- */
+.sanctra-app .text-slate-300{color:rgba(255,255,255,.80) !important}
+.sanctra-app .text-slate-400{color:rgba(255,255,255,.64) !important}
+.sanctra-app .text-slate-500{color:rgba(255,255,255,.50) !important}
+.sanctra-app .text-white\/40,.sanctra-app .text-white\/45{color:rgba(255,255,255,.62) !important}
+
+/* ---------- one frosted recipe on every surface ---------- */
+.app-header,.app-sidebar,.glass-panel,.glass-card,.glass-modal,
+.analytics-card,.workspace-panel,.jee-panel,.group-chat,.current-task-bar{
+  background:var(--g-surface) !important;
+  border:1px solid var(--g-line) !important;
+  box-shadow:var(--g-shadow) !important;
+  backdrop-filter:blur(24px) saturate(140%) !important;
+  -webkit-backdrop-filter:blur(24px) saturate(140%) !important;
+}
+
+/* higher specificity for shell chrome (it ships its own !important rules) */
+.sanctra-app .app-sidebar,.sanctra-app .app-header{
+  background:var(--g-surface) !important;
+  border-color:var(--g-line) !important;
+  box-shadow:var(--g-shadow) !important;
+  backdrop-filter:blur(24px) saturate(140%) !important;
+  -webkit-backdrop-filter:blur(24px) saturate(140%) !important;
+}
+
+/* theme glass variables -> one recipe for every panel, sidebar included */
+.sanctra-app{
+  --sanctra-glass-bg:linear-gradient(180deg,rgba(255,255,255,.085),rgba(255,255,255,.035)) !important;
+  --sanctra-panel-blur:24px;
+  --sanctra-glass-border:rgba(255,255,255,.13);
+}
+
+/* sidebar ships a runtime theme gradient: force the shared surface on the element */
+.sanctra-app .app-sidebar.glass-panel{
+  background-image:linear-gradient(180deg,rgba(255,255,255,.085),rgba(255,255,255,.035)) !important;
+  background-color:rgba(10,14,20,.55) !important;
+  -webkit-backdrop-filter:blur(24px) saturate(140%) !important;
+  backdrop-filter:blur(24px) saturate(140%) !important;
+  border-color:rgba(255,255,255,.13) !important;
+}

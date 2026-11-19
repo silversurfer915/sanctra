@@ -120,7 +120,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       id: 'jeetrack' as ViewMode,
       label: 'JEE Track',
       icon: GraduationCap,
-      badge: jeeTrackEnabled ? 'NEW' : 'Paused',
+      badge: null,
       desc: 'Mocks, Syllabus & Coach',
       pastel: 'text-[#e9d5ff]', // Soft pastel lilac
       pastelBg: 'bg-[#e9d5ff]/10',
@@ -218,7 +218,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           {/* Primary Navigation List */}
           <nav className={`flex flex-col gap-1.5 mt-3 ${compact ? 'px-2' : 'px-3'}`}>
-            {navItems.map((item) => {
+            {navItems.filter(item => item.id !== 'jeetrack' || (jeeTrackEnabled && userSettings.jeeTrackOptIn !== false)).map((item) => {
               const isActive = currentView === item.id;
               const Icon = item.icon;
 
