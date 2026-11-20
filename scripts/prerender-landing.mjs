@@ -44,7 +44,7 @@ try {
  html=html.replace(/<div id="root"[^>]*><\/div>/,`<div id="root">${markup}</div>`);
  // React SSR can emit scenic image preloads; the landing scene is CSS-only, so drop them.
  html=html.replace('</body>','<noscript><p style="padding:24px;text-align:center">Enable JavaScript to start a timer, sign in and use the interactive study desk. You can still read about Sanctra above.</p></noscript></body>');
- if(!html.includes('<h1')||!html.includes('A little calm.'))throw new Error('Landing prerender missing');
+ if(!html.includes('<h1')||!html.includes('Study time'))throw new Error('Landing prerender missing');
  await writeFile('dist/index.html',html);
 
  const {SeoTopicView}=await server.ssrLoadModule('/src/components/views/SeoTopicView.tsx');

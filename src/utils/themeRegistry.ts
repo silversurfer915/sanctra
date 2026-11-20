@@ -74,7 +74,7 @@ export const THEME_PRESETS: Record<ThemeId, ThemePreset> = {
     beadStroke: '#C4B5FD',
     buttonBg: '#C4B5FD',
     buttonText: '#1E1238',
-    buttonGlow: '0 4px 22px rgba(196, 181, 253, 0.45)',
+    buttonGlow: '0 6px 18px -4px rgba(196, 181, 253, 0.35)',
     buttonRing: 'rgba(196, 181, 253, 0.65)',
     canvas: '#090710',
     surface: '#130F20',
@@ -269,7 +269,7 @@ export const THEME_PRESETS: Record<ThemeId, ThemePreset> = {
     beadStroke: '#FEF08A',
     buttonBg: '#FEF08A',
     buttonText: '#272107',
-    buttonGlow: '0 4px 22px rgba(254, 240, 138, 0.45)',
+    buttonGlow: '0 6px 18px -4px rgba(254, 240, 138, 0.35)',
     buttonRing: 'rgba(254, 240, 138, 0.65)',
     canvas: '#0E0C06',
     surface: '#19160D',
@@ -309,7 +309,7 @@ export const THEME_PRESETS: Record<ThemeId, ThemePreset> = {
     beadStroke: '#C4B5FD',
     buttonBg: '#C4B5FD',
     buttonText: '#1E1238',
-    buttonGlow: '0 4px 22px rgba(196, 181, 253, 0.45)',
+    buttonGlow: '0 6px 18px -4px rgba(196, 181, 253, 0.35)',
     buttonRing: 'rgba(196, 181, 253, 0.65)',
     canvas: '#090710',
     surface: '#130F20',
@@ -464,7 +464,7 @@ export const THEME_PRESETS: Record<ThemeId, ThemePreset> = {
   },
 };
 
-export const DEFAULT_THEME_ID: ThemeId = 'starlight-violet';
+export const DEFAULT_THEME_ID: ThemeId = 'nocturne-gold';
 export const DEFAULT_THEME_PRESET: ThemePreset = THEME_PRESETS[DEFAULT_THEME_ID];
 
 // Curated primary presets for the theme picker UI (distinct, non-aliased)

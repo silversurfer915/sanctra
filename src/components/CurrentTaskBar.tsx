@@ -29,7 +29,7 @@ export function CurrentTaskBar({
     return () => clearInterval(tick);
   }, []);
 
-  const { list, current, next } = scheduledTasksForDay(tasks, now);
+  const { current, next } = scheduledTasksForDay(tasks, now);
   const scheduledTask = current || next;
 
   // Is the scheduled task currently the one in focus?
@@ -167,28 +167,9 @@ export function CurrentTaskBar({
     );
   };
 
-  // If there is no scheduled task and no focused task
+  // If there is no scheduled task and no focused task, keep the focus stage clear
   if (!scheduledTask && !focusedTask) {
-    return (
-      <section
-        className="current-task-bar glass-card w-full rounded-2xl border border-white/15"
-        aria-label="Today's schedule"
-      >
-        <div className="flex-1 min-w-0">
-          <p
-            className="text-[10px] uppercase tracking-[.18em] mb-1 font-semibold"
-            style={{ color: 'var(--sanctra-sage, #b2cbb1)' }}
-          >
-            {list.length ? 'Today’s schedule finished' : 'No task scheduled'}
-          </p>
-          <p className="text-xs text-[var(--sanctra-muted)]">
-            {list.length
-              ? 'No more timed tasks today.'
-              : 'No timed tasks scheduled today.'}
-          </p>
-        </div>
-      </section>
-    );
+    return null;
   }
 
   // If the scheduled task is the same as the focused task: render ONE merged card!

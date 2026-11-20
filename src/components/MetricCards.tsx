@@ -37,8 +37,8 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
   const goalPercent = Math.min(100, Math.round((todaySeconds / (targetSeconds || 1)) * 100));
 
   const cardStyle = {
-    border: `1px solid ${theme.accent}2b`,
-    boxShadow: `0 4px 20px rgba(0, 0, 0, 0.25), 0 0 18px ${theme.accent}14`,
+    borderColor: 'rgba(255, 255, 255, 0.12)',
+    boxShadow: '0 8px 24px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12)',
   };
 
   return (
@@ -61,7 +61,7 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
         </div>
         <div
           className="text-2xl sm:text-3xl font-normal text-[var(--rs-cream)] tracking-tight tabular-nums my-1"
-          style={{ fontFamily: theme.fontDisplay }}
+          style={{ fontFamily: "var(--font-timer, 'Inter Variable', Inter, system-ui, sans-serif)", fontWeight: 600 }}
         >
           {subjectTrackingEnabled ? subjects.length : '—'}
         </div>
@@ -88,7 +88,7 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
         </div>
         <div
           className="text-2xl sm:text-3xl font-normal text-[var(--rs-cream)] tracking-tight tabular-nums my-1"
-          style={{ fontFamily: theme.fontDisplay }}
+          style={{ fontFamily: "var(--font-timer, 'Inter Variable', Inter, system-ui, sans-serif)", fontWeight: 600 }}
         >
           {formatDurationHuman(todaySeconds)}
         </div>
@@ -127,7 +127,7 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
         </div>
         <div
           className="text-2xl sm:text-3xl font-normal text-[var(--rs-cream)] tracking-tight tabular-nums my-1"
-          style={{ fontFamily: theme.fontDisplay }}
+          style={{ fontFamily: "var(--font-timer, 'Inter Variable', Inter, system-ui, sans-serif)", fontWeight: 600 }}
         >
           {streakDays} <span className="font-sans text-xs text-[var(--rs-cream-dim)] font-normal">{streakDays === 1 ? 'day' : 'days'}</span>
         </div>
@@ -149,7 +149,7 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
         </div>
         <div
           className="text-2xl sm:text-3xl font-normal text-[var(--rs-cream)] tracking-tight tabular-nums my-1"
-          style={{ fontFamily: theme.fontDisplay }}
+          style={{ fontFamily: "var(--font-timer, 'Inter Variable', Inter, system-ui, sans-serif)", fontWeight: 600 }}
         >
           {formatDurationHuman(thisWeekSeconds)}
         </div>

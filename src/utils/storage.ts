@@ -130,7 +130,7 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   subjectTrackingEnabled: true,
   activeSubjectId: 'sub-1',
   activeWallpaperId: 'wp-art-rain',
-  activeThemeId: 'starlight-violet',
+  activeThemeId: 'nocturne-gold',
   wallpaperFitMode: 'fill',
   backgroundDimness: 25,
   timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
