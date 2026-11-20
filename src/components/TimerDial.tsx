@@ -427,6 +427,11 @@ export const TimerDial: React.FC<TimerDialProps> = ({
             </button>
           )}
         </div>
+
+        {/* Keyboard shortcut hint */}
+        <p className="text-[11px] text-white/45 tracking-wide font-sans mt-0.5 select-none text-center">
+          Press <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-[10px] text-white/80 font-mono border border-white/15">SPACE</kbd> to {isRunning ? 'pause' : 'resume'}
+        </p>
       </div>
 
       {minimal && (

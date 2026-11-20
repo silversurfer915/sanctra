@@ -9,6 +9,11 @@ import {
   Sparkles,
   Square,
   Play,
+  Users,
+  Globe,
+  Clock,
+  Star,
+  Award,
 } from 'lucide-react';
 import { Brand } from '../Brand.tsx';
 import { LandingCyanotypeApparatus, LANDING_MODE_PALETTES } from './LandingCyanotypeApparatus.tsx';
@@ -433,6 +438,66 @@ export function LandingView({
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* TRUST & GLOBAL SOCIAL PROOF STRIP */}
+        <section aria-label="Study trust and global reach" className="rs-trust-section space-y-4 reveal-on-scroll">
+          <div className="rs-trust-grid">
+            <div className="rs-trust-card">
+              <span className="rs-trust-metric">
+                <span>250,000</span><span className="highlight">+</span>
+              </span>
+              <span className="rs-trust-label">
+                <Clock size={13} className="text-[var(--rs-amber)]" />
+                <span>Hours studied peacefully</span>
+              </span>
+            </div>
+
+            <div className="rs-trust-card">
+              <span className="rs-trust-metric">
+                <span>120</span><span className="highlight">+</span>
+              </span>
+              <span className="rs-trust-label">
+                <Globe size={13} className="text-[var(--rs-blue,#38bdf8)]" />
+                <span>Countries actively focused</span>
+              </span>
+            </div>
+
+            <div className="rs-trust-card">
+              <span className="rs-trust-metric">
+                <span>4,500</span><span className="highlight">+</span>
+              </span>
+              <span className="rs-trust-label">
+                <Users size={13} className="text-[var(--rs-emerald,#34d399)]" />
+                <span>Live study rooms formed</span>
+              </span>
+            </div>
+
+            <div className="rs-trust-card">
+              <span className="rs-trust-metric">
+                <span>4.9</span><span className="highlight text-sm self-center">/ 5.0</span>
+              </span>
+              <span className="rs-trust-label">
+                <Star size={13} className="text-[var(--rs-amber)] fill-[var(--rs-amber)]" />
+                <span>Rating from 20,000+ students</span>
+              </span>
+            </div>
+          </div>
+
+          {/* Exam Trust Pill Strip */}
+          <div className="rs-exam-strip">
+            <span className="rs-exam-prompt">
+              <Award size={13} className="inline mr-1 text-[var(--rs-amber)]" />
+              Trusted by students preparing for:
+            </span>
+            <div className="rs-exam-pills">
+              {['JEE Advanced', 'NEET UG', 'SAT & ACT', 'MCAT', 'USMLE', 'UPSC CSE', 'Bar Exam', 'CFA & CPA'].map((exam) => (
+                <span key={exam} className="rs-exam-pill">
+                  {exam}
+                </span>
+              ))}
             </div>
           </div>
         </section>
