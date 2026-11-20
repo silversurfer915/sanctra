@@ -215,9 +215,9 @@ export function AdminWorkspace({
         <div className="p-4 rounded-2xl bg-[var(--sanctra-surface)] border border-[var(--sanctra-glass-border)] space-y-1">
           <div className="flex items-center justify-between text-xs text-[var(--sanctra-muted)] font-medium">
             <span>Plus+ Members</span>
-            <Crown size={14} className="text-purple-400" />
+            <Crown size={14} className="text-amber-400" />
           </div>
-          <div className="text-2xl font-bold font-mono text-purple-300 mt-1">{plusUsers.length}</div>
+          <div className="text-2xl font-bold font-mono text-amber-300 mt-1">{plusUsers.length}</div>
           <div className="text-[11px] text-[var(--sanctra-muted)]">Active subscriptions</div>
         </div>
 

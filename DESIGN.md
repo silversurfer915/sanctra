@@ -19,6 +19,12 @@ typography:
     fontFamily: "'Inter Variable', Inter, system-ui, sans-serif"
     fontWeight: 400
     lineHeight: 1.6
+  editorial:
+    fontFamily: "'Instrument Serif', Georgia, serif"
+    fontWeight: 400
+  pixel:
+    fontFamily: "'Pixelify Sans', monospace, sans-serif"
+    fontWeight: 700
 rounded:
   control: "12px"
   panel: "20px"

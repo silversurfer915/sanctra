@@ -404,7 +404,7 @@ export const SyllabusTracker: React.FC<SyllabusTrackerProps> = ({
               <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
                 Mastered (2x+)
               </span>
-              <span className="text-xs font-bold text-purple-300 font-mono">
+              <span className="text-xs font-bold text-sky-300 font-mono">
                 {analytics.masteryPct}%
               </span>
             </div>
@@ -413,7 +413,7 @@ export const SyllabusTracker: React.FC<SyllabusTrackerProps> = ({
             </span>
             <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden mt-1.5">
               <div
-                className="h-full bg-gradient-to-r from-purple-400 to-indigo-400 rounded-full transition-all duration-500"
+                className="h-full bg-gradient-to-r from-sky-400 to-blue-400 rounded-full transition-all duration-500"
                 style={{ width: `${analytics.masteryPct}%` }}
               />
             </div>
@@ -822,7 +822,7 @@ export const SyllabusTracker: React.FC<SyllabusTrackerProps> = ({
                                       <span
                                         className={`text-[9px] px-1.5 py-0.2 rounded font-mono font-semibold shrink-0 ${
                                           topic.revisionCount >= 2
-                                            ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
+                                            ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
                                             : topic.revisionCount === 1
                                             ? 'bg-[var(--sanctra-sage)]/20 text-[var(--sanctra-sage)] border border-[var(--sanctra-sage)]/30'
                                             : 'bg-white/5 text-slate-400'

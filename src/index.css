@@ -369,5 +369,9 @@ html { scroll-behavior:smooth; }
 .inbox-input { display:block; width:100%; padding:12px; border-radius:10px; border:1px solid #ffffff22; background:#091218; color:#f1f5f9; }
 .group-switcher-menu { background:#111f26; box-shadow:0 20px 50px #0008; }
 .group-chat input { min-width:0; }
-@media(prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
+@media(prefers-reduced-motion:reduce) {
+  html { scroll-behavior:auto!important; }
+  *,*::before,*::after { animation-iteration-count:1!important; }
+  .motion-reveal[data-motion] { opacity:1!important; transform:none!important; }
+}
 

@@ -346,10 +346,10 @@ function StandaloneAiDemoApp() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as DemoTab)}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-semibold transition-all border-b-2 whitespace-nowrap ${
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${
                   isCurrent
-                    ? 'border-emerald-400 text-emerald-300 bg-slate-900/60'
-                    : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/20'
+                    ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-400/30'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/20 border border-transparent'
                 }`}
               >
                 <Icon className={`w-4 h-4 ${isCurrent ? 'text-emerald-400' : 'text-slate-500'}`} />
