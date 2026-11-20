@@ -346,9 +346,9 @@ function StandaloneAiDemoApp() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as DemoTab)}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-semibold transition-all border-b-2 whitespace-nowrap ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all border whitespace-nowrap ${
                   isCurrent
-                    ? 'border-emerald-400 text-emerald-300 bg-slate-900/60'
+                    ? 'border-emerald-400/40 text-emerald-300 bg-emerald-500/10'
                     : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/20'
                 }`}
               >

@@ -34,7 +34,7 @@ export function useStudyIntegrity(
         if (closed || auth.currentUser?.uid !== user.uid) return;
         try {
           const endpoint = import.meta.env.VITE_AI_GATEWAY_URL?.replace(/\/$/, '');
-          if (!endpoint) throw new TimerSyncError(503, 'Ranking sync is not configured.');
+          if (!endpoint) return;
           const token = await auth.currentUser.getIdToken();
           const response = await fetch(`${endpoint}/timer`, {
             method: 'POST',

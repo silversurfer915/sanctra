@@ -93,7 +93,7 @@ export const THEME_PRESETS: Record<ThemeId, ThemePreset> = {
       'wp-motion-aurora',
     ],
     fontDisplay: '"Instrument Serif", Georgia, serif',
-    fontTimer: '"Instrument Serif", Georgia, serif',
+    fontTimer: '"Manrope Variable", Manrope, "Inter Variable", Inter, system-ui, sans-serif',
     fontBody: 'Inter, -apple-system, system-ui, sans-serif',
   },
 
@@ -171,7 +171,7 @@ export const THEME_PRESETS: Record<ThemeId, ThemePreset> = {
       'wp-art-forest',
     ],
     fontDisplay: '"Instrument Serif", Georgia, serif',
-    fontTimer: '"Instrument Serif", Georgia, serif',
+    fontTimer: '"Manrope Variable", Manrope, "Inter Variable", Inter, system-ui, sans-serif',
     fontBody: 'Inter, -apple-system, system-ui, sans-serif',
   },
 
@@ -249,7 +249,7 @@ export const THEME_PRESETS: Record<ThemeId, ThemePreset> = {
       'wp-plus-kyoto',
     ],
     fontDisplay: '"Instrument Serif", Georgia, serif',
-    fontTimer: '"Instrument Serif", Georgia, serif',
+    fontTimer: '"Manrope Variable", Manrope, "Inter Variable", Inter, system-ui, sans-serif',
     fontBody: 'Inter, -apple-system, system-ui, sans-serif',
   },
 
@@ -288,7 +288,7 @@ export const THEME_PRESETS: Record<ThemeId, ThemePreset> = {
       'wp-art-forest',
     ],
     fontDisplay: '"Instrument Serif", Georgia, serif',
-    fontTimer: '"Instrument Serif", Georgia, serif',
+    fontTimer: '"Manrope Variable", Manrope, "Inter Variable", Inter, system-ui, sans-serif',
     fontBody: 'Inter, -apple-system, system-ui, sans-serif',
   },
 
@@ -323,7 +323,7 @@ export const THEME_PRESETS: Record<ThemeId, ThemePreset> = {
     defaultSceneId: 'wp-motion-nebula',
     curatedSceneIds: ['wp-motion-nebula', 'wp-plus-observatory'],
     fontDisplay: '"Instrument Serif", Georgia, serif',
-    fontTimer: '"Instrument Serif", Georgia, serif',
+    fontTimer: '"Manrope Variable", Manrope, "Inter Variable", Inter, system-ui, sans-serif',
     fontBody: 'Inter, -apple-system, system-ui, sans-serif',
   },
 
@@ -425,7 +425,7 @@ export const THEME_PRESETS: Record<ThemeId, ThemePreset> = {
     defaultSceneId: 'wp-art-rose-terrace',
     curatedSceneIds: ['wp-art-rose-terrace'],
     fontDisplay: '"Instrument Serif", Georgia, serif',
-    fontTimer: '"Instrument Serif", Georgia, serif',
+    fontTimer: '"Manrope Variable", Manrope, "Inter Variable", Inter, system-ui, sans-serif',
     fontBody: 'Inter, -apple-system, system-ui, sans-serif',
   },
 

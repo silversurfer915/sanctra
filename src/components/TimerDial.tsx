@@ -299,53 +299,44 @@ export const TimerDial: React.FC<TimerDialProps> = ({
             {formatDisplayTime(seconds)}
           </div>
 
-          {/* Quick Mode Trigger */}
+          {/* Quick Mode Trigger & Active Subject Selector in single row */}
           {!minimal && (
-            <div className="mt-3 flex items-center justify-center gap-2 z-20">
+            <div className="mt-3 flex items-center justify-center gap-2 z-20 flex-wrap max-w-[280px] mx-auto">
               <button
                 type="button"
                 onClick={onOpenModeModal}
-                className="px-3.5 py-1.5 rounded-full text-xs font-sans font-medium text-slate-200 hover:text-white bg-black/45 hover:bg-black/65 border flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
-                style={{
-                  borderColor: `${theme.accent}33`,
-                  boxShadow: `0 0 14px ${theme.accent}14`,
-                }}
+                className="px-3 py-1 rounded-full text-xs font-sans font-medium text-slate-200 hover:text-white bg-black/40 hover:bg-black/60 border border-white/10 flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
                 aria-label="Customize timer mode and duration"
               >
                 <Sliders className="w-3 h-3" style={{ color: theme.accent }} />
                 <span>Customize</span>
               </button>
+
+              {subjectTrackingEnabled && (subjectControl || (onOpenSubjects && (
+                <button
+                  onClick={onOpenSubjects}
+                  aria-label="Select focus category"
+                  title="Change active subject"
+                  className="px-3 py-1 rounded-full text-xs font-sans font-medium text-slate-200 hover:text-white bg-black/40 hover:bg-black/60 border border-white/10 flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm max-w-[140px]"
+                >
+                  {activeSubject ? (
+                    <>
+                      <span
+                        className="w-2 h-2 rounded-full shrink-0 ring-1 ring-white/20"
+                        style={{ backgroundColor: activeSubject.color }}
+                      />
+                      <span className="truncate">{activeSubject.name}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Layers className="w-3 h-3 text-slate-400 shrink-0" />
+                      <span className="text-slate-400">Untagged</span>
+                    </>
+                  )}
+                </button>
+              )))}
             </div>
           )}
-
-          {/* Active Subject Selector Button */}
-          {!minimal && subjectTrackingEnabled && (subjectControl || (onOpenSubjects && (
-            <button
-              onClick={onOpenSubjects}
-              aria-label="Select focus category"
-              title="Change active subject"
-              className="mt-2 px-3.5 py-1 rounded-full text-xs font-sans font-medium text-slate-200 hover:text-white bg-black/45 hover:bg-black/65 border flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm mx-auto z-20 max-w-[200px]"
-              style={{
-                borderColor: `${theme.accent}33`,
-                boxShadow: `0 0 14px ${theme.accent}14`,
-              }}
-            >
-              {activeSubject ? (
-                <>
-                  <span
-                    className="w-2.5 h-2.5 rounded-full shrink-0 ring-1 ring-white/20"
-                    style={{ backgroundColor: activeSubject.color }}
-                  />
-                  <span className="truncate">{activeSubject.name}</span>
-                </>
-              ) : (
-                <>
-                  <Layers className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                  <span className="text-slate-400">Untagged</span>
-                </>
-              )}
-            </button>
-          )))}
           {subjectDetail && !minimal && (
             <button type="button" className="timer-chapter-detail text-xs font-sans text-slate-400 mt-1" onClick={onOpenSubjects}>
               {subjectDetail}
@@ -354,29 +345,29 @@ export const TimerDial: React.FC<TimerDialProps> = ({
         </div>
       </div>
 
-      {/* Action Pill Bar (Buttons) - Sleek Single Row matching Image 3 */}
-      <div className="timer-actions flex items-center justify-center gap-2 sm:gap-2.5 mt-3 sm:mt-4 w-full max-w-xl px-2 z-20 flex-nowrap">
+      {/* Action Pill Bar (Buttons) — Symmetrical, Centered, Beautifully Balanced */}
+      <div className="timer-actions flex flex-col items-center justify-center gap-2.5 mt-3 sm:mt-4 w-full max-w-xl px-2 z-20">
         {/* 1. Start / Pause Primary Hero Button */}
         <button
           onClick={onToggleStart}
           aria-label={isRunning ? 'Pause focus timer' : 'Start focus timer'}
           title={isRunning ? 'Pause focus timer (Space)' : 'Start focus timer (Space)'}
-          className="btn-sheen flex items-center justify-center gap-2 px-5 sm:px-6 py-2 sm:py-2.5 rounded-full font-sans font-bold text-xs sm:text-sm tracking-wide transition-all duration-200 cursor-pointer shrink-0"
+          className="btn-sheen flex items-center justify-center gap-2 px-8 py-2.5 rounded-full font-sans font-semibold text-xs sm:text-sm tracking-wide transition-all duration-200 cursor-pointer shadow-lg active:scale-98"
           style={{
             backgroundColor: theme.buttonBg,
             color: theme.buttonText,
-            boxShadow: theme.buttonGlow,
+            boxShadow: '0 8px 24px -6px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.4)',
             border: `1px solid ${theme.buttonRing}`,
           }}
         >
           {isRunning ? (
             <>
-              <Pause className="w-3.5 h-3.5 fill-current" />
+              <Pause className="w-4 h-4 fill-current" />
               <span>Pause</span>
             </>
           ) : (
             <>
-              <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
+              <Play className="w-4 h-4 fill-current ml-0.5" />
               <span>{status === 'paused' || status === 'break-paused' ? 'Resume' : 'Start'}</span>
             </>
           )}
@@ -388,56 +379,53 @@ export const TimerDial: React.FC<TimerDialProps> = ({
           </span>
         </button>
 
-        {/* 2. Reset Button */}
-        <button
-          onClick={onRequestReset}
-          disabled={seconds === 0 && status === 'idle'}
-          aria-label="Reset timer"
-          title={seconds === 0 && status === 'idle' ? 'Start a session first' : 'Reset timer'}
-          className="btn-sheen-subtle flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full text-xs font-sans font-semibold tracking-wide text-slate-200 bg-[#12151b]/80 hover:bg-[#1a1f29] border border-white/10 hover:border-white/20 shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer shrink-0"
-        >
-          <RotateCcw className="w-3.5 h-3.5 text-slate-300" />
-          <span>Reset</span>
-        </button>
-
-        <div className="ta-right">
-        {/* 3. Save Session Button */}
-        <button
-          onClick={onRequestSave}
-          disabled={!canSave}
-          aria-label="Save focus session"
-          title={!canSave ? 'Start a session to save focus time' : 'Save focus session'}
-          className="btn-sheen-subtle flex items-center justify-center gap-1.5 px-3.5 sm:px-4.5 py-2 sm:py-2.5 rounded-full text-xs font-sans font-semibold tracking-wide shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer whitespace-nowrap shrink-0"
-          style={{
-            color: theme.accent,
-            backgroundColor: `${theme.accent}15`,
-            borderColor: `${theme.accent}40`,
-          }}
-        >
-          <BookmarkCheck className="w-3.5 h-3.5" style={{ color: theme.accent }} />
-          <span>Save session</span>
-        </button>
-
-        {/* 4. Fullscreen Button */}
-        {!minimal && (
+        {/* 2. Symmetrical Auxiliary Actions Trio */}
+        <div className="flex items-center justify-center gap-2 sm:gap-2.5 w-full">
+          {/* Reset Button */}
           <button
-            onClick={onToggleFullscreen}
-            aria-label={isFullscreen ? 'Exit full screen mode' : 'Enter full screen mode'}
-            className="btn-sheen-subtle flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full text-xs font-sans font-semibold tracking-wide text-slate-200 bg-[#12151b]/80 hover:bg-[#1a1f29] border border-white/10 hover:border-white/20 shadow-md transition-all cursor-pointer whitespace-nowrap shrink-0"
+            onClick={onRequestReset}
+            disabled={seconds === 0 && status === 'idle'}
+            aria-label="Reset timer"
+            title={seconds === 0 && status === 'idle' ? 'Start a session first' : 'Reset timer'}
+            className="btn-sheen-subtle flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-full text-xs font-sans font-medium tracking-wide text-slate-200 bg-white/[0.06] hover:bg-white/[0.12] border border-white/12 shadow-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer shrink-0"
           >
-            {isFullscreen ? (
-              <>
-                <Minimize2 className="w-3.5 h-3.5 text-slate-300" />
-                <span className="sr-only">Exit full screen</span>
-              </>
-            ) : (
-              <>
-                <Maximize2 className="w-3.5 h-3.5 text-slate-300" />
-                <span className="sr-only">Full screen</span>
-              </>
-            )}
+            <RotateCcw className="w-3.5 h-3.5 text-slate-300" />
+            <span>Reset</span>
           </button>
-        )}
+
+          {/* Save Session Button */}
+          <button
+            onClick={onRequestSave}
+            disabled={!canSave}
+            aria-label="Save focus session"
+            title={!canSave ? 'Start a session to save focus time' : 'Save focus session'}
+            className="btn-sheen-subtle flex items-center justify-center gap-1.5 px-4 py-2 rounded-full text-xs font-sans font-medium tracking-wide shadow-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer whitespace-nowrap shrink-0 text-slate-200 bg-white/[0.06] hover:bg-white/[0.12] border border-white/12"
+          >
+            <BookmarkCheck className="w-3.5 h-3.5" style={{ color: theme.accent }} />
+            <span>Save session</span>
+          </button>
+
+          {/* Fullscreen Button */}
+          {!minimal && (
+            <button
+              onClick={onToggleFullscreen}
+              aria-label={isFullscreen ? 'Exit full screen mode' : 'Enter full screen mode'}
+              title={isFullscreen ? 'Exit full screen' : 'Full screen'}
+              className="btn-sheen-subtle flex items-center justify-center gap-1.5 px-3 py-2 rounded-full text-xs font-sans font-medium tracking-wide text-slate-200 bg-white/[0.06] hover:bg-white/[0.12] border border-white/12 shadow-sm transition-all cursor-pointer whitespace-nowrap shrink-0"
+            >
+              {isFullscreen ? (
+                <>
+                  <Minimize2 className="w-3.5 h-3.5 text-slate-300" />
+                  <span className="hidden sm:inline">Exit</span>
+                </>
+              ) : (
+                <>
+                  <Maximize2 className="w-3.5 h-3.5 text-slate-300" />
+                  <span className="hidden sm:inline">Full screen</span>
+                </>
+              )}
+            </button>
+          )}
         </div>
       </div>
 

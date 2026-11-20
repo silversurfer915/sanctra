@@ -215,7 +215,7 @@ export function AdminWorkspace({
         <div className="p-4 rounded-2xl bg-[var(--sanctra-surface)] border border-[var(--sanctra-glass-border)] space-y-1">
           <div className="flex items-center justify-between text-xs text-[var(--sanctra-muted)] font-medium">
             <span>Plus+ Members</span>
-            <Crown size={14} className="text-purple-400" />
+            <Crown size={14} className="text-amber-400" />
           </div>
           <div className="text-2xl font-bold font-mono text-[var(--sanctra-sage)] mt-1">{plusUsers.length}</div>
           <div className="text-[11px] text-[var(--sanctra-muted)]">Active subscriptions</div>
@@ -539,7 +539,7 @@ export function AdminWorkspace({
                     : 'text-[var(--sanctra-muted)] hover:text-[var(--sanctra-paper)]'
                 }`}
               >
-                <Crown size={14} className="text-purple-400" />
+                <Crown size={14} className="text-amber-400" />
                 <span>Plus+ Membership & Trials</span>
               </button>
 
@@ -697,7 +697,7 @@ export function AdminWorkspace({
                 {!selected.isGuest && (
                   <div className="p-4 rounded-xl bg-white/[0.02] border border-[var(--sanctra-glass-border)] space-y-3">
                     <h4 className="text-sm font-semibold text-[var(--sanctra-paper)] flex items-center gap-2">
-                      <Crown size={16} className="text-purple-400" />
+                      <Crown size={16} className="text-amber-400" />
                       <span>Manual Full Membership Grant</span>
                     </h4>
                     <p className="text-xs text-[var(--sanctra-muted)]">

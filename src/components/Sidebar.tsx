@@ -216,22 +216,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
           </div>
 
-          {/* Primary Navigation List */}
-          <nav className={`flex flex-col gap-1.5 mt-3 ${compact ? 'px-2' : 'px-3'}`}>
-            {navItems.filter(item => item.id !== 'jeetrack' || (jeeTrackEnabled && userSettings.jeeTrackOptIn !== false)).map((item) => {
-              const isActive = currentView === item.id;
-              const Icon = item.icon;
+          {/* Primary Navigation List with Grouped Sections */}
+          <nav className={`flex flex-col gap-1 mt-2.5 ${compact ? 'px-2' : 'px-3'}`}>
+            {/* Section: Focus */}
+            {!compact && (
+              <span className="px-3 pt-1.5 pb-1 text-[9.5px] font-bold uppercase tracking-[0.16em] text-slate-400/60 select-none">
+                Focus
+              </span>
+            )}
+            {navItems
+              .filter(item => ['timer', 'planner', 'calendar', 'analytics', 'jeetrack'].includes(item.id))
+              .filter(item => item.id !== 'jeetrack' || (jeeTrackEnabled && userSettings.jeeTrackOptIn !== false))
+              .map((item) => {
+                const isActive = currentView === item.id;
+                const Icon = item.icon;
 
-              if (compact) {
                 return (
                   <button
                     key={item.id}
                     onClick={() => handleNavClick(item.id)}
-                    title={item.label}
-                    className={`w-11 h-11 mx-auto flex items-center justify-center rounded-xl transition-all cursor-pointer relative group ${
+                    className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium transition-all cursor-pointer group ${
                       isActive
-                        ? 'shadow-sm text-white'
-                        : 'text-slate-400 hover:text-white hover:bg-white/5'
+                        ? 'text-white font-semibold shadow-sm'
+                        : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
                     }`}
                     style={isActive ? {
                       backgroundColor: 'var(--theme-accent-wash)',
@@ -239,13 +246,30 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       boxShadow: '0 0 16px var(--theme-card-glow)',
                     } : undefined}
                   >
-                    <Icon
-                      className="w-4 h-4 transition-transform group-hover:scale-110"
-                      style={{ color: isActive ? 'var(--theme-accent)' : undefined }}
-                    />
+                    <div
+                      className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-all"
+                      style={{
+                        backgroundColor: isActive ? 'var(--theme-card-border)' : undefined,
+                      }}
+                    >
+                      <Icon
+                        className="w-3.5 h-3.5 transition-transform group-hover:scale-110 shrink-0"
+                        style={{
+                          color: isActive ? 'var(--theme-accent)' : undefined,
+                        }}
+                      />
+                    </div>
+                    <span className="truncate flex-1 text-left">{item.id==='jeetrack'&&userSettings.jeeTrackOptIn===false?'Explore JEE Track':item.label}</span>
+                    {item.badge && (
+                      <span className={`text-[9px] px-1.5 py-0.2 rounded-md font-bold border ${
+                        isActive ? `${item.pastelBg} ${item.pastel} ${item.pastelBorder}` : 'bg-white/10 text-slate-200 border-white/20'
+                      }`}>
+                        {item.badge}
+                      </span>
+                    )}
                     {isActive && (
                       <span
-                        className="absolute right-1.5 top-1.5 w-1.5 h-1.5 rounded-full"
+                        className="w-1.5 h-1.5 rounded-full shrink-0"
                         style={{
                           backgroundColor: 'var(--theme-accent)',
                           boxShadow: '0 0 8px var(--theme-accent)',
@@ -254,56 +278,68 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     )}
                   </button>
                 );
-              }
+              })}
 
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => handleNavClick(item.id)}
-                  className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium transition-all cursor-pointer group ${
-                    isActive
-                      ? 'text-white font-semibold shadow-sm'
-                      : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
-                  }`}
-                  style={isActive ? {
-                    backgroundColor: 'var(--theme-accent-wash)',
-                    border: '1px solid var(--theme-card-border)',
-                    boxShadow: '0 0 16px var(--theme-card-glow)',
-                  } : undefined}
-                >
-                  <div
-                    className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-all"
-                    style={{
-                      backgroundColor: isActive ? 'var(--theme-card-border)' : undefined,
-                    }}
+            {/* Section: Community */}
+            {!compact && (
+              <span className="px-3 pt-3 pb-1 text-[9.5px] font-bold uppercase tracking-[0.16em] text-slate-400/60 select-none">
+                Community
+              </span>
+            )}
+            {navItems
+              .filter(item => ['groups', 'rankings', 'inbox'].includes(item.id))
+              .map((item) => {
+                const isActive = currentView === item.id;
+                const Icon = item.icon;
+
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => handleNavClick(item.id)}
+                    className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium transition-all cursor-pointer group ${
+                      isActive
+                        ? 'text-white font-semibold shadow-sm'
+                        : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                    }`}
+                    style={isActive ? {
+                      backgroundColor: 'var(--theme-accent-wash)',
+                      border: '1px solid var(--theme-card-border)',
+                      boxShadow: '0 0 16px var(--theme-card-glow)',
+                    } : undefined}
                   >
-                    <Icon
-                      className="w-3.5 h-3.5 transition-transform group-hover:scale-110 shrink-0"
+                    <div
+                      className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-all"
                       style={{
-                        color: isActive ? 'var(--theme-accent)' : undefined,
+                        backgroundColor: isActive ? 'var(--theme-card-border)' : undefined,
                       }}
-                    />
-                  </div>
-                  <span className="truncate flex-1 text-left">{item.id==='jeetrack'&&userSettings.jeeTrackOptIn===false?'Explore JEE Track':item.label}</span>
-                  {item.badge && (
-                    <span className={`text-[9px] px-1.5 py-0.2 rounded-md font-bold border ${
-                      isActive ? `${item.pastelBg} ${item.pastel} ${item.pastelBorder}` : 'bg-white/10 text-slate-200 border-white/20'
-                    }`}>
-                      {item.badge}
-                    </span>
-                  )}
-                  {isActive && (
-                    <span
-                      className="w-1.5 h-1.5 rounded-full shrink-0"
-                      style={{
-                        backgroundColor: 'var(--theme-accent)',
-                        boxShadow: '0 0 8px var(--theme-accent)',
-                      }}
-                    />
-                  )}
-                </button>
-              );
-            })}
+                    >
+                      <Icon
+                        className="w-3.5 h-3.5 transition-transform group-hover:scale-110 shrink-0"
+                        style={{
+                          color: isActive ? 'var(--theme-accent)' : undefined,
+                        }}
+                      />
+                    </div>
+                    <span className="truncate flex-1 text-left">{item.label}</span>
+                    {item.badge && (
+                      <span className={`text-[9px] px-1.5 py-0.2 rounded-md font-bold border ${
+                        isActive ? `${item.pastelBg} ${item.pastel} ${item.pastelBorder}` : 'bg-white/10 text-slate-200 border-white/20'
+                      }`}>
+                        {item.badge}
+                      </span>
+                    )}
+                    {isActive && (
+                      <span
+                        className="w-1.5 h-1.5 rounded-full shrink-0"
+                        style={{
+                          backgroundColor: 'var(--theme-accent)',
+                          boxShadow: '0 0 8px var(--theme-accent)',
+                        }}
+                      />
+                    )}
+                  </button>
+                );
+              })}
           </nav>
         </div>
 

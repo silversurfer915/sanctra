@@ -231,8 +231,8 @@ button:not(:disabled),a { cursor:pointer; }
 .sanctra-app>div>header { background:transparent; border:0; }
 .sanctra-app .app-scroll-stage>header { background:linear-gradient(180deg, color-mix(in srgb, var(--sanctra-surface) 32%, color-mix(in srgb, var(--sanctra-ink) 54%, transparent)), color-mix(in srgb, var(--sanctra-surface) 24%, color-mix(in srgb, var(--sanctra-ink) 44%, transparent))) !important; -webkit-backdrop-filter:blur(var(--sanctra-panel-blur,12px)) saturate(100%) !important; backdrop-filter:blur(var(--sanctra-panel-blur,12px)) saturate(100%) !important; border-bottom:1px solid color-mix(in srgb, var(--sanctra-sage) 14%, rgba(255, 255, 255, 0.12)) !important; }
 .sanctra-app :is(.text-emerald-400,.text-emerald-300,.text-emerald-200) { color:var(--sanctra-sage); }
-.sanctra-app button:is(.bg-emerald-500,.from-emerald-500) { background:var(--sanctra-sage); color:var(--sanctra-ink); border-color:color-mix(in srgb,var(--sanctra-sage) 22%,transparent); box-shadow:0 8px 24px #0002; }
-.sanctra-app button:is(.bg-emerald-500,.from-emerald-500):hover { background:color-mix(in srgb,var(--sanctra-sage) 85%,white); }
+.sanctra-app button:is(.btn-primary-action,.btn-primary-submit) { background:var(--sanctra-sage); color:var(--sanctra-ink); border-color:color-mix(in srgb,var(--sanctra-sage) 22%,transparent); box-shadow:0 8px 24px #0002; }
+.sanctra-app button:is(.btn-primary-action,.btn-primary-submit):hover { background:color-mix(in srgb,var(--sanctra-sage) 85%,white); }
 .sanctra-app .ring-emerald-200\/50 { --tw-ring-color:color-mix(in srgb,var(--sanctra-sage) 50%,transparent); }
 .sanctra-app .text-slate-400 { color:var(--sanctra-muted); }
 .sanctra-app h1 { font-family:var(--font-display); font-size:clamp(30px,3vw,42px); font-weight:700; letter-spacing:-.035em; }
@@ -278,8 +278,8 @@ button:not(:disabled),a { cursor:pointer; }
 .sanctra-app :is(.text-slate-400,.text-slate-300) { color:var(--sanctra-muted); }
 .sanctra-app :is(input:not([type=checkbox],[type=range]),textarea,select) { background:color-mix(in srgb,var(--sanctra-ink) 60%,transparent); border-color:#ffffff28; }
 .sanctra-app :is(.text-emerald-400,.text-cyan-400,.text-blue-400,.text-purple-400,.text-amber-400,.text-amber-300,.text-amber-200) { color:var(--sanctra-sage); }
-.sanctra-app :is(.bg-emerald-500,.bg-emerald-400,.bg-blue-500,.bg-blue-400,.bg-cyan-500,.bg-purple-500,.bg-purple-600,.bg-amber-500,.bg-amber-400) { background:var(--sanctra-sage); color:var(--sanctra-ink); }
-.sanctra-app [class*="bg-emerald-500/"],.sanctra-app [class*="bg-blue-500/"],.sanctra-app [class*="bg-purple-500/"],.sanctra-app [class*="bg-amber-500/"],.sanctra-app [class*="bg-amber-400/"] { background:color-mix(in srgb,var(--sanctra-sage) 9%,transparent); }
+.sanctra-app :is(.btn-sage-action,.btn-sage-accent,.btn-sage-solid) { background:var(--sanctra-sage); color:var(--sanctra-ink); }
+.sanctra-app :is(.bg-sage-soft,.badge-sage-soft) { background:color-mix(in srgb,var(--sanctra-sage) 9%,transparent); }
 .sanctra-app :is(.border-emerald-400,.border-emerald-500,.border-blue-500,.border-purple-500,.border-amber-400,.border-amber-500) { border-color:color-mix(in srgb,var(--sanctra-sage) 40%,transparent); }
 .sanctra-app [class*="border-amber-400/"],.sanctra-app [class*="border-amber-500/"] { border-color:color-mix(in srgb,var(--sanctra-sage) 28%,transparent); }
 .sanctra-app [class*="ring-amber-400/"] { --tw-ring-color:color-mix(in srgb,var(--sanctra-sage) 30%,transparent); }
@@ -333,7 +333,19 @@ button:not(:disabled),a { cursor:pointer; }
 .sanctra-app .header-brand-status {height:36px;gap:18px;}
 .sanctra-app .header-brand-status .sanctra-brand {height:36px;align-items:center;gap:9px;}
 .sanctra-app .header-brand-status .sanctra-wordmark {line-height:36px;transform:translateY(-2px);}
-.sanctra-app .header-status {height:36px;line-height:36px;gap:8px;padding:0;}
+.sanctra-app .header-status {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 12px;
+  gap: 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
 .sanctra-app .header-status>span:first-child {flex-shrink:0;}
 .sanctra-app .app-sidebar {
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%),
@@ -506,7 +518,14 @@ button:not(:disabled),a { cursor:pointer; }
 @media(prefers-reduced-motion:reduce){.abstract-motion-on .abstract-folds,.abstract-motion-on .wallpaper-layer{animation:none!important;}}
 
 /* Analytics labels need a stable high-contrast surface even on bright scenery. */
-.sanctra-app .analytics-view .analytics-card {background:linear-gradient(135deg,#ffffff09,#ffffff02),color-mix(in srgb,var(--sanctra-ink) 84%,transparent)!important;}
+.sanctra-app .analytics-view .analytics-card {
+  background: linear-gradient(160deg, rgba(255,255,255,0.08), rgba(255,255,255,0.025)), rgba(18,22,32,0.60) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  box-shadow: 0 16px 36px -20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.12) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(140%) !important;
+  backdrop-filter: blur(20px) saturate(140%) !important;
+  border-radius: 20px !important;
+}
 .sanctra-app .analytics-view :is(.text-slate-500,.text-slate-600) {color:#d3d7df;}
 .sanctra-app .analytics-view .text-slate-400 {color:#d3d7df;}
 
@@ -846,7 +865,7 @@ button:not(:disabled),a { cursor:pointer; }
 .workspace-tabs button {background:#ffffff05;color:var(--sanctra-muted);}
 .workspace-tabs button[aria-pressed=true] {color:var(--sanctra-ink);background:var(--sanctra-sage);}
 .workspace-actions {display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:16px;}
-.workspace-note {padding:20px;background:color-mix(in srgb,var(--sanctra-sage) 8%,var(--sanctra-ink));border:1px solid color-mix(in srgb,var(--sanctra-sage) 23%,transparent);border-radius:18px;line-height:1.7;margin:16px 0;}
+.workspace-note {padding:12px 22px;background:rgba(20,24,34,0.72);border:1px solid rgba(255,255,255,0.14);box-shadow:0 12px 30px -12px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.12);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:999px;line-height:1.5;margin:10px auto;max-width:max-content;}
 .workspace-footnote {font-size:12px;line-height:1.7;margin:14px 0;}
 .workspace-panel label {display:block;font-size:13px;margin:14px 0;}
 .workspace-panel .inbox-input {margin-top:8px;font-size:14px;min-height:44px;}
@@ -3908,12 +3927,35 @@ html,body {background:var(--sanctra-boot-ink,#131b28);min-height:100%;}
 .sanctra-app .task-overview-grid>article:nth-child(3){--task-accent:var(--pastel-gold);}
 .sanctra-app .task-overview-grid>article{background:color-mix(in srgb,var(--task-accent) 20%,#162438e8)!important;border-color:color-mix(in srgb,var(--task-accent) 35%,transparent)!important;}
 .sanctra-app .task-overview-grid>article :is(small,strong){color:var(--task-accent)!important;}
-.sanctra-app .planner-tabs button[data-task-tab=today]{--task-accent:var(--pastel-sky);}
-.sanctra-app .planner-tabs button[data-task-tab=backlog]{--task-accent:var(--pastel-blush);}
-.sanctra-app .planner-tabs button[data-task-tab=unscheduled]{--task-accent:var(--pastel-gold);}
-.sanctra-app .planner-tabs button[data-task-tab]{color:var(--task-accent)!important;background:color-mix(in srgb,var(--task-accent) 10%,#162438)!important;}
-.sanctra-app .planner-tabs button[data-task-tab][aria-pressed=true]{color:#172334!important;background:var(--task-accent)!important;box-shadow:none!important;}
-.sanctra-app .planner-days button[aria-pressed=true]{background:var(--pastel-sky)!important;color:#172334!important;box-shadow:none!important;}
+.sanctra-app .planner-tabs button[data-task-tab] {
+  color: rgba(255, 255, 255, 0.7) !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  transition: all 0.2s ease !important;
+}
+.sanctra-app .planner-tabs button[data-task-tab]:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+.sanctra-app .planner-tabs button[data-task-tab][aria-pressed=true] {
+  color: var(--theme-button-text, #1a1405) !important;
+  background: linear-gradient(180deg, var(--theme-accent, #fef08a), color-mix(in srgb, var(--theme-accent, #fef08a) 85%, #000)) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+  font-weight: 600 !important;
+}
+.sanctra-app .planner-tabs button[data-task-tab][aria-pressed=true] span:last-child {
+  background: rgba(0, 0, 0, 0.15) !important;
+  color: inherit !important;
+}
+.sanctra-app .planner-days button[aria-pressed=true],
+.sanctra-app .active-day-tab {
+  background: linear-gradient(180deg, var(--theme-accent, #fef08a), color-mix(in srgb, var(--theme-accent, #fef08a) 85%, #000)) !important;
+  color: var(--theme-button-text, #1a1405) !important;
+  font-weight: 600 !important;
+  box-shadow: 0 6px 18px -4px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
 .sanctra-app .ranking-leader.leader-1{--rank-accent:var(--pastel-gold);}
 .sanctra-app .ranking-leader.leader-2{--rank-accent:var(--pastel-sky);}
 .sanctra-app .ranking-leader.leader-3{--rank-accent:var(--pastel-blush);}
